@@ -1,1 +1,0 @@
-# ScanDocs README

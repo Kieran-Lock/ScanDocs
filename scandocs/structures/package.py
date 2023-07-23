@@ -2,14 +2,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType, FunctionType
 from inspect import getmembers, ismodule
+from json import load
 from .module import Module
 
 
-from pprint import pprint
 from inspect import isclass, isfunction
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Package:
     name: str
     modules: list[Module]
@@ -44,3 +44,14 @@ class Package:
             package,
             predicate=lambda member: isclass(member) or isfunction(member)
         ))
+
+    def serialize(self):
+        return {
+            "component": "Package",
+            "meta": {
+                self.name
+            },
+            "children": [
+                [module.serialize() for module in self.modules]
+            ]
+        }

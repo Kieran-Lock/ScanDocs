@@ -16,3 +16,14 @@ class Class:
             declared,
             [Subroutine(method, declared) for method in class_.__dict__ if callable(getattr(class_, method))]
         )
+
+    def serialize(self):
+        return {
+            "component": "Class",
+            "meta": {
+                self.name
+            },
+            "children": [
+                [method.serialize() for method in self.methods]
+            ]
+        }

@@ -11,3 +11,14 @@ class Subroutine:
     @classmethod
     def from_subroutine(cls, subroutine: FunctionType, declared: bool) -> Subroutine:
         return cls(subroutine.__name__, declared)
+
+    def serialize(self):
+        return {
+            "component": "Subroutine",
+            "meta": {
+                self.name
+            },
+            "children": [
+                []
+            ]
+        }
