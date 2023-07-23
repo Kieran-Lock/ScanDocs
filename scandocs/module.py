@@ -17,7 +17,15 @@ class Module:
         return cls(
             module.__name__,
             [Class.from_class(class_[1])
-             for class_ in getmembers(module, predicate=isclass)],
+             for class_ in getmembers(
+                module, predicate=lambda member: isclass(member) and cls.is_user_defined(member, module)
+            )],
             [Function.from_function(subroutine[1])
-             for subroutine in getmembers(module, predicate=isfunction)]
+             for subroutine in getmembers(
+                module, predicate=lambda member: isfunction(member) and cls.is_user_defined(member, module)
+            )]
         )
+
+    @staticmethod
+    def is_user_defined(member, module: ModuleType) -> bool:
+        return member.__module__ == module.__name__
