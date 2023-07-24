@@ -41,10 +41,10 @@ class Documentation:
         copy_tree(str(Path(f"{__file__}/../../templates/routes")), str(self.base_directory / "src/routes"))
 
     def dump_project(self) -> None:
-        with (self.base_directory / "src/routes/+layout.svelte").open("r+") as f:
+        with (self.base_directory / "src/lib/stores/project.ts").open("r+") as f:
             content = f.read().replace(
                 "\"%PROJECT_HERE%\"",
-                dumps(self.project.serialize(), indent=4).replace("\n", "\n\t")
+                dumps(self.project.serialize(), indent=4)
             )
             f.seek(0)
             f.truncate(0)

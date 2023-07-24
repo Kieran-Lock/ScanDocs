@@ -1,21 +1,26 @@
-// @ts-ignore
 import type {SvelteComponent} from "svelte";
 
-type PackageMeta = {
-    name: string,
-    version: string | null
-}
-type ModuleMeta = {
+interface Meta {
     name: string
 }
-type ClassMeta = {
-    name: string
+
+interface SourceMeta extends Meta {
+    source: string | null
 }
-type SubroutineMeta = {
-    name: string
-}
+
+export type PackageMeta = Meta
+export type ModuleMeta = Meta
+export type ClassMeta = SourceMeta
+export type SubroutineMeta = SourceMeta
+
 export type Node = {
     component: SvelteComponent,
     meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
     children: Node[][]
+}
+
+export type JsonNode = {
+    component: string,
+    meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
+    children: JsonNode[][]
 }
