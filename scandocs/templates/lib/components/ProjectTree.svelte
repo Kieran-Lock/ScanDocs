@@ -1,6 +1,6 @@
 <script lang="ts">
     import { TreeViewItem } from '@skeletonlabs/skeleton';
-    import Tree from './Tree.svelte'
+    import ProjectTree from './ProjectTree.svelte'
 
     export let nodes
 </script>
@@ -12,7 +12,7 @@
             {#each node.children as childType}
                 {#each childType as child}
                     {#if child.children.flat().length}
-                        <Tree nodes={[child]} />
+                        <ProjectTree nodes={[child]} />
                     {:else}
                         <TreeViewItem>
                             <svelte:component this={child.component} meta={child.meta} />
