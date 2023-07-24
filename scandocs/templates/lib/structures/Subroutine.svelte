@@ -1,10 +1,11 @@
 <script lang="ts">
+    import {CodeBlock} from "@skeletonlabs/skeleton";
     export let meta
 </script>
 
 <div>
-    <h1 class="font-bold text-lg">Structure: Subroutine</h1>
-    {#each Object.entries(meta) as [attribute, value]}
-        <p class="capitalize">{attribute}: {value}</p>
-    {/each}
+    <h1 class="font-bold text-lg">Subroutine: {meta.name}</h1>
+    {#if meta.source !== null}
+        <CodeBlock language="Python" code={meta.source}></CodeBlock>
+    {/if}
 </div>

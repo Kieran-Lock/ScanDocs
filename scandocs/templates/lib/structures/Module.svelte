@@ -3,8 +3,5 @@
 </script>
 
 <div>
-    <h1 class="font-bold text-lg">Structure: Module</h1>
-    {#each Object.entries(meta) as [attribute, value]}
-        <p class="capitalize">{attribute}: {value}</p>
-    {/each}
+    <h1 class="font-bold text-lg">Module: {meta.name}</h1>
 </div>

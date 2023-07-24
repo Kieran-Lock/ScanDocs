@@ -1,12 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType, FunctionType
-from inspect import getmembers, ismodule
-from json import load
+from inspect import getmembers, ismodule, isclass, isfunction
 from .module import Module
-
-
-from inspect import isclass, isfunction
 
 
 @dataclass(frozen=True)

@@ -4,5 +4,5 @@ import test_project
 
 
 project = Package.from_module(test_project)
-docs = Documentation(project, Path("./docs-test"))
+docs = Documentation(project, Path("./docs"))
 docs.output()

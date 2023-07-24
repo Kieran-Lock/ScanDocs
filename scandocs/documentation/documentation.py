@@ -14,6 +14,7 @@ class Documentation:
 
     def output(self) -> None:
         self.create_skeleton_template()
+        self.install_dependencies()
         self.copy_templates()
         self.dump_project()
 
@@ -21,6 +22,13 @@ class Documentation:
         run(
             ["pnpm", "create", "skeleton-app@latest", "-q", "-n", self.project.name, "-p", str(self.base_directory)],
             shell=True
+        )
+
+    def install_dependencies(self) -> None:
+        run(
+            ["pnpm", "install", "highlight.js"],
+            shell=True,
+            cwd=str(self.base_directory)
         )
 
     def copy_templates(self) -> None:

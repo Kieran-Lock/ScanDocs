@@ -6,6 +6,10 @@
     import Header from "$lib/components/Header.svelte";
     import Search from "$lib/components/Search.svelte";
     import Footer from "$lib/components/Footer.svelte";
+    import hljs from 'highlight.js';
+    import 'highlight.js/styles/github-dark.css';
+    import { storeHighlightJs } from '@skeletonlabs/skeleton';
+    storeHighlightJs.set(hljs);
 </script>
 
 <AppShell>
