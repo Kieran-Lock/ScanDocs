@@ -1,16 +1,25 @@
 <script lang="ts">
-    import type {Node} from "$lib/utils/types";
-    import Tree from './Tree.svelte';
-    import {TreeViewItem} from "@skeletonlabs/skeleton";
-    export let nodes: Node
+    import { TreeViewItem } from '@skeletonlabs/skeleton';
+    import Tree from './Tree.svelte'
+
+    export let nodes
 </script>
 
 {#each nodes as node}
     <TreeViewItem>
         <svelte:component this={node.component} meta={node.meta} />
         <svelte:fragment slot="children">
-            <Tree nodes={node.children.flat()} />
+            {#each node.children as childType}
+                {#each childType as child}
+                    {#if child.children.flat().length}
+                        <Tree nodes={[child]} />
+                    {:else}
+                        <TreeViewItem>
+                            <svelte:component this={child.component} meta={child.meta} />
+                        </TreeViewItem>
+                    {/if}
+                {/each}
+            {/each}
         </svelte:fragment>
     </TreeViewItem>
 {/each}
-<!--node.children.flat().length !== 0-->
