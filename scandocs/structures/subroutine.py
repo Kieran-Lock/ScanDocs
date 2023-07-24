@@ -16,7 +16,7 @@ class Subroutine:
         return {
             "component": "Subroutine",
             "meta": {
-                self.name
+                "name": self.name
             },
             "children": [
                 []

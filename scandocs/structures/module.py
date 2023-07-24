@@ -34,7 +34,7 @@ class Module:
         return {
             "component": "Module",
             "meta": {
-                self.name
+                "name": self.name
             },
             "children": [
                 [class_.serialize() for class_ in self.classes],

@@ -49,7 +49,7 @@ class Package:
         return {
             "component": "Package",
             "meta": {
-                self.name
+                "name": self.name
             },
             "children": [
                 [module.serialize() for module in self.modules]

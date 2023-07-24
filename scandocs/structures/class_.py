@@ -21,7 +21,7 @@ class Class:
         return {
             "component": "Class",
             "meta": {
-                self.name
+                "name": self.name
             },
             "children": [
                 [method.serialize() for method in self.methods]
