@@ -10,16 +10,13 @@ from .structure import Structure
 
 @dataclass(frozen=True)
 class Package(Structure):
+    subpackages: list[Package]
     modules: list[Module]
 
     @classmethod
     def from_module(cls, package: ModuleType, declared: set[type | FunctionType] | None = None) -> Package:
         if not cls.is_package(package):
             raise TypeError("Can't build documentation for non-package") from None
-        module_lookup = {
-            True: cls,
-            False: Module
-        }
 
         if declared is None:
             declared = cls.get_declared(package)
@@ -28,12 +25,17 @@ class Package(Structure):
 
         name = package.__name__.split(".")[-1]
         is_dunder = name.startswith("__")
+        try:
+            substructures = package.__all__
+        except AttributeError:  # __all__ index not defined
+            substructures = [substructure[1] for substructure in getmembers(package, predicate=ismodule)]
+
         return cls(
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
-            [module_lookup.get(cls.is_package(module[1])).from_module(module[1], declared)
-             for module in getmembers(package, predicate=ismodule)]
+            [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
+            [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )
 
     @staticmethod
@@ -53,11 +55,13 @@ class Package(Structure):
             {
                 "name": self.name
             },
-            [
-                {
-                    "modules": [
-                        module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)
-                    ]
-                }
-            ]
+            {
+                "subpackages": [
+                    subpackage.serialize(
+                        child_filter=child_filter) for subpackage in self.subpackages if child_filter(subpackage)
+                ],
+                "modules": [
+                    module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)
+                ]
+            }
         )

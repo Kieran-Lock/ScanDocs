@@ -21,6 +21,8 @@ class PythonStructure(Generic[StructureT], Structure, ABC):
             return getsource(method)
         except OSError:
             return  # Can't be provided
+        except TypeError:
+            return  # Can't be provided, maybe builtin?
 
     @staticmethod
     def get_signature(method: StructureT) -> Signature | None:

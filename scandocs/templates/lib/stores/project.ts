@@ -1,7 +1,6 @@
 // @ts-nocheck
 import {parseProject, traverseProject} from "$lib/utils/parsing";
 import {writable} from "svelte/store";
-import type {Subscriber, Unsubscriber} from "svelte/store";
 import type {Node} from "$lib/utils/types";
 
 export const project = parseProject("%PROJECT_HERE%")

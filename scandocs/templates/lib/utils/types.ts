@@ -17,11 +17,11 @@ export type SubroutineMeta = SourceMeta
 export type Node = {
     component: SvelteComponent,
     meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
-    children: Record<string, Node[]>[]
+    children: Record<string, Node[]>
 }
 
 export type JsonNode = {
     component: string,
     meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
-    children: Record<string, JsonNode[]>[]
+    children: Record<string, JsonNode[]>
 }

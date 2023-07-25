@@ -1,10 +1,10 @@
 from scandocs import Package, Documentation
 from pathlib import Path
 from pprint import pprint
-import test_project
+import sqliteframe
 
 
-project = Package.from_module(test_project)
+project = Package.from_module(sqliteframe)
 docs = Documentation(project, Path("./docs"))
-pprint(project.serialize().to_json())
+pprint(project.serialize(docs.filter).to_json())
 docs.output()

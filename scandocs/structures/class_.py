@@ -39,11 +39,9 @@ class Class(PythonStructure[type]):
                 "source": self.source,
                 "signature": str(self.signature)
             },
-            [
-                {
-                    "methods": [
-                        method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)
-                    ]
-                }
-            ]
+            {
+                "methods": [
+                    method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)
+                ]
+            }
         )

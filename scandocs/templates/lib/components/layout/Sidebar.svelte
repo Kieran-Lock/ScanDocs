@@ -14,7 +14,7 @@
     </header>
     <section class="flex flex-col card justify-center items-center p-4 gap-6 variant-ringed-surface">
         <TreeView>
-            <ProjectTree nodes={project.children.map(childType => Object.values(childType)).flat(Infinity)} />
+            <ProjectTree nodes={Object.values(project.children).flat()} />
         </TreeView>
     </section>
 </div>

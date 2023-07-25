@@ -5,7 +5,7 @@ from subprocess import run
 from json import dumps
 from distutils.dir_util import copy_tree
 from typing import Callable
-from ..structures import Package, Structure
+from ..structures import Package, Structure, Subroutine
 
 
 @dataclass(frozen=True, slots=True)
@@ -13,7 +13,8 @@ class Documentation:
     project: Package
     base_directory: Path
     filter: Callable[[Structure], bool] = lambda structure: (
-            not (structure.is_private or structure.is_dunder)
+        not ((structure.is_private or structure.is_dunder)
+             or (isinstance(structure, Subroutine) and structure.is_lambda))
     )
 
     def output(self) -> None:

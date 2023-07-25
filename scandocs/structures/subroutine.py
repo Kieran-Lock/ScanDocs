@@ -42,7 +42,5 @@ class Subroutine(PythonStructure[FunctionType]):
                 "signature": str(self.signature),
                 "returnType": self.get_return_type()
             },
-            [
-                {}
-            ]
+            {}
         )

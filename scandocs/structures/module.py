@@ -42,17 +42,13 @@ class Module(Structure):
             {
                 "name": self.name
             },
-            [
-                {
-                    "classes": [
-                        class_.serialize(child_filter=child_filter) for class_ in self.classes
-                    ]
-                },
-                {
-                    "subroutines": [
-                        subroutine.serialize(
-                            child_filter=child_filter) for subroutine in self.subroutines if child_filter(subroutine)
-                    ]
-                }
-            ]
+            {
+                "classes": [
+                    class_.serialize(child_filter=child_filter) for class_ in self.classes
+                ],
+                "subroutines": [
+                    subroutine.serialize(
+                        child_filter=child_filter) for subroutine in self.subroutines if child_filter(subroutine)
+                ]
+            }
         )
