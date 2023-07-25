@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from inspect import getsource
+from inspect import getsource, Signature, signature
 from .subroutine import Subroutine
 
 
@@ -10,6 +10,7 @@ class Class:
     declared: bool
     methods: list[Subroutine]
     source: str
+    signature: Signature | None
 
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
@@ -23,7 +24,8 @@ class Class:
                 )
                 for method in class_.__dict__ if callable(getattr(class_, method))
             ],
-            getsource(class_)
+            cls.get_method_source(class_),
+            cls.get_method_signature(class_)
         )
 
     def serialize(self):
@@ -31,9 +33,24 @@ class Class:
             "component": "Class",
             "meta": {
                 "name": self.name,
-                "source": self.source
+                "source": self.source,
+                "signature": str(self.signature)
             },
             "children": [
                 [method.serialize() for method in self.methods]
             ]
         }
+
+    @staticmethod
+    def get_method_source(method: type) -> str | None:
+        try:
+            return getsource(method)
+        except OSError:
+            return  # Can't be provided
+
+    @staticmethod
+    def get_method_signature(method: type) -> Signature | None:
+        try:
+            return signature(method)
+        except ValueError:
+            return  # Can't be provided

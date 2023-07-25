@@ -16,5 +16,7 @@ class TestClass3:
         return self.cached_attribute
 
 
-def silent_function() -> None:
+def silent_function(x: int) -> None | str:
+    if x:
+        return "Passed"
     return
