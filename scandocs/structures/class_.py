@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
 from .python_structure import PythonStructure
+from .serialized import Serialized
 from .structure import Structure
 from .subroutine import Subroutine
 
@@ -30,15 +31,19 @@ class Class(PythonStructure[type]):
             ]
         )
 
-    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
-        return {
-            "component": "Class",
-            "meta": {
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
+        return Serialized(
+            "Class",
+            {
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature)
             },
-            "children": [
-                [method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)]
+            [
+                {
+                    "methods": [
+                        method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)
+                    ]
+                }
             ]
-        }
+        )

@@ -4,6 +4,7 @@ from types import FunctionType
 from inspect import Signature
 from typing import Callable
 from .python_structure import PythonStructure
+from .serialized import Serialized
 from .structure import Structure
 
 
@@ -25,23 +26,23 @@ class Subroutine(PythonStructure[FunctionType]):
             name == "<lambda>"
         )
 
-    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
-        return {
-            "component": "Subroutine",
-            "meta": {
-                "name": self.name,
-                "source": self.source,
-                "signature": str(self.signature),
-                "returnType": self.get_return_type()
-            },  # Parameters from signature, Raises from getclosurevars
-            "children": [
-                []
-            ]
-        }
-
     def get_return_type(self) -> str | None:
         if self.signature.return_annotation in (Signature.empty, "_empty"):
             return ""
         elif self.signature.return_annotation in (None, "None"):
             return
         return str(self.signature.return_annotation)
+
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
+        return Serialized(
+            "Subroutine",
+            {
+                "name": self.name,
+                "source": self.source,
+                "signature": str(self.signature),
+                "returnType": self.get_return_type()
+            },
+            [
+                {}
+            ]
+        )

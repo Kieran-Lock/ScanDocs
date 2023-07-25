@@ -48,7 +48,7 @@ class Documentation:
         with (self.base_directory / "src/lib/stores/project.ts").open("r+") as f:
             content = f.read().replace(
                 "\"%PROJECT_HERE%\"",
-                dumps(self.project.serialize(child_filter=self.filter), indent=4)
+                dumps(self.project.serialize(child_filter=self.filter).to_json(), indent=4)
             )
             f.seek(0)
             f.truncate(0)

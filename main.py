@@ -6,5 +6,5 @@ import test_project
 
 project = Package.from_module(test_project)
 docs = Documentation(project, Path("./docs"))
-pprint(project.serialize(child_filter=docs.filter))
+pprint(project.serialize().to_json())
 docs.output()

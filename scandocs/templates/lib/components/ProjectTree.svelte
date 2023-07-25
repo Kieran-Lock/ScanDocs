@@ -16,14 +16,16 @@
         <svelte:component this={node.component} meta={node.meta} />
         <svelte:fragment slot="children">
             {#each node.children as childType}
-                {#each childType as child}
-                    {#if child.children.flat().length}
-                        <ProjectTree nodes={[child]} />
-                    {:else}
-                        <TreeViewItem on:click={() => onClick(child)}>
-                            <svelte:component this={child.component} meta={child.meta} />
-                        </TreeViewItem>
-                    {/if}
+                {#each Object.values(childType) as children}
+                    {#each children as child}
+                        {#if child.children.map(childType => Object.values(childType)).map(children => children.length).every(Boolean)}
+                            <ProjectTree nodes={[child]} />
+                        {:else}
+                            <TreeViewItem on:click={() => onClick(child)}>
+                                <svelte:component this={child.component} meta={child.meta} />
+                            </TreeViewItem>
+                        {/if}
+                    {/each}
                 {/each}
             {/each}
         </svelte:fragment>

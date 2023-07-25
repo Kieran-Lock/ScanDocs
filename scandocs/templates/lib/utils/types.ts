@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {SvelteComponent} from "svelte";
 
 interface Meta {
@@ -16,11 +17,11 @@ export type SubroutineMeta = SourceMeta
 export type Node = {
     component: SvelteComponent,
     meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
-    children: Node[][]
+    children: Record<string, Node[]>[]
 }
 
 export type JsonNode = {
     component: string,
     meta: PackageMeta | ModuleMeta | ClassMeta | SubroutineMeta,
-    children: JsonNode[][]
+    children: Record<string, JsonNode[]>[]
 }

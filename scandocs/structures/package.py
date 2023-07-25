@@ -4,6 +4,7 @@ from types import ModuleType, FunctionType
 from inspect import getmembers, ismodule, isclass, isfunction
 from typing import Callable
 from .module import Module
+from .serialized import Serialized
 from .structure import Structure
 
 
@@ -46,13 +47,17 @@ class Package(Structure):
             predicate=lambda member: isclass(member) or isfunction(member)
         ))
 
-    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
-        return {
-            "component": "Package",
-            "meta": {
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
+        return Serialized(
+            "Package",
+            {
                 "name": self.name
             },
-            "children": [
-                [module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)]
+            [
+                {
+                    "modules": [
+                        module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)
+                    ]
+                }
             ]
-        }
+        )

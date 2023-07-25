@@ -4,6 +4,7 @@ from inspect import getmembers, isclass, isfunction
 from types import ModuleType, FunctionType
 from typing import Callable
 from .class_ import Class
+from .serialized import Serialized
 from .structure import Structure
 from .subroutine import Subroutine
 
@@ -35,15 +36,23 @@ class Module(Structure):
     def is_user_defined(member, module: ModuleType) -> bool:
         return member.__module__ == module.__name__
 
-    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
-        return {
-            "component": "Module",
-            "meta": {
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
+        return Serialized(
+            "Module",
+            {
                 "name": self.name
             },
-            "children": [
-                [class_.serialize(child_filter=child_filter) for class_ in self.classes],
-                [subroutine.serialize(child_filter=child_filter)
-                 for subroutine in self.subroutines if child_filter(subroutine)]
+            [
+                {
+                    "classes": [
+                        class_.serialize(child_filter=child_filter) for class_ in self.classes
+                    ]
+                },
+                {
+                    "subroutines": [
+                        subroutine.serialize(
+                            child_filter=child_filter) for subroutine in self.subroutines if child_filter(subroutine)
+                    ]
+                }
             ]
-        }
+        )
