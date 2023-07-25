@@ -12,17 +12,19 @@
     onDestroy(unsubscribe);
 </script>
 
-<div class="flex flex-col items-end gap-2">
-    <div class="flex flex-row justify-between items-center w-full pl-1.5 pr-0.5">
-        <h1 class="text-2xl font-bold">{activeProject.getActive($activeProject).meta.name}</h1>
+<div class="flex flex-col items-end gap-2 card w-[50%] p-4">
+    <header class="flex flex-row justify-between items-center w-full pl-1.5 pr-1">
+        <h2 class="text-2xl font-bold">{activeProject.getActive($activeProject).meta.name}</h2>
         {#if meta.signature}
             <RadioGroup rounded="rounded-container-token">
                 <RadioItem bind:group={isSignature} name="toggle" value={false}>Source</RadioItem>
                 <RadioItem bind:group={isSignature} name="toggle" value={true}>Signature</RadioItem>
             </RadioGroup>
         {/if}
-    </div>
+    </header>
     {#if meta.source}
-        <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
+        <section class="w-full mx-1">
+            <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
+        </section>
     {/if}
 </div>
