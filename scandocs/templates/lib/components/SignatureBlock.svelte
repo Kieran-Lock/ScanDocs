@@ -1,9 +1,15 @@
 <script lang="ts">
     import {CodeBlock, SlideToggle} from "@skeletonlabs/skeleton";
     import {activeProject} from "$lib/stores/project";
+    import {onDestroy} from "svelte";
 
     let isSource = false
-    const meta = activeProject.getActive($activeProject).meta
+    let meta
+    const unsubscribe = activeProject.subscribe((value) => {
+        meta = activeProject.getActive($activeProject).meta
+    });
+
+    onDestroy(unsubscribe);
 </script>
 
 <div class="flex flex-col items-end gap-2">
