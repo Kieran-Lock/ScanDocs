@@ -1,15 +1,14 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Any
 
 
-JsonT = dict[str, str | dict[str, Any] | list[dict[str, "JsonT"]]]
+JsonT = dict[str, str | dict[str, object] | list[dict[str, "JsonT"]]]
 
 
 @dataclass(frozen=True, slots=True)
 class Serialized:
     component: str
-    meta: dict[str, Any]
+    meta: dict[str, object]
     children: dict[str, list[Serialized]]
 
     def to_json(self) -> JsonT:

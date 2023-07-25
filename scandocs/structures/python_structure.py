@@ -1,8 +1,8 @@
 from __future__ import annotations
 from abc import ABC
 from dataclasses import dataclass
-from inspect import getsource, signature, Signature
-from typing import Generic, TypeVar
+from inspect import signature, Signature
+from typing import TypeVar
 from .structure import Structure
 
 
@@ -10,19 +10,9 @@ StructureT = TypeVar("StructureT")
 
 
 @dataclass(frozen=True, slots=True)
-class PythonStructure(Generic[StructureT], Structure, ABC):
+class PythonStructure(Structure[StructureT], ABC):
     is_declared: bool
-    source: str | None
     signature: Signature | None
-
-    @staticmethod
-    def get_source(method: StructureT) -> str | None:
-        try:
-            return getsource(method)
-        except OSError:
-            return  # Can't be provided
-        except TypeError:
-            return  # Can't be provided, maybe builtin?
 
     @staticmethod
     def get_signature(method: StructureT) -> Signature | None:

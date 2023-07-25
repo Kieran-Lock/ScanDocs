@@ -20,8 +20,8 @@ class Subroutine(PythonStructure[FunctionType]):
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
-            is_declared,
             cls.get_source(subroutine),
+            is_declared,
             cls.get_signature(subroutine),
             name == "<lambda>"
         )

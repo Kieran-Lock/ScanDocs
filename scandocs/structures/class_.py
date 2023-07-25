@@ -19,8 +19,8 @@ class Class(PythonStructure[type]):
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
-            is_declared,
             cls.get_source(class_),
+            is_declared,
             cls.get_signature(class_),
             [
                 Subroutine.from_subroutine(

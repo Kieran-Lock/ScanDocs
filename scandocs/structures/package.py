@@ -9,7 +9,7 @@ from .structure import Structure
 
 
 @dataclass(frozen=True)
-class Package(Structure):
+class Package(Structure[ModuleType]):
     subpackages: list[Package]
     modules: list[Module]
 
@@ -34,6 +34,7 @@ class Package(Structure):
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
+            cls.get_source(package),
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
             [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )
@@ -53,7 +54,8 @@ class Package(Structure):
         return Serialized(
             "Package",
             {
-                "name": self.name
+                "name": self.name,
+                "source": self.source
             },
             {
                 "subpackages": [

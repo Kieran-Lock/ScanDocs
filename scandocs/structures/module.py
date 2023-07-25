@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from inspect import getmembers, isclass, isfunction
+from inspect import getmembers, isclass, isfunction, getsource
 from types import ModuleType, FunctionType
 from typing import Callable
 from .class_ import Class
@@ -10,7 +10,7 @@ from .subroutine import Subroutine
 
 
 @dataclass(frozen=True, slots=True)
-class Module(Structure):
+class Module(Structure[ModuleType]):
     classes: list[Class]
     subroutines: list[Subroutine]
 
@@ -22,6 +22,7 @@ class Module(Structure):
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
+            cls.get_source(module),
             [Class.from_class(class_[1], class_[1] in declared)
              for class_ in getmembers(
                 module, predicate=lambda member: isclass(member) and cls.is_user_defined(member, module)
@@ -40,7 +41,8 @@ class Module(Structure):
         return Serialized(
             "Module",
             {
-                "name": self.name
+                "name": self.name,
+                "source": self.source
             },
             {
                 "classes": [

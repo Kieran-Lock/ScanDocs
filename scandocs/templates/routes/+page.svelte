@@ -1,6 +1,6 @@
 <script>
     import {activeProject} from "$lib/stores/project";
-    import SignatureBlock from "$lib/components/SignatureBlock.svelte";
+    import SourceBlock from "$lib/components/SourceBlock.svelte";
 </script>
 
 <div class="flex w-full">
@@ -10,7 +10,7 @@
         </header>
         <section>
             {#if activeProject.getActive($activeProject).meta.source}
-                <SignatureBlock />
+                <SourceBlock />
             {/if}
         </section>
     </div>
