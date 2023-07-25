@@ -5,13 +5,15 @@ import Class from "$lib/components/structures/Class.svelte";
 import Subroutine from "$lib/components/structures/Subroutine.svelte";
 import type {JsonNode, Node} from "$lib/utils/types";
 import {project} from "$lib/stores/project";
+import Parameter from "$lib/components/structures/Parameter.svelte";
 
 export const parseProject = (project: JsonNode): Node => {
     const componentLookup = {
         "Package": Package,
         "Module": Module,
         "Class": Class,
-        "Subroutine": Subroutine
+        "Subroutine": Subroutine,
+        "Parameter": Parameter
     }
     return JSON.parse(JSON.stringify(project), (key, value) => {
         if (key === "component" && value in componentLookup) {

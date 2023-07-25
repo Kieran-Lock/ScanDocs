@@ -6,6 +6,7 @@ from typing import Callable
 from .python_structure import PythonStructure
 from .serialized import Serialized
 from .structure import Structure
+from .parameter import Parameter
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,7 +27,7 @@ class Subroutine(PythonStructure[FunctionType]):
             name == "<lambda>"
         )
 
-    def get_return_type(self) -> str:
+    def get_annotation(self) -> str:
         if self.signature.return_annotation in (Signature.empty, "_empty"):
             return ""
         return str(self.signature.return_annotation)
@@ -38,7 +39,13 @@ class Subroutine(PythonStructure[FunctionType]):
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "returnType": self.get_return_type()
+                "returnType": Parameter.get_annotation(self.signature.return_annotation)
             },
-            {}
+            {
+                "parameters": [
+                    Parameter.from_parameter(
+                        self.signature.parameters[parameter]
+                    ).serialize() for parameter in self.signature.parameters if parameter is not None
+                ]
+            }
         )
