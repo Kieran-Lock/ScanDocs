@@ -9,8 +9,6 @@
     const onClick = (node: Node) => {
         activeProject.setActive(node)
     }
-
-    console.log(nodes)
 </script>
 
 {#each nodes as node}

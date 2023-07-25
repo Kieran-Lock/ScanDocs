@@ -31,13 +31,20 @@ class Class(PythonStructure[type]):
             ]
         )
 
+    @property
+    def initializer(self) -> Subroutine:
+        return next(filter(
+            lambda method: method.name == "__init__", self.methods), Subroutine.from_subroutine(object.__init__, False)
+        )
+
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(
             "Class",
             {
                 "name": self.name,
                 "source": self.source,
-                "signature": str(self.signature)
+                "signature": str(self.signature),
+                "parameters": self.initializer.serialize().meta.get("parameters")
             },
             {
                 "methods": [

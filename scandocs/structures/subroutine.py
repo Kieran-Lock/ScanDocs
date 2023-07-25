@@ -15,7 +15,7 @@ class Subroutine(PythonStructure[FunctionType]):
     parameters: list[Parameter]
 
     @classmethod
-    def from_subroutine(cls, subroutine: FunctionType, is_declared: bool) -> Subroutine:
+    def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool) -> Subroutine:
         name = subroutine.__name__
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
