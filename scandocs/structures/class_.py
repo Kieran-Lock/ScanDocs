@@ -1,34 +1,36 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from inspect import getsource, Signature, signature
+from typing import Callable
+from .python_structure import PythonStructure
+from .structure import Structure
 from .subroutine import Subroutine
 
 
 @dataclass(frozen=True, slots=True)
-class Class:
-    name: str
-    declared: bool
+class Class(PythonStructure[type]):
     methods: list[Subroutine]
-    source: str
-    signature: Signature | None
 
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
+        name = class_.__name__
+        is_dunder = name.startswith("__")
         return cls(
-            class_.__name__,
+            name,
+            (not is_dunder) and name.startswith("_"),
+            is_dunder,
             is_declared,
+            cls.get_source(class_),
+            cls.get_signature(class_),
             [
                 Subroutine.from_subroutine(
                     getattr(class_, method),
                     is_declared
                 )
                 for method in class_.__dict__ if callable(getattr(class_, method))
-            ],
-            cls.get_method_source(class_),
-            cls.get_method_signature(class_)
+            ]
         )
 
-    def serialize(self):
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
         return {
             "component": "Class",
             "meta": {
@@ -37,20 +39,6 @@ class Class:
                 "signature": str(self.signature)
             },
             "children": [
-                [method.serialize() for method in self.methods]
+                [method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)]
             ]
         }
-
-    @staticmethod
-    def get_method_source(method: type) -> str | None:
-        try:
-            return getsource(method)
-        except OSError:
-            return  # Can't be provided
-
-    @staticmethod
-    def get_method_signature(method: type) -> Signature | None:
-        try:
-            return signature(method)
-        except ValueError:
-            return  # Can't be provided

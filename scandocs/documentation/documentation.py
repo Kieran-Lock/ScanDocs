@@ -4,13 +4,17 @@ from pathlib import Path
 from subprocess import run
 from json import dumps
 from distutils.dir_util import copy_tree
-from ..structures import Package
+from typing import Callable
+from ..structures import Package, Structure
 
 
 @dataclass(frozen=True, slots=True)
 class Documentation:
     project: Package
     base_directory: Path
+    filter: Callable[[Structure], bool] = lambda structure: (
+            not (structure.is_private or structure.is_dunder)
+    )
 
     def output(self) -> None:
         self.create_skeleton_template()
@@ -44,7 +48,7 @@ class Documentation:
         with (self.base_directory / "src/lib/stores/project.ts").open("r+") as f:
             content = f.read().replace(
                 "\"%PROJECT_HERE%\"",
-                dumps(self.project.serialize(), indent=4)
+                dumps(self.project.serialize(child_filter=self.filter), indent=4)
             )
             f.seek(0)
             f.truncate(0)

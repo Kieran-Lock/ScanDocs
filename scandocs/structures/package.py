@@ -2,12 +2,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType, FunctionType
 from inspect import getmembers, ismodule, isclass, isfunction
+from typing import Callable
 from .module import Module
+from .structure import Structure
 
 
 @dataclass(frozen=True)
-class Package:
-    name: str
+class Package(Structure):
     modules: list[Module]
 
     @classmethod
@@ -24,8 +25,12 @@ class Package:
         else:
             declared = declared.intersection(cls.get_declared(package))
 
+        name = package.__name__.split(".")[-1]
+        is_dunder = name.startswith("__")
         return cls(
-            package.__name__,
+            name,
+            (not is_dunder) and name.startswith("_"),
+            is_dunder,
             [module_lookup.get(cls.is_package(module[1])).from_module(module[1], declared)
              for module in getmembers(package, predicate=ismodule)]
         )
@@ -41,13 +46,13 @@ class Package:
             predicate=lambda member: isclass(member) or isfunction(member)
         ))
 
-    def serialize(self):
+    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> dict:
         return {
             "component": "Package",
             "meta": {
                 "name": self.name
             },
             "children": [
-                [module.serialize() for module in self.modules]
+                [module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)]
             ]
         }
