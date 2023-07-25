@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {CodeBlock, SlideToggle} from "@skeletonlabs/skeleton";
+    import {CodeBlock, RadioGroup, RadioItem, SlideToggle} from "@skeletonlabs/skeleton";
     import {activeProject} from "$lib/stores/project";
     import {onDestroy} from "svelte";
 
@@ -13,11 +13,16 @@
 </script>
 
 <div class="flex flex-col items-end gap-2">
-    {#if meta.signature !== undefined}
-        <div class="flex flex-row justify-between w-full">
-            <p class="variant-ghost-surface rounded-3xl p-2 text-sm">Viewing {isSignature ? "Signature" : "Source"}</p>
-            <SlideToggle name="mode-slider" active="bg-primary-600" bind:checked={isSignature} />
-        </div>
+    <div class="flex flex-row justify-between items-center w-full pl-1.5 pr-0.5">
+        <h1 class="text-2xl font-bold">{activeProject.getActive($activeProject).meta.name}</h1>
+        {#if meta.signature}
+            <RadioGroup rounded="rounded-container-token">
+                <RadioItem bind:group={isSignature} name="toggle" value={false}>Source</RadioItem>
+                <RadioItem bind:group={isSignature} name="toggle" value={true}>Signature</RadioItem>
+            </RadioGroup>
+        {/if}
+    </div>
+    {#if meta.source}
+        <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
     {/if}
-    <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
 </div>
