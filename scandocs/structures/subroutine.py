@@ -26,11 +26,9 @@ class Subroutine(PythonStructure[FunctionType]):
             name == "<lambda>"
         )
 
-    def get_return_type(self) -> str | None:
+    def get_return_type(self) -> str:
         if self.signature.return_annotation in (Signature.empty, "_empty"):
             return ""
-        elif self.signature.return_annotation in (None, "None"):
-            return
         return str(self.signature.return_annotation)
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
