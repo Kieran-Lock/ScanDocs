@@ -1,3 +1,10 @@
+"""
+This is file_1
+
+It is the first file in the test project
+"""
+
+
 from dataclasses import dataclass
 
 

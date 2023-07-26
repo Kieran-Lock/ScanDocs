@@ -8,15 +8,17 @@
     });
 
     onDestroy(unsubscribe);
+
+    console.log(meta)
 </script>
 
-{#if meta.returnType}
+{#if meta.docstring}
     <div class="flex flex-col gap-2 card w-[50%] p-4">
         <header>
-            <h2 class="text-2xl font-bold">Returns</h2>
+            <h2 class="text-2xl font-bold">Docstring</h2>
         </header>
         <section>
-            <h3>{meta.returnType}</h3>
+            <svelte:component this={meta.docstring.component} meta={meta.docstring.meta} />
         </section>
     </div>
 {/if}

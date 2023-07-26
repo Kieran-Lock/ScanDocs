@@ -61,7 +61,8 @@ class Subroutine(SignatureStructure[FunctionType]):
                 "parameters": [
                     parameter.serialize(child_filter=child_filter).to_json() for parameter in self.parameters
                 ],
-                "exceptions": [error.serialize(child_filter=child_filter).to_json() for error in self.raises]
+                "exceptions": [error.serialize(child_filter=child_filter).to_json() for error in self.raises],
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
             },
             {}
         )

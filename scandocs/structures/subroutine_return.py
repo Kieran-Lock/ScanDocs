@@ -22,7 +22,7 @@ class SubroutineReturn(Structure):
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(
-            "Parameter",
+            "SubroutineReturn",
             {
                 "name": self.name,
                 "annotation": self.annotation,

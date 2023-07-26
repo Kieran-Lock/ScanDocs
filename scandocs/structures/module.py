@@ -45,7 +45,8 @@ class Module(SourceStructure[ModuleType]):
             "Module",
             {
                 "name": self.name,
-                "source": self.source
+                "source": self.source,
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
             },
             {
                 "classes": [

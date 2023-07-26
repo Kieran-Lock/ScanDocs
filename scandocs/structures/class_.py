@@ -46,7 +46,8 @@ class Class(SignatureStructure[type]):
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters")
+                "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
             },
             {
                 "methods": [

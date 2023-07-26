@@ -4,6 +4,11 @@ from functools import cached_property
 
 @dataclass(frozen=True)
 class TestClass3:
+    """
+    A complicated dataclass
+
+    This one has all kinds of attributes, but no methods
+    """
     attribute: bool
     cached_attribute: str
 
@@ -17,6 +22,12 @@ class TestClass3:
 
 
 def silent_function(x: int) -> None | str:
+    """
+    This isn't exposed
+
+    :param x:
+    :return:
+    """
     if x:
         return "Passed"
     return
