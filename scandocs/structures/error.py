@@ -8,6 +8,7 @@ from .structure import Structure
 
 @dataclass(frozen=True, slots=True)
 class Error(Structure):
+    name: str
     description: str
 
     @classmethod

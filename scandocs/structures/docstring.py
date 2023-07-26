@@ -20,9 +20,8 @@ class Docstring(Structure):
     returns: list[SubroutineReturn]
 
     @classmethod
-    def from_docstring(cls, docstring: ParserDocstring, parent_name: str) -> Docstring:
+    def from_docstring(cls, docstring: ParserDocstring) -> Docstring:
         return cls(
-            parent_name,
             docstring.short_description,
             docstring.long_description,
             Deprecation.from_docstring_deprecated(docstring.deprecation) if docstring.deprecation else None,

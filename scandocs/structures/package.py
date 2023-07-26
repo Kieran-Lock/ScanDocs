@@ -38,7 +38,7 @@ class Package(SourceStructure[ModuleType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(package),
-            Docstring.from_docstring(docstring, name) if docstring else None,
+            Docstring.from_docstring(docstring) if docstring else None,
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
             [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )

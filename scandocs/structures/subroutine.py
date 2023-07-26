@@ -36,7 +36,7 @@ class Subroutine(SignatureStructure[FunctionType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(subroutine),
-            Docstring.from_docstring(docstring, name) if docstring else None,
+            Docstring.from_docstring(docstring) if docstring else None,
             is_declared,
             signature,
             name == "<lambda>",

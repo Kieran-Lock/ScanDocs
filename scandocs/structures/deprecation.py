@@ -14,7 +14,6 @@ class Deprecation(Structure):
     @classmethod
     def from_docstring_deprecated(cls, deprecation: DocstringDeprecated) -> Deprecation:
         return cls(
-            f"Deprecated in version {deprecation.version}",
             deprecation.description,
             deprecation.version
         )

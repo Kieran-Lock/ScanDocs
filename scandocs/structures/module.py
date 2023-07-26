@@ -26,7 +26,7 @@ class Module(SourceStructure[ModuleType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(module),
-            Docstring.from_docstring(docstring, name) if docstring else None,
+            Docstring.from_docstring(docstring) if docstring else None,
             [Class.from_class(class_[1], class_[1] in declared)
              for class_ in getmembers(
                 module, predicate=lambda member: isclass(member) and cls.is_user_defined(member, module)

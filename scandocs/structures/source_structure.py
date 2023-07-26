@@ -13,6 +13,7 @@ StructureT = TypeVar("StructureT")
 
 @dataclass(frozen=True, slots=True)
 class SourceStructure(Generic[StructureT], Structure, ABC):
+    name: str
     is_private: bool
     is_dunder: bool
     source: str

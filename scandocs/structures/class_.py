@@ -22,7 +22,7 @@ class Class(SignatureStructure[type]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(class_),
-            Docstring.from_docstring(docstring, name) if docstring else None,
+            Docstring.from_docstring(docstring) if docstring else None,
             is_declared,
             cls.get_signature(class_),
             [

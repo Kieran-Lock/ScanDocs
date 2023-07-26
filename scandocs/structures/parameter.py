@@ -8,6 +8,7 @@ from .structure import Structure
 
 @dataclass(frozen=True, slots=True)
 class Parameter(Structure):
+    name: str
     annotation: str
     default: str | None
     is_optional: bool

@@ -16,7 +16,6 @@ class SubroutineReturn(Structure):
     @classmethod
     def from_docstring_returns(cls, returns: DocstringReturns) -> SubroutineReturn:
         return cls(
-            "",
             returns.description,
             returns.type_name,
             returns.is_generator

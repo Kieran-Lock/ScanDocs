@@ -8,8 +8,6 @@ from .serialized import Serialized
 
 @dataclass(frozen=True, slots=True)
 class Structure(ABC):
-    name: str
-
     @abstractmethod
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         ...
