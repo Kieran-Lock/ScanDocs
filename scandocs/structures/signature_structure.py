@@ -3,14 +3,14 @@ from abc import ABC
 from dataclasses import dataclass
 from inspect import signature, Signature
 from typing import TypeVar
-from .structure import Structure
+from .source_structure import SourceStructure
 
 
 StructureT = TypeVar("StructureT")
 
 
 @dataclass(frozen=True, slots=True)
-class PythonStructure(Structure[StructureT], ABC):
+class SignatureStructure(SourceStructure[StructureT], ABC):
     is_declared: bool
     signature: Signature | None
 

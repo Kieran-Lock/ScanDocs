@@ -1,14 +1,15 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
-from .python_structure import PythonStructure
-from .serialized import Serialized
+from .docstring import Docstring
 from .structure import Structure
+from .signature_structure import SignatureStructure
+from .serialized import Serialized
 from .subroutine import Subroutine
 
 
 @dataclass(frozen=True, slots=True)
-class Class(PythonStructure[type]):
+class Class(SignatureStructure[type]):
     methods: list[Subroutine]
 
     @classmethod
@@ -20,6 +21,7 @@ class Class(PythonStructure[type]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(class_),
+            Docstring.from_docstring(class_.__doc__, name),
             is_declared,
             cls.get_signature(class_),
             [
@@ -44,7 +46,7 @@ class Class(PythonStructure[type]):
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "parameters": self.initializer.serialize().meta.get("parameters")
+                "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters")
             },
             {
                 "methods": [

@@ -1,24 +1,24 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from inspect import Parameter, Signature
+from inspect import Parameter as PythonParameter, Signature
 from typing import Callable
 from .serialized import Serialized
 from .structure import Structure
 
 
 @dataclass(frozen=True, slots=True)
-class Parameter(Structure[Parameter]):
-    annotation: object
+class Parameter(Structure):
+    annotation: str
+    default: str | None
+    is_optional: bool
 
     @classmethod
-    def from_parameter(cls, parameter: Parameter) -> Parameter:
-        is_dunder = parameter.name.startswith("__")
+    def from_parameter(cls, parameter: PythonParameter) -> Parameter:
         return cls(
             parameter.name,
-            (not is_dunder) and parameter.name.startswith("_"),
-            is_dunder,
-            str(parameter),
-            parameter.annotation
+            cls.object_as_written(parameter.annotation),
+            cls.object_as_written(parameter.default),
+            parameter.kind not in (PythonParameter.POSITIONAL_ONLY, PythonParameter.POSITIONAL_OR_KEYWORD)
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -26,14 +26,9 @@ class Parameter(Structure[Parameter]):
             "Parameter",
             {
                 "name": self.name,
-                "source": self.source,
-                "annotation": self.get_annotation(self.annotation)
+                "annotation": self.annotation,
+                "default": self.default,
+                "isOptional": self.is_optional
             },
             {}
         )
-
-    @staticmethod
-    def get_annotation(annotation: object) -> str:
-        if annotation in (Signature.empty, "_empty"):
-            return ""
-        return annotation.__name__ if isinstance(annotation, type) else str(annotation)

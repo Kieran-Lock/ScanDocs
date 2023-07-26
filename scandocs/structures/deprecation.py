@@ -1,28 +1,30 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
-from docstring_parser import DocstringRaises
+from docstring_parser import DocstringDeprecated
 from .serialized import Serialized
 from .structure import Structure
 
 
 @dataclass(frozen=True, slots=True)
-class Error(Structure):
+class Deprecation(Structure):
     description: str
+    version: str
 
     @classmethod
-    def from_docstring_raises(cls, raises: DocstringRaises) -> Error:
+    def from_docstring_deprecated(cls, deprecation: DocstringDeprecated) -> Deprecation:
         return cls(
-            raises.type_name,
-            raises.description
+            f"Deprecated in version {deprecation.version}",
+            deprecation.description,
+            deprecation.version
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(
-            "Exception",
+            "Deprecation",
             {
-                "name": self.name,
-                "description": self.description
+                "description": self.description,
+                "version": self.version
             },
             {}
         )

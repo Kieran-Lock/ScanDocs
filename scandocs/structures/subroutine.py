@@ -3,16 +3,17 @@ from dataclasses import dataclass
 from types import FunctionType
 from inspect import Signature
 from typing import Callable
-from .error import Error
-from .python_structure import PythonStructure
-from .serialized import Serialized
+from .docstring import Docstring
 from .structure import Structure
+from .error import Error
+from .signature_structure import SignatureStructure
+from .serialized import Serialized
 from .parameter import Parameter
 from ..parsing import ExceptionsParser
 
 
 @dataclass(frozen=True, slots=True)
-class Subroutine(PythonStructure[FunctionType]):
+class Subroutine(SignatureStructure[FunctionType]):
     is_lambda: bool
     parameters: list[Parameter]
     raises: list[Error]
@@ -24,6 +25,7 @@ class Subroutine(PythonStructure[FunctionType]):
         signature = cls.get_signature(subroutine)
 
         parser = ExceptionsParser()
+        # noinspection PyBroadException
         try:
             parser.deep_visit(subroutine)
         except Exception:
@@ -34,6 +36,7 @@ class Subroutine(PythonStructure[FunctionType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(subroutine),
+            Docstring.from_docstring(subroutine.__doc__, name),
             is_declared,
             signature,
             name == "<lambda>",
@@ -43,14 +46,9 @@ class Subroutine(PythonStructure[FunctionType]):
                 ) for parameter in signature.parameters if parameter is not None
             ],
             [
-                Error.from_exception_name(error_name) for error_name in parser.exceptions
+                Error(error_name, "") for error_name in parser.exceptions
             ]
         )
-
-    def get_annotation(self) -> str:
-        if self.signature.return_annotation in (Signature.empty, "_empty"):
-            return ""
-        return str(self.signature.return_annotation)
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(
@@ -59,7 +57,7 @@ class Subroutine(PythonStructure[FunctionType]):
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "returnType": Parameter.get_annotation(self.signature.return_annotation),
+                "returnType": self.object_as_written(self.signature.return_annotation),  # TODO: Clean
                 "parameters": [
                     parameter.serialize(child_filter=child_filter).to_json() for parameter in self.parameters
                 ],

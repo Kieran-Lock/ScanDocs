@@ -3,13 +3,15 @@ from dataclasses import dataclass
 from types import ModuleType, FunctionType
 from inspect import getmembers, ismodule, isclass, isfunction
 from typing import Callable
+from .docstring import Docstring
+from .structure import Structure
 from .module import Module
 from .serialized import Serialized
-from .structure import Structure
+from .source_structure import SourceStructure
 
 
 @dataclass(frozen=True)
-class Package(Structure[ModuleType]):
+class Package(SourceStructure[ModuleType]):
     subpackages: list[Package]
     modules: list[Module]
 
@@ -35,6 +37,7 @@ class Package(Structure[ModuleType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(package),
+            Docstring.from_docstring(package.__doc__, name),
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
             [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )
@@ -55,7 +58,8 @@ class Package(Structure[ModuleType]):
             "Package",
             {
                 "name": self.name,
-                "source": self.source
+                "source": self.source,
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
             },
             {
                 "subpackages": [
