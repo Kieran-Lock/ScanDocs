@@ -6,7 +6,9 @@
     <dt>
         <div class="flex flex-row pr-2 justify-between w-full">
             <div class="flex flex-row">
-                <h3>{meta.name}</h3>
+                {#if meta.name}
+                    <h3>{meta.name}</h3>
+                {/if}
                 {#if meta.annotation}
                     <h3>: {meta.annotation}</h3>
                 {/if}
