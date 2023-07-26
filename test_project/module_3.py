@@ -29,11 +29,16 @@ def function_2(arg_1: type, arg_2: str = "Default Arg") -> tuple[type, str]:
 
     This function has lots of different bits
 
-    :param arg_1:
-    :param arg_2:
+    :param arg_1: the first argument
+    :type arg_1: type
+    :param arg_2: the second argument, defaults to "Default Arg"
+    :type arg_2?: str
     :return: returns a tuple (very cool)
+    :raises ValueError: If neither of the arguments are truthy
     :rtype: tuple[type, str]
     """
+    if not (arg_1 or arg_2):
+        raise ValueError
     return arg_1, arg_2
 
 
@@ -50,7 +55,14 @@ async def async_function() -> None:
 
 
 def normal_generator() -> Iterator[str]:
+    """
+    basic generator test
+
+    :yield: "Generator"
+    :raise RuntimeError: End with a runtime error for extra punishment
+    """
     yield "Generator"
+    raise RuntimeError
 
 
 async def async_generator() -> Iterator[str]:

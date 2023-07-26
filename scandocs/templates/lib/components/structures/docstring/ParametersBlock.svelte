@@ -10,7 +10,9 @@
         <section>
             {#each parameters as parameter}
                 <dl class="list-d flex-auto p-2">
-                    <svelte:component this={parameter.component} meta={parameter.meta} />
+                    <div class="flex flex-row justify-between pr-2">
+                        <svelte:component this={parameter.component} meta={parameter.meta} />
+                    </div>
                     <div class="pb-2 pt-4">
                         <hr class="!border-t-2" />
                     </div>

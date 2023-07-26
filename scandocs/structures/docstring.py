@@ -27,9 +27,10 @@ class Docstring(Structure):
             Deprecation.from_docstring_deprecated(docstring.deprecation) if docstring.deprecation else None,
             [Parameter(
                 parameter.arg_name,
+                parameter.description,
                 parameter.type_name,
                 parameter.default,
-                parameter.is_optional
+                parameter.is_optional  # TODO: Gives None wrongly
             ) for parameter in docstring.params],
             [Error.from_docstring_raises(error) for error in docstring.raises],
             [SubroutineReturn.from_docstring_returns(subroutine_return) for subroutine_return in docstring.many_returns]

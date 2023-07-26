@@ -14,6 +14,10 @@ class TestClass3:
 
     @property
     def property_method(self) -> bool:
+        """
+        A very simple getter method
+        :return:
+        """
         return self.attribute
 
     @cached_property
@@ -21,14 +25,18 @@ class TestClass3:
         return self.cached_attribute
 
 
-def silent_function(x: int) -> None | str:
+def silent_function(x: int, y: str) -> None | str:
     """
     This isn't exposed
 
+    This function was deprecated in v4.2.0, so probably don't use it lol.
+
+    :param y:
     :param x:
-    :return the results, duh: whether the inputs passed the test
+    :type y: str
+    :return: whether the inputs passed the test
     :rtype: None | str
     """
-    if x:
+    if x or y:
         return "Passed"
     return
