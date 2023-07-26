@@ -16,12 +16,13 @@ class Class(SignatureStructure[type]):
     def from_class(cls, class_: type, is_declared: bool) -> Class:
         name = class_.__name__
         is_dunder = name.startswith("__")
+        docstring = cls.get_docstring(class_)
         return cls(
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(class_),
-            Docstring.from_docstring(class_.__doc__, name),
+            Docstring.from_docstring(docstring, name) if docstring else None,
             is_declared,
             cls.get_signature(class_),
             [
@@ -47,7 +48,7 @@ class Class(SignatureStructure[type]):
                 "source": self.source,
                 "signature": str(self.signature),
                 "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
             },
             {
                 "methods": [

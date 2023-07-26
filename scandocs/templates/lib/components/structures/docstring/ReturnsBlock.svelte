@@ -2,8 +2,8 @@
     export let returns
 </script>
 
-{#if returns && returns.length}
-    <div class="flex flex-col gap-2 card w-[50%] p-4 variant-glass-surface">
+{#if returns.length}
+    <div class="flex flex-col gap-2 card w-[50%] p-4 variant-glass-surface w-full">
         <header>
             <h2 class="text-2xl font-bold">Returns</h2>
         </header>

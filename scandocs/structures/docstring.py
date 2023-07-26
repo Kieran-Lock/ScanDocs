@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
-from docstring_parser import parse
+from docstring_parser import parse, Docstring as ParserDocstring
 from .serialized import Serialized
 from .structure import Structure
 from .parameter import Parameter
@@ -20,8 +20,7 @@ class Docstring(Structure):
     returns: list[SubroutineReturn]
 
     @classmethod
-    def from_docstring(cls, docstring: str, parent_name: str) -> Docstring:
-        docstring = parse(docstring)
+    def from_docstring(cls, docstring: ParserDocstring, parent_name: str) -> Docstring:
         return cls(
             parent_name,
             docstring.short_description,

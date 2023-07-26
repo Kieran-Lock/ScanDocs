@@ -1,7 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from types import FunctionType
-from inspect import Signature
 from typing import Callable
 from .docstring import Docstring
 from .structure import Structure
@@ -23,6 +22,7 @@ class Subroutine(SignatureStructure[FunctionType]):
         name = subroutine.__name__
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
+        docstring = cls.get_docstring(subroutine)
 
         parser = ExceptionsParser()
         # noinspection PyBroadException
@@ -36,7 +36,7 @@ class Subroutine(SignatureStructure[FunctionType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(subroutine),
-            Docstring.from_docstring(subroutine.__doc__, name),
+            Docstring.from_docstring(docstring, name) if docstring else None,
             is_declared,
             signature,
             name == "<lambda>",
@@ -62,7 +62,7 @@ class Subroutine(SignatureStructure[FunctionType]):
                     parameter.serialize(child_filter=child_filter).to_json() for parameter in self.parameters
                 ],
                 "exceptions": [error.serialize(child_filter=child_filter).to_json() for error in self.raises],
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
             },
             {}
         )

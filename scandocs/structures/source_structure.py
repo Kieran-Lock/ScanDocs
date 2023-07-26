@@ -1,7 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Generic, TypeVar
-from inspect import getsource, Signature
+from inspect import getsource
+from docstring_parser import parse, Docstring as ParserDocstring
 from abc import ABC
 from .docstring import Docstring
 from .structure import Structure
@@ -15,7 +16,7 @@ class SourceStructure(Generic[StructureT], Structure, ABC):
     is_private: bool
     is_dunder: bool
     source: str
-    docstring: Docstring
+    docstring: Docstring | None
 
     @staticmethod
     def get_source(method: StructureT) -> str | None:
@@ -25,3 +26,10 @@ class SourceStructure(Generic[StructureT], Structure, ABC):
             return  # Can't be provided
         except TypeError:
             return  # Can't be provided, maybe builtin?
+
+    @staticmethod
+    def get_docstring(structure: StructureT) -> ParserDocstring | None:
+        docstring = structure.__doc__
+        if docstring is None or docstring.isspace():
+            return
+        return parse(docstring)

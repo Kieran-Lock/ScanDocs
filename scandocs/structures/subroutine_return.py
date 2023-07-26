@@ -9,13 +9,15 @@ from .structure import Structure
 
 @dataclass(frozen=True, slots=True)
 class SubroutineReturn(Structure):
+    description: str
     annotation: str | None
     is_yield: bool
 
     @classmethod
     def from_docstring_returns(cls, returns: DocstringReturns) -> SubroutineReturn:
         return cls(
-            returns.return_name,
+            "",
+            returns.description,
             returns.type_name,
             returns.is_generator
         )
@@ -24,7 +26,7 @@ class SubroutineReturn(Structure):
         return Serialized(
             "SubroutineReturn",
             {
-                "name": self.name,
+                "description": self.description,
                 "annotation": self.annotation,
                 "isYield": self.is_yield
             },

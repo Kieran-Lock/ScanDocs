@@ -2,8 +2,8 @@
     export let exceptions
 </script>
 
-{#if exceptions && exceptions.length}
-    <div class="flex flex-col gap-2 card w-[50%] p-4 variant-glass-surface">
+{#if exceptions.length}
+    <div class="flex flex-col gap-2 card w-[50%] p-4 variant-glass-surface w-full">
         <header>
             <h2 class="text-2xl font-bold">Raises</h2>
         </header>

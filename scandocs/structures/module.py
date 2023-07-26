@@ -20,12 +20,13 @@ class Module(SourceStructure[ModuleType]):
     def from_module(cls, module: ModuleType, declared: set[type | FunctionType]) -> Module:
         name = module.__name__.split(".")[-1]
         is_dunder = name.startswith("__")
+        docstring = cls.get_docstring(module)
         return cls(
             name,
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(module),
-            Docstring.from_docstring(module.__doc__, name),
+            Docstring.from_docstring(docstring, name) if docstring else None,
             [Class.from_class(class_[1], class_[1] in declared)
              for class_ in getmembers(
                 module, predicate=lambda member: isclass(member) and cls.is_user_defined(member, module)
@@ -46,7 +47,7 @@ class Module(SourceStructure[ModuleType]):
             {
                 "name": self.name,
                 "source": self.source,
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
             },
             {
                 "classes": [

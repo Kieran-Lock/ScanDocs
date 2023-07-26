@@ -27,6 +27,7 @@ class Package(SourceStructure[ModuleType]):
 
         name = package.__name__.split(".")[-1]
         is_dunder = name.startswith("__")
+        docstring = cls.get_docstring(package)
         try:
             substructures = package.__all__
         except AttributeError:  # __all__ index not defined
@@ -37,7 +38,7 @@ class Package(SourceStructure[ModuleType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(package),
-            Docstring.from_docstring(package.__doc__, name),
+            Docstring.from_docstring(docstring, name) if docstring else None,
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
             [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )
@@ -59,7 +60,7 @@ class Package(SourceStructure[ModuleType]):
             {
                 "name": self.name,
                 "source": self.source,
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json()
+                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
             },
             {
                 "subpackages": [

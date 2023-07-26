@@ -26,7 +26,8 @@ def silent_function(x: int) -> None | str:
     This isn't exposed
 
     :param x:
-    :return:
+    :return the results, duh: whether the inputs passed the test
+    :rtype: None | str
     """
     if x:
         return "Passed"

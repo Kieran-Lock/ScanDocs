@@ -10,13 +10,15 @@ from typing import Iterator
 
 
 class Nonsense:
-    """
-    An empty class
-    """
     pass
 
 
 def function_1() -> None:
+    """
+    Boring function
+    :return: Nothing
+    :rtype: None
+    """
     print("This is a function")
     return
 
@@ -29,7 +31,8 @@ def function_2(arg_1: type, arg_2: str = "Default Arg") -> tuple[type, str]:
 
     :param arg_1:
     :param arg_2:
-    :return: returns a tuple
+    :return: returns a tuple (very cool)
+    :rtype: tuple[type, str]
     """
     return arg_1, arg_2
 
@@ -38,6 +41,11 @@ lambda_function = lambda x: x + 1
 
 
 async def async_function() -> None:
+    """
+        Boring async function
+        :return: Nothing
+        :rtype:
+        """
     pass
 
 
@@ -56,7 +64,8 @@ def context_manager() -> Iterator[int]:
 
     This returns an iterator, which makes it a good test!
 
-    :return: An iterator
+    :return iterator: From the as statement
+    :rtype: Iterator[int]
     """
     x = 0
     try:

@@ -8,8 +8,6 @@
     });
 
     onDestroy(unsubscribe);
-
-    console.log(meta)
 </script>
 
 {#if meta.docstring}
