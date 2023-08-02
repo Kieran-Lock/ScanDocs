@@ -1,19 +1,21 @@
 <script lang="ts">
-    import {CodeBlock, RadioGroup, RadioItem, SlideToggle} from "@skeletonlabs/skeleton";
+    import {CodeBlock, RadioGroup, RadioItem} from "@skeletonlabs/skeleton";
     import {activeProject} from "$lib/stores/project";
     import {onDestroy} from "svelte";
+
+    export let short
+    export let long
 
     let isSignature = false
     let meta
     const unsubscribe = activeProject.subscribe((value) => {
         meta = activeProject.getActive($activeProject).meta
-    });
-
-    onDestroy(unsubscribe);
+    })
+    onDestroy(unsubscribe)
 </script>
 
-<div class="flex flex-col items-end gap-2 card w-[50%] p-4">
-    <header class="flex flex-row justify-between items-center w-full pl-1.5 pr-1">
+<div class="flex flex-col gap-2 card p-4 variant-glass-surface">
+    <header class="flex flex-row justify-between items-center w-full">
         <h2 class="text-2xl font-bold">{activeProject.getActive($activeProject).meta.name}</h2>
         {#if meta.signature}
             <RadioGroup rounded="rounded-container-token">
@@ -23,8 +25,18 @@
         {/if}
     </header>
     {#if meta.source}
-        <section class="w-full mx-1">
+        <section class="w-full">
             <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
         </section>
+    {/if}
+    {#if short || long}
+        <footer class="w-full pt-2">
+            {#if short}
+                <p>{short}</p>
+            {/if}
+            {#if long}
+                <p>{long}</p>
+            {/if}
+        </footer>
     {/if}
 </div>

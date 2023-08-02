@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Search from "$lib/components/Search.svelte";
+    import Search from "$lib/components/sidebar/Search.svelte";
     import {TreeView} from "@skeletonlabs/skeleton";
-    import ProjectTree from "$lib/components/ProjectTree.svelte";
+    import ProjectTree from "$lib/components/sidebar/ProjectTree.svelte";
     import {project, activeProject} from "$lib/stores/project";
 </script>
 

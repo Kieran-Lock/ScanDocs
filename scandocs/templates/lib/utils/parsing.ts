@@ -6,7 +6,6 @@ import Subroutine from "$lib/components/structures/Subroutine.svelte";
 import type {JsonNode, Node} from "$lib/utils/types";
 import Parameter from "$lib/components/structures/Parameter.svelte";
 import Exception from "$lib/components/structures/Exception.svelte";
-import Docstring from "$lib/components/structures/docstring/Docstring.svelte";
 import SubroutineReturn from "$lib/components/structures/SubroutineReturn.svelte";
 import Deprecation from "$lib/components/structures/Deprecation.svelte";
 
@@ -18,7 +17,6 @@ export const parseProject = (project: JsonNode): Node => {
         "Subroutine": Subroutine,
         "Parameter": Parameter,
         "Exception": Exception,
-        "Docstring": Docstring,
         "SubroutineReturn": SubroutineReturn,
         "Deprecation": Deprecation
     }

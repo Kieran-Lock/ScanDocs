@@ -3,7 +3,7 @@
 </script>
 
 {#if parameters.length}
-    <div class="flex flex-col gap-2 card w-[50%] p-4 variant-glass-surface w-full">
+    <div class="flex flex-col gap-2 card p-4 variant-glass-surface">
         <header>
             <h2 class="text-2xl font-bold">Parameters</h2>
         </header>
