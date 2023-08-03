@@ -5,12 +5,15 @@
 <div class="w-full">
     <dt>
         <div class="flex flex-row pr-2 justify-between w-full">
-            <div class="flex flex-row">
+            <div class="flex flex-row gap-2 text-md">
                 {#if meta.name}
-                    <h3>{meta.name}</h3>
+                    <p>{meta.name}</p>
                 {/if}
+                <p> : </p>
                 {#if meta.annotation}
-                    <h3>: {meta.annotation}</h3>
+                    <p class="italic">{meta.annotation}</p>
+                {:else}
+                    <p class="italic">No Annotation Specified</p>
                 {/if}
             </div>
             {#if meta.isOptional}
@@ -18,7 +21,7 @@
             {/if}
         </div>
     </dt>
-    <dd class="ml-4">
+    <dd class="pl-8">
         {#if meta.description}
             {meta.description}
         {/if}

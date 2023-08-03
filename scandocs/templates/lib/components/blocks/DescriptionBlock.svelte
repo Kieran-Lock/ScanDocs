@@ -24,19 +24,19 @@
             </RadioGroup>
         {/if}
     </header>
-    {#if meta.source}
-        <section class="w-full">
-            <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
-        </section>
-    {/if}
     {#if short || long}
-        <footer class="w-full pt-2">
+        <section class="w-full pt-2">
             {#if short}
                 <p>{short}</p>
             {/if}
             {#if long}
                 <p>{long}</p>
             {/if}
+        </section>
+    {/if}
+    {#if meta.source}
+        <footer class="w-full">
+            <CodeBlock class="w-full" language="Python" code={isSignature ? meta.signature : meta.source}></CodeBlock>
         </footer>
     {/if}
 </div>

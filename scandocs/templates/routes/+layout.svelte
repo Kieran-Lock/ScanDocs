@@ -6,7 +6,7 @@
     import hljs from 'highlight.js';
     import 'highlight.js/styles/github-dark.css';
     import { storeHighlightJs } from '@skeletonlabs/skeleton';
-    import Sidebar from "$lib/components/layout/Sidebar.svelte";
+    import Sidebar from "$lib/components/sidebar/Sidebar.svelte";
     storeHighlightJs.set(hljs);
 </script>
 

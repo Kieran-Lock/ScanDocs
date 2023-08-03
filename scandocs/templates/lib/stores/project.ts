@@ -24,7 +24,7 @@ const createStore = () => {
                 }
             }
         },
-        getActive: (current: unknown) => {
+        getActive: (current: unknown): Node => {
             for (const [i, structure] of entriesOf(traverseProject(project))) {
                 if (i === current as number) {
                     return structure

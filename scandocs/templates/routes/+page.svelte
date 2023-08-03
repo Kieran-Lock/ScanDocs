@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import DescriptionBlock from "$lib/components/blocks/DescriptionBlock.svelte";
     import ParametersBlock from "$lib/components/blocks/ParametersBlock.svelte";
     import ReturnsBlock from "$lib/components/blocks/ReturnsBlock.svelte";
@@ -19,7 +19,7 @@
         shortDescription = meta.docstring?.meta.shortDescription
         longDescription = meta.docstring?.meta.longDescription
         deprecation = meta.docstring?.meta.deprecation
-        parameters = meta.docstring?.meta.parameters
+        parameters = meta.parameters
         returns = meta.docstring?.meta.returns
         raises = meta.docstring?.meta.raises
     })
