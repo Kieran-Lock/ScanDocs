@@ -25,7 +25,9 @@ interface ComplexDescriptionMeta {
     deprecation: Node | null
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
+    isAbstract: boolean
+}
 export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
@@ -41,6 +43,8 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
     returns: Node[]
     isGenerator: boolean
     isAsync: boolean
+    isAbstract: boolean
+    isLambda: boolean
 }
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 

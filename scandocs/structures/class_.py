@@ -1,4 +1,5 @@
 from __future__ import annotations
+from abc import ABCMeta
 from dataclasses import dataclass
 from typing import Callable
 from .docstring import Docstring
@@ -11,12 +12,17 @@ from .subroutine import Subroutine
 @dataclass(frozen=True, slots=True)
 class Class(SignatureStructure[type]):
     methods: list[Subroutine]
+    is_abstract: bool
 
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
         name = class_.__name__
         is_dunder = name.startswith("__")
         docstring = cls.get_docstring(class_)
+        try:
+            abstract_methods = class_.__abstractmethods__
+        except AttributeError:
+            abstract_methods = []
         return cls(
             name,
             (not is_dunder) and name.startswith("_"),
@@ -28,10 +34,12 @@ class Class(SignatureStructure[type]):
             [
                 Subroutine.from_subroutine(
                     getattr(class_, method),
-                    is_declared
+                    is_declared,
+                    is_abstract=method in abstract_methods
                 )
                 for method in class_.__dict__ if callable(getattr(class_, method))
-            ]
+            ],
+            isinstance(class_, ABCMeta)
         )
 
     @property
@@ -50,7 +58,8 @@ class Class(SignatureStructure[type]):
                 "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.docstring.deprecation if self.docstring else None
+                "deprecation": self.docstring.deprecation if self.docstring else None,
+                "isAbstract": self.is_abstract
             },
             {
                 "methods": [

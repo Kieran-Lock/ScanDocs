@@ -15,14 +15,16 @@ from ..parsing import ExceptionsParser
 
 @dataclass(frozen=True, slots=True)
 class Subroutine(SignatureStructure[FunctionType]):
-    is_lambda: bool
     parameters: list[Parameter]
     raises: list[Error]
     is_generator: bool
     is_async: bool
+    is_abstract: bool
+    is_lambda: bool
 
     @classmethod
-    def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool) -> Subroutine:
+    def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool,
+                        is_abstract: bool = False) -> Subroutine:
         name = subroutine.__name__
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
@@ -46,7 +48,6 @@ class Subroutine(SignatureStructure[FunctionType]):
             docstring,
             is_declared,
             signature,
-            name == "<lambda>",
             [
                 Parameter.from_parameter(
                     signature.parameters[parameter], docstring.parameters if docstring else []
@@ -56,7 +57,9 @@ class Subroutine(SignatureStructure[FunctionType]):
                 Error(error_name, "") for error_name in parser.exceptions
             ],
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
-            isasyncgenfunction(subroutine) or iscoroutinefunction(subroutine)
+            isasyncgenfunction(subroutine) or iscoroutinefunction(subroutine),
+            is_abstract,
+            name == "<lambda>"
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -83,7 +86,9 @@ class Subroutine(SignatureStructure[FunctionType]):
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.docstring.deprecation if self.docstring else None,
                 "isGenerator": self.is_generator,
-                "isAsync": self.is_async
+                "isAsync": self.is_async,
+                "isAbstract": self.is_abstract,
+                "isLambda": self.is_lambda
             },
             {}
         )
