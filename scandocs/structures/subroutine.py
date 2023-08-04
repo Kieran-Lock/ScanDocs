@@ -23,6 +23,7 @@ class Subroutine(SignatureStructure[FunctionType]):
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
         docstring = cls.get_docstring(subroutine)
+        docstring = Docstring.from_docstring(docstring) if docstring else None
 
         parser = ExceptionsParser()
         # noinspection PyBroadException
@@ -36,13 +37,13 @@ class Subroutine(SignatureStructure[FunctionType]):
             (not is_dunder) and name.startswith("_"),
             is_dunder,
             cls.get_source(subroutine),
-            Docstring.from_docstring(docstring) if docstring else None,
+            docstring,
             is_declared,
             signature,
             name == "<lambda>",
             [
                 Parameter.from_parameter(
-                    signature.parameters[parameter]
+                    signature.parameters[parameter], docstring.parameters if docstring else []
                 ) for parameter in signature.parameters if parameter is not None
             ],
             [
