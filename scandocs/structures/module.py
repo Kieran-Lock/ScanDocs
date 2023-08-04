@@ -48,8 +48,7 @@ class Module(SourceStructure[ModuleType]):
                 "name": self.name,
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
-                "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.docstring.deprecation if self.docstring else None
+                "longDescription": self.docstring.long_description if self.docstring else None
             },
             {
                 "classes": [

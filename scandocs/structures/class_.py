@@ -7,11 +7,13 @@ from .structure import Structure
 from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .subroutine import Subroutine
+from ..tags import Deprecated
 
 
 @dataclass(frozen=True, slots=True)
 class Class(SignatureStructure[type]):
     methods: list[Subroutine]
+    deprecation: Deprecated | None
     is_abstract: bool
 
     @classmethod
@@ -39,6 +41,7 @@ class Class(SignatureStructure[type]):
                 )
                 for method in class_.__dict__ if callable(getattr(class_, method))
             ],
+            Deprecated.get_tag(class_),
             isinstance(class_, ABCMeta)
         )
 
@@ -58,7 +61,7 @@ class Class(SignatureStructure[type]):
                 "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.docstring.deprecation if self.docstring else None,
+                "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
                 "isAbstract": self.is_abstract
             },
             {

@@ -11,16 +11,19 @@ from .serialized import Serialized
 from .parameter import Parameter
 from .subroutine_return import SubroutineReturn
 from ..parsing import ExceptionsParser
+from ..tags import ContextManager, Deprecated
 
 
 @dataclass(frozen=True, slots=True)
 class Subroutine(SignatureStructure[FunctionType]):
     parameters: list[Parameter]
     raises: list[Error]
+    deprecation: Deprecated | None
     is_generator: bool
     is_async: bool
     is_abstract: bool
     is_lambda: bool
+    is_context_manager: bool
 
     @classmethod
     def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool,
@@ -56,10 +59,16 @@ class Subroutine(SignatureStructure[FunctionType]):
             [
                 Error(error_name, "") for error_name in parser.exceptions
             ],
+            Deprecated.get_tag(subroutine),
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
-            isasyncgenfunction(subroutine) or iscoroutinefunction(subroutine),
+            (
+                    isasyncgenfunction(subroutine) or
+                    iscoroutinefunction(subroutine) or
+                    ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else None
+            ),
             is_abstract,
-            name == "<lambda>"
+            name == "<lambda>",
+            ContextManager.is_tagged(subroutine)
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -84,11 +93,12 @@ class Subroutine(SignatureStructure[FunctionType]):
                 ],
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.docstring.deprecation if self.docstring else None,
+                "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
                 "isGenerator": self.is_generator,
                 "isAsync": self.is_async,
                 "isAbstract": self.is_abstract,
-                "isLambda": self.is_lambda
+                "isLambda": self.is_lambda,
+                "isContextManager": self.is_context_manager
             },
             {}
         )

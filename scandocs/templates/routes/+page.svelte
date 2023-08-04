@@ -21,6 +21,7 @@
     let isAsync
     let isAbstract
     let isLambda
+    let isContextManager
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = activeProject.subscribe((_) => {
         const meta = activeProject.getActive($activeProject).meta
@@ -37,13 +38,14 @@
         isAsync = meta.isAsync
         isAbstract = meta.isAbstract
         isLambda = meta.isLambda
+        isContextManager = meta.isContextManager
     })
     onDestroy(unsubscribe)
 </script>
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
     <div class="flex flex-col gap-6 w-full">
-        <DescriptionBlock name={name} short={shortDescription} long={longDescription} isGenerator={isGenerator} isAsync={isAsync} isAbstract={isAbstract} isLambda={isLambda} />
+        <DescriptionBlock name={name} short={shortDescription} long={longDescription} isGenerator={isGenerator} isAsync={isAsync} isAbstract={isAbstract} isLambda={isLambda} isContextManager={isContextManager} />
         {#if deprecation}
             <DeprecationBlock deprecation={deprecation} />
         {/if}

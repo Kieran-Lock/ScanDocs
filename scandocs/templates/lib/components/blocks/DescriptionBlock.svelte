@@ -6,6 +6,7 @@
     export let isAsync
     export let isAbstract
     export let isLambda
+    export let isContextManager
 </script>
 
 <div class="flex flex-col card p-4 gap-4 variant-glass-surface">
@@ -23,6 +24,9 @@
             {/if}
             {#if isLambda}
                 <p class="badge variant-ghost-secondary">Lambda</p>
+            {/if}
+            {#if isContextManager}
+                <p class="badge variant-ghost-secondary">Context Manager</p>
             {/if}
         </div>
     </header>
