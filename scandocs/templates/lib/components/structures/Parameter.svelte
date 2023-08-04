@@ -16,9 +16,11 @@
                     <p class="italic">No Annotation Specified</p>
                 {/if}
             </div>
-            {#if meta.isOptional}
-                <p class="badge variant-ghost-secondary">Optional</p>
-            {/if}
+            <div>
+                {#if meta.isOptional}
+                    <p class="badge variant-ghost-secondary">Optional</p>
+                {/if}
+            </div>
         </div>
     </dt>
     <dd class="pl-8">

@@ -17,6 +17,7 @@
     let source
     let signature
     let name
+    let isGenerator
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = activeProject.subscribe((_) => {
         const meta = activeProject.getActive($activeProject).meta
@@ -29,13 +30,14 @@
         raises = meta.raises
         source = meta.source
         signature = meta.signature
+        isGenerator = meta.isGenerator
     })
     onDestroy(unsubscribe)
 </script>
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
     <div class="flex flex-col gap-6 w-full">
-        <DescriptionBlock name={name} short={shortDescription} long={longDescription} />
+        <DescriptionBlock name={name} short={shortDescription} long={longDescription} isGenerator={isGenerator} />
         {#if deprecation}
             <DeprecationBlock deprecation={deprecation} />
         {/if}

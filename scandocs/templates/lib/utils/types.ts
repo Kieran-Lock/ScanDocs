@@ -4,7 +4,7 @@ import type {SvelteComponent} from "svelte";
 interface NameMeta {
     name: string
 }
-interface DescriptionMeta {
+interface SimpleDescriptionMeta {
     description: string
 }
 interface AnnotationMeta {
@@ -12,7 +12,6 @@ interface AnnotationMeta {
 }
 interface SourceMeta {
     source: string
-    docstring: Node
 }
 interface SignatureMeta extends SourceMeta {
     signature: string
@@ -20,34 +19,31 @@ interface SignatureMeta extends SourceMeta {
 interface ParametersMeta {
     parameters: Node[]
 }
+interface ComplexDescriptionMeta {
+    shortDescription: string | null
+    longDescription: string | null
+    deprecation: Node | null
+}
 
-export type ClassMeta = SignatureMeta & ParametersMeta
-export type DeprecationMeta = DescriptionMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta
+export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
-export type DocstringMeta = ParametersMeta & {
-    shortDescription: string
-    longDescription: string
-    deprecation: Node | null
-    raises: Node[]
-    returns: Node[]
-}
-export type ErrorMeta = NameMeta & DescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta
-export type PackageMeta = NameMeta & SourceMeta
-export type ParameterMeta = NameMeta & DescriptionMeta & ParametersMeta & AnnotationMeta & {
+export type ErrorMeta = NameMeta & SimpleDescriptionMeta
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
+export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
+export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
     isOptional: string
 }
-export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & {
-    returnType: string
-    exceptions: Node[]
+export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
+    raises: Node[]
+    returns: Node[]
+    isGenerator: boolean
 }
-export type SubroutineReturnMeta = DescriptionMeta & AnnotationMeta & {
-    isYield: boolean
-}
+export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
-export type AllMeta = ClassMeta & DeprecationMeta & DocstringMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
+export type AllMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
 export type Node = {
     component: SvelteComponent,
     meta: AllMeta,
