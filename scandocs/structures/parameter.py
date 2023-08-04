@@ -28,9 +28,9 @@ class Parameter(Structure):
             description,
             cls.object_as_written(parameter.annotation),
             cls.object_as_written(parameter.default),
-            (
-                parameter.kind not in (PythonParameter.POSITIONAL_ONLY, PythonParameter.POSITIONAL_OR_KEYWORD)
-            ) and parameter.default is PythonParameter.empty
+            not (parameter.kind in (
+                PythonParameter.POSITIONAL_ONLY, PythonParameter.POSITIONAL_OR_KEYWORD
+            ) and parameter.default == PythonParameter.empty)
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
