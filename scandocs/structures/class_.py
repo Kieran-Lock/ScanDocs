@@ -48,7 +48,9 @@ class Class(SignatureStructure[type]):
                 "source": self.source,
                 "signature": str(self.signature),
                 "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
+                "shortDescription": self.docstring.short_description if self.docstring else None,
+                "longDescription": self.docstring.long_description if self.docstring else None,
+                "deprecation": self.docstring.deprecation if self.docstring else None
             },
             {
                 "methods": [

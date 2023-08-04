@@ -60,7 +60,9 @@ class Package(SourceStructure[ModuleType]):
             {
                 "name": self.name,
                 "source": self.source,
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
+                "shortDescription": self.docstring.short_description if self.docstring else None,
+                "longDescription": self.docstring.long_description if self.docstring else None,
+                "deprecation": self.docstring.deprecation if self.docstring else None
             },
             {
                 "subpackages": [

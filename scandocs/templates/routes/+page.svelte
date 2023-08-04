@@ -21,12 +21,12 @@
     const unsubscribe = activeProject.subscribe((_) => {
         const meta = activeProject.getActive($activeProject).meta
         name = meta.name
-        shortDescription = meta.docstring?.meta.shortDescription
-        longDescription = meta.docstring?.meta.longDescription
-        deprecation = meta.docstring?.meta.deprecation
+        shortDescription = meta.shortDescription
+        longDescription = meta.longDescription
+        deprecation = meta.deprecation
         parameters = meta.parameters
-        returns = meta.docstring?.meta.returns
-        raises = meta.docstring?.meta.raises
+        returns = meta.returns
+        raises = meta.raises
         source = meta.source
         signature = meta.signature
     })

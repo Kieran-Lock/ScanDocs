@@ -51,18 +51,25 @@ class Subroutine(SignatureStructure[FunctionType]):
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
+        # self.object_as_written(self.signature.return_annotation)
         return Serialized(
             "Subroutine",
             {
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "returnType": self.object_as_written(self.signature.return_annotation),  # TODO: Clean
                 "parameters": [
                     parameter.serialize(child_filter=child_filter).to_json() for parameter in self.parameters
                 ],
-                "exceptions": [error.serialize(child_filter=child_filter).to_json() for error in self.raises],
-                "docstring": self.docstring.serialize(child_filter=child_filter).to_json() if self.docstring else None
+                "raises": [
+                    error.serialize(child_filter=child_filter).to_json() for error in self.docstring.raises
+                ] if self.docstring else [],
+                "returns": [
+                    return_.serialize(child_filter=child_filter).to_json() for return_ in self.docstring.returns
+                ] if self.docstring else [],
+                "shortDescription": self.docstring.short_description if self.docstring else None,
+                "longDescription": self.docstring.long_description if self.docstring else None,
+                "deprecation": self.docstring.deprecation if self.docstring else None
             },
             {}
         )
