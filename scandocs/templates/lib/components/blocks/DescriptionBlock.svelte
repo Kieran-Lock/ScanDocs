@@ -3,6 +3,7 @@
     export let short
     export let long
     export let isGenerator
+    export let isAsync
 </script>
 
 <div class="flex flex-col card p-4 gap-4 variant-glass-surface">
@@ -11,6 +12,9 @@
         <div>
             {#if isGenerator}
                 <p class="badge variant-ghost-secondary">Generator</p>
+            {/if}
+            {#if isAsync}
+                <p class="badge variant-ghost-secondary">Asynchronous</p>
             {/if}
         </div>
     </header>

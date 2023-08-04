@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import FunctionType
 from typing import Callable
-from inspect import isgeneratorfunction, isasyncgenfunction
+from inspect import isgeneratorfunction, isasyncgenfunction, iscoroutinefunction
 from .docstring import Docstring
 from .structure import Structure
 from .error import Error
@@ -19,6 +19,7 @@ class Subroutine(SignatureStructure[FunctionType]):
     parameters: list[Parameter]
     raises: list[Error]
     is_generator: bool
+    is_async: bool
 
     @classmethod
     def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool) -> Subroutine:
@@ -54,7 +55,8 @@ class Subroutine(SignatureStructure[FunctionType]):
             [
                 Error(error_name, "") for error_name in parser.exceptions
             ],
-            isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine)
+            isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
+            isasyncgenfunction(subroutine) or iscoroutinefunction(subroutine)
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -80,7 +82,8 @@ class Subroutine(SignatureStructure[FunctionType]):
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.docstring.deprecation if self.docstring else None,
-                "isGenerator": self.is_generator
+                "isGenerator": self.is_generator,
+                "isAsync": self.is_async
             },
             {}
         )

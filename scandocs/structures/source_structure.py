@@ -1,7 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Generic, TypeVar
-from inspect import getsource
+from inspect import getsource, getdoc
 from docstring_parser import parse, Docstring as ParserDocstring
 from abc import ABC
 from .docstring import Docstring
@@ -30,7 +30,7 @@ class SourceStructure(Generic[StructureT], Structure, ABC):
 
     @staticmethod
     def get_docstring(structure: StructureT) -> ParserDocstring | None:
-        docstring = structure.__doc__
+        docstring = getdoc(structure)
         if docstring is None or docstring.isspace():
             return
         return parse(docstring)

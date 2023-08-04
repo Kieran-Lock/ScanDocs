@@ -40,6 +40,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
     raises: Node[]
     returns: Node[]
     isGenerator: boolean
+    isAsync: boolean
 }
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
