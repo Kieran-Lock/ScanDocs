@@ -23,7 +23,9 @@ class Subroutine(SignatureStructure[FunctionType]):
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
         docstring = cls.get_docstring(subroutine)
-        docstring = Docstring.from_docstring(docstring) if docstring else None
+        docstring = Docstring.from_docstring(
+            docstring, cls.object_as_written(signature.return_annotation)
+        ) if docstring else None
 
         parser = ExceptionsParser()
         # noinspection PyBroadException
@@ -52,7 +54,6 @@ class Subroutine(SignatureStructure[FunctionType]):
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
-        # self.object_as_written(self.signature.return_annotation)
         return Serialized(
             "Subroutine",
             {

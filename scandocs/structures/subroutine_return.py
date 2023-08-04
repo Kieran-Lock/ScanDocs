@@ -21,6 +21,11 @@ class SubroutineReturn(Structure):
             returns.is_generator
         )
 
+    def patch_annotation(self, annotation: str) -> SubroutineReturn:
+        if annotation != "":
+            object.__setattr__(self, "annotation", annotation)
+        return self
+
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(
             "SubroutineReturn",

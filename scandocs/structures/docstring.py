@@ -17,7 +17,7 @@ class Docstring:
     returns: list[SubroutineReturn]
 
     @classmethod
-    def from_docstring(cls, docstring: ParserDocstring) -> Docstring:
+    def from_docstring(cls, docstring: ParserDocstring, return_annotation: str | None = None) -> Docstring:
         return cls(
             docstring.short_description,
             docstring.long_description,
@@ -30,5 +30,7 @@ class Docstring:
                 parameter.is_optional  # TODO: Gives None wrongly
             ) for parameter in docstring.params],
             [Error.from_docstring_raises(error) for error in docstring.raises],
-            [SubroutineReturn.from_docstring_returns(subroutine_return) for subroutine_return in docstring.many_returns]
+            [SubroutineReturn.from_docstring_returns(
+                subroutine_return
+            ).patch_annotation(return_annotation) for subroutine_return in docstring.many_returns]
         )
