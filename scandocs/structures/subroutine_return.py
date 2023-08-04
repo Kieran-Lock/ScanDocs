@@ -11,14 +11,12 @@ from .structure import Structure
 class SubroutineReturn(Structure):
     description: str
     annotation: str | None
-    is_yield: bool
 
     @classmethod
     def from_docstring_returns(cls, returns: DocstringReturns) -> SubroutineReturn:
         return cls(
             returns.description,
-            returns.type_name,
-            returns.is_generator
+            returns.type_name
         )
 
     def patch_annotation(self, annotation: str) -> SubroutineReturn:
@@ -31,8 +29,7 @@ class SubroutineReturn(Structure):
             "SubroutineReturn",
             {
                 "description": self.description,
-                "annotation": self.annotation,
-                "isYield": self.is_yield
+                "annotation": self.annotation
             },
             {}
         )

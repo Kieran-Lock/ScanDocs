@@ -2,12 +2,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import FunctionType
 from typing import Callable
+from inspect import isgeneratorfunction, isasyncgenfunction
 from .docstring import Docstring
 from .structure import Structure
 from .error import Error
 from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .parameter import Parameter
+from .subroutine_return import SubroutineReturn
 from ..parsing import ExceptionsParser
 
 
@@ -16,6 +18,7 @@ class Subroutine(SignatureStructure[FunctionType]):
     is_lambda: bool
     parameters: list[Parameter]
     raises: list[Error]
+    is_generator: bool
 
     @classmethod
     def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool) -> Subroutine:
@@ -50,7 +53,8 @@ class Subroutine(SignatureStructure[FunctionType]):
             ],
             [
                 Error(error_name, "") for error_name in parser.exceptions
-            ]
+            ],
+            isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine)
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -68,10 +72,15 @@ class Subroutine(SignatureStructure[FunctionType]):
                 ] if self.docstring else [],
                 "returns": [
                     return_.serialize(child_filter=child_filter).to_json() for return_ in self.docstring.returns
-                ] if self.docstring else [],
+                ] if self.docstring else [
+                    SubroutineReturn(
+                        "No description...", self.object_as_written(self.signature.return_annotation)
+                    ).serialize(child_filter=child_filter).to_json()
+                ],
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.docstring.deprecation if self.docstring else None
+                "deprecation": self.docstring.deprecation if self.docstring else None,
+                "isGenerator": self.is_generator
             },
             {}
         )
