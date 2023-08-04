@@ -7,21 +7,23 @@
     import {activeProject} from "$lib/stores/project";
     import {onDestroy} from "svelte";
     import SourceBlock from "$lib/components/blocks/SourceBlock.svelte";
+    import type {DeprecationTag} from "$lib/utils/types";
+    import type {Node} from "$lib/utils/types";
 
-    let shortDescription
-    let longDescription
-    let deprecation
-    let parameters
-    let returns
-    let raises
-    let source
-    let signature
-    let name
-    let isGenerator
-    let isAsync
-    let isAbstract
-    let isLambda
-    let isContextManager
+    let shortDescription: string | null
+    let longDescription: string | null
+    let deprecation: DeprecationTag
+    let parameters: Node[]
+    let returns: Node[]
+    let raises: Node[]
+    let source: string
+    let signature: string
+    let name: string
+    let isGenerator: boolean
+    let isAsync: boolean
+    let isAbstract: boolean
+    let isLambda: boolean
+    let isContextManager: boolean
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = activeProject.subscribe((_) => {
         const meta = activeProject.getActive($activeProject).meta

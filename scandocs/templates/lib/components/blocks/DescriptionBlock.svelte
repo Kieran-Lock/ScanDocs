@@ -1,12 +1,12 @@
 <script lang="ts">
-    export let name
-    export let short
-    export let long
-    export let isGenerator
-    export let isAsync
-    export let isAbstract
-    export let isLambda
-    export let isContextManager
+    export let name: string
+    export let short: string | null
+    export let long: string | null
+    export let isGenerator: boolean
+    export let isAsync: boolean
+    export let isAbstract: boolean
+    export let isLambda: boolean
+    export let isContextManager: boolean
 </script>
 
 <div class="flex flex-col card p-4 gap-4 variant-glass-surface">

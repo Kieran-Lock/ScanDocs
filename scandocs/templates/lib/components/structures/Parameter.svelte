@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let meta
+    import type {ParameterMeta} from "$lib/utils/types";
+
+    export let meta: ParameterMeta
 </script>
 
 <div class="w-full">

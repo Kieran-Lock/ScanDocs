@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type {SvelteComponent} from "svelte";
+import type {ComponentType} from "svelte";
 
 interface NameMeta {
     name: string
@@ -25,6 +25,11 @@ interface ComplexDescriptionMeta {
     deprecation: Node | null
 }
 
+export interface DeprecationTag {
+    version: string
+    description: string | null
+}
+
 export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
     isAbstract: boolean
     deprecation: {
@@ -45,10 +50,7 @@ export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & 
 export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
     raises: Node[]
     returns: Node[]
-    deprecation: {
-        version: string
-        description: string
-    }
+    deprecation: DeprecationTag
     isGenerator: boolean
     isAsync: boolean
     isAbstract: boolean
@@ -59,7 +61,7 @@ export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
 export type AllMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
 export type Node = {
-    component: SvelteComponent,
+    component: ComponentType,
     meta: AllMeta,
     children: Record<string, Node[]>
 }

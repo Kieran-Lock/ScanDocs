@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let meta
+    import type {SubroutineReturnMeta} from "$lib/utils/types";
+
+    export let meta: SubroutineReturnMeta
 </script>
 
 <div class="w-full">
@@ -12,9 +14,6 @@
                     <p>No Annotation Specified</p>
                 {/if}
             </div>
-            {#if meta.isOptional}
-                <p class="badge variant-ghost-secondary">Optional</p>
-            {/if}
         </div>
     </dt>
     <dd class="pl-8">

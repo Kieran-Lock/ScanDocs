@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let meta
+    import type {ClassMeta} from "$lib/utils/types";
+
+    export let meta: ClassMeta
 </script>
 
 <h3>{meta.name}</h3>

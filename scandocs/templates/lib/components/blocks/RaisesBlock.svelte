@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let exceptions
+    import type {Node} from "$lib/utils/types";
+
+    export let exceptions: Node[]
 </script>
 
 {#if exceptions.length}

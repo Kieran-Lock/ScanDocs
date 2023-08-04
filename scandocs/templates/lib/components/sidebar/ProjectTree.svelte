@@ -1,10 +1,10 @@
 <script lang="ts">
     import { TreeViewItem } from '@skeletonlabs/skeleton';
     import ProjectTree from './ProjectTree.svelte'
-    import {activeProject, project} from "$lib/stores/project";
+    import {activeProject} from "$lib/stores/project";
     import type {Node} from "$lib/utils/types";
 
-    export let nodes
+    export let nodes: Node[]
 
     const onClick = (node: Node) => {
         activeProject.setActive(node)

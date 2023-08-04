@@ -1,7 +1,7 @@
 <script lang="ts">
     import {CodeBlock, RadioGroup, RadioItem} from "@skeletonlabs/skeleton";
-    export let source
-    export let signature
+    export let source: string
+    export let signature: string
 
     let isSignature = false
 </script>

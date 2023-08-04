@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let parameters
+    import type {Node} from "$lib/utils/types";
+
+    export let parameters: Node[]
 </script>
 
 {#if parameters.length}

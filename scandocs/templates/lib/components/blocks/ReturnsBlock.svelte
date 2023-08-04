@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let returns
+    import type {Node} from "$lib/utils/types";
+
+    export let returns: Node[]
 </script>
 
 {#if returns.length}

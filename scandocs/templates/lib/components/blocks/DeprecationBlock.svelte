@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let deprecation
+    import type {DeprecationTag} from "$lib/utils/types";
+
+    export let deprecation: DeprecationTag
 </script>
 
 <div class="flex flex-col card p-4 gap-4 variant-glass-warning">
