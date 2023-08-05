@@ -7,14 +7,22 @@ from .structure import Structure
 from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .subroutine import Subroutine
+from .searchable_structure import SearchableStructure
 from ..tags import Deprecated
 
 
 @dataclass(frozen=True, slots=True)
-class Class(SignatureStructure[type]):
+class Class(SignatureStructure[type], SearchableStructure):
     methods: list[Subroutine]
     deprecation: Deprecated | None
     is_abstract: bool
+
+    @property
+    def search_terms(self) -> str:
+        return (
+            f"{self.name}\n{self.docstring.short_description if self.docstring else ''}"
+            f"\n{self.docstring.long_description if self.docstring else ''}"
+        )
 
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
@@ -62,7 +70,8 @@ class Class(SignatureStructure[type]):
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
-                "isAbstract": self.is_abstract
+                "isAbstract": self.is_abstract,
+                "searchTerms": self.search_terms
             },
             {
                 "methods": [

@@ -23,13 +23,17 @@ export interface ComplexDescriptionMeta {
     shortDescription: string | null
     longDescription: string | null
 }
+export interface SearchTermsMeta {
+    searchTerms: string
+}
 
 export interface DeprecationTag {
     version: string
     description: string | null
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
+
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     isAbstract: boolean
     deprecation: DeprecationTag | null
 }
@@ -37,13 +41,13 @@ export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
 export type ErrorMeta = NameMeta & SimpleDescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
-export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
+export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
     isOptional: boolean
 }
-export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
+export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     raises: Node[]
     returns: Node[]
     deprecation: DeprecationTag | null

@@ -9,12 +9,20 @@ from .class_ import Class
 from .serialized import Serialized
 from .source_structure import SourceStructure
 from .subroutine import Subroutine
+from .searchable_structure import SearchableStructure
 
 
 @dataclass(frozen=True, slots=True)
-class Module(SourceStructure[ModuleType]):
+class Module(SourceStructure[ModuleType], SearchableStructure):
     classes: list[Class]
     subroutines: list[Subroutine]
+
+    @property
+    def search_terms(self) -> str:
+        return (
+            f"{self.name}\n{self.docstring.short_description if self.docstring else ''}"
+            f"\n{self.docstring.long_description if self.docstring else ''}"
+        )
 
     @classmethod
     def from_module(cls, module: ModuleType, declared: set[type | FunctionType]) -> Module:
@@ -48,7 +56,8 @@ class Module(SourceStructure[ModuleType]):
                 "name": self.name,
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
-                "longDescription": self.docstring.long_description if self.docstring else None
+                "longDescription": self.docstring.long_description if self.docstring else None,
+                "searchTerms": self.search_terms
             },
             {
                 "classes": [

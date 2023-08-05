@@ -3,7 +3,7 @@ import type {
     ComplexDescriptionMeta,
     DeprecationMeta,
     DeprecationTag, ErrorMeta, ModuleMeta,
-    NameMeta, PackageMeta, ParameterMeta,
+    NameMeta, PackageMeta, ParameterMeta, SearchTermsMeta,
     SignatureMeta, SubroutineReturnMeta
 } from "$lib/utils/types";
 
@@ -11,7 +11,7 @@ export interface JsonParametersMeta {
     parameters: JsonNode[]
 }
 
-export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & {
+export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     raises: JsonNode[]
     returns: JsonNode[]
     deprecation: DeprecationTag | null

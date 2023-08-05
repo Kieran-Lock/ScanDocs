@@ -10,12 +10,20 @@ from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .parameter import Parameter
 from .subroutine_return import SubroutineReturn
-from ..parsing import ExceptionsParser
+from .searchable_structure import SearchableStructure
 from ..tags import ContextManager, Deprecated
+# from ..parsing import ExceptionsParser
 
 
 @dataclass(frozen=True, slots=True)
-class Subroutine(SignatureStructure[FunctionType]):
+class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
+    @property
+    def search_terms(self) -> str:
+        return (
+            f"{self.name}\n{self.docstring.short_description if self.docstring else ''}"
+            f"\n{self.docstring.long_description if self.docstring else ''}"
+        )
+
     parameters: list[Parameter]
     raises: list[Error]
     deprecation: Deprecated | None
@@ -36,12 +44,12 @@ class Subroutine(SignatureStructure[FunctionType]):
             docstring, cls.object_as_written(signature.return_annotation)
         ) if docstring else None
 
-        parser = ExceptionsParser()
-        # noinspection PyBroadException
-        try:
-            parser.deep_visit(subroutine)
-        except Exception:
-            parser.exceptions = set()
+        # parser = ExceptionsParser()
+        # # noinspection PyBroadException
+        # try:
+        #     parser.deep_visit(subroutine)
+        # except Exception:
+        #     parser.exceptions = set()
 
         return cls(
             name,
@@ -56,9 +64,10 @@ class Subroutine(SignatureStructure[FunctionType]):
                     signature.parameters[parameter], docstring.parameters if docstring else []
                 ) for parameter in signature.parameters if parameter is not None
             ],
-            [
-                Error(error_name, "") for error_name in parser.exceptions
-            ],
+            [],
+            # [
+            #     Error(error_name, "") for error_name in parser.exceptions
+            # ],
             Deprecated.get_tag(subroutine),
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
             (
@@ -98,7 +107,8 @@ class Subroutine(SignatureStructure[FunctionType]):
                 "isAsync": self.is_async,
                 "isAbstract": self.is_abstract,
                 "isLambda": self.is_lambda,
-                "isContextManager": self.is_context_manager
+                "isContextManager": self.is_context_manager,
+                "searchTerms": self.search_terms
             },
             {}
         )

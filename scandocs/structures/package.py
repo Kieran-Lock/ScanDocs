@@ -8,12 +8,20 @@ from .structure import Structure
 from .module import Module
 from .serialized import Serialized
 from .source_structure import SourceStructure
+from .searchable_structure import SearchableStructure
 
 
 @dataclass(frozen=True)
-class Package(SourceStructure[ModuleType]):
+class Package(SourceStructure[ModuleType], SearchableStructure):
     subpackages: list[Package]
     modules: list[Module]
+
+    @property
+    def search_terms(self) -> str:
+        return (
+            f"{self.name}\n{self.docstring.short_description if self.docstring else ''}"
+            f"\n{self.docstring.long_description if self.docstring else ''}"
+        )
 
     @classmethod
     def from_module(cls, package: ModuleType, declared: set[type | FunctionType] | None = None) -> Package:
@@ -61,7 +69,8 @@ class Package(SourceStructure[ModuleType]):
                 "name": self.name,
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
-                "longDescription": self.docstring.long_description if self.docstring else None
+                "longDescription": self.docstring.long_description if self.docstring else None,
+                "searchTerms": self.search_terms
             },
             {
                 "subpackages": [
