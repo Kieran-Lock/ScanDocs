@@ -1,5 +1,6 @@
 <script lang="ts">
     import type {ParameterMeta} from "$lib/utils/types";
+    import Badge from "$lib/components/extra/Badge.svelte";
 
     export let meta: ParameterMeta
 </script>
@@ -18,11 +19,7 @@
                     <p class="italic">No Annotation Specified</p>
                 {/if}
             </div>
-            <div>
-                {#if meta.isOptional}
-                    <p class="badge variant-ghost-secondary">Optional</p>
-                {/if}
-            </div>
+            <Badge text="Optional" isVisible={meta.isOptional} />
         </div>
     </dt>
     <dd class="pl-8">

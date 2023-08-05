@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Badge from "$lib/components/extra/Badge.svelte";
+
     export let name: string
     export let short: string | null
     export let long: string | null
@@ -13,21 +15,11 @@
     <header class="flex flex-row justify-between w-full pr-2">
         <h2 class="text-2xl font-bold">{name}</h2>
         <div>
-            {#if isGenerator}
-                <p class="badge variant-ghost-secondary">Generator</p>
-            {/if}
-            {#if isAsync}
-                <p class="badge variant-ghost-secondary">Asynchronous</p>
-            {/if}
-            {#if isAbstract}
-                <p class="badge variant-ghost-secondary">Abstract</p>
-            {/if}
-            {#if isLambda}
-                <p class="badge variant-ghost-secondary">Lambda</p>
-            {/if}
-            {#if isContextManager}
-                <p class="badge variant-ghost-secondary">Context Manager</p>
-            {/if}
+            <Badge text="Generator" isVisible={isGenerator} />
+            <Badge text="Asynchronous" isVisible={isAsync} />
+            <Badge text="Abstract" isVisible={isAbstract} />
+            <Badge text="Lambda" isVisible={isLambda} />
+            <Badge text="Context Manager" isVisible={isContextManager} />
         </div>
     </header>
     {#if short || long}
