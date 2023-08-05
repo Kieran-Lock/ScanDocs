@@ -6,7 +6,7 @@
     let isSignature = false
 </script>
 
-<div class="flex flex-col gap-2 items-end card p-4 variant-glass-surface">
+<div class="flex flex-col gap-2 items-end card p-4 variant-glass-surface w-full">
     {#if signature}
         <RadioGroup rounded="rounded-container-token">
             <RadioItem bind:group={isSignature} name="toggle" value={false}>Source</RadioItem>

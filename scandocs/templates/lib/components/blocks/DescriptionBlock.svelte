@@ -9,7 +9,7 @@
     export let isContextManager: boolean
 </script>
 
-<div class="flex flex-col card p-4 gap-4 variant-glass-surface">
+<div class="flex flex-col card p-4 gap-4 variant-glass-surface w-full">
     <header class="flex flex-row justify-between w-full pr-2">
         <h2 class="text-2xl font-bold">{name}</h2>
         <div>
@@ -31,7 +31,7 @@
         </div>
     </header>
     {#if short || long}
-        <section class="w-full pt-2 flex flex-col gap-2">
+        <section class="w-full pt-2 flex flex-col gap-2 items-start">
             {#if short}
                 <p>{short}</p>
             {/if}

@@ -7,65 +7,38 @@
     import {onDestroy} from "svelte";
     import {activeNode} from "$lib/stores/node";
     import SourceBlock from "$lib/components/blocks/SourceBlock.svelte";
-    import type {DeprecationTag} from "$lib/utils/types";
-    import type {Node} from "$lib/utils/types";
+    import type {AnyMeta} from "$lib/utils/types";
 
-    let shortDescription: string | null
-    let longDescription: string | null
-    let deprecation: DeprecationTag | null
-    let parameters: Node[]
-    let returns: Node[]
-    let raises: Node[]
-    let source: string
-    let signature: string
-    let name: string
-    let isGenerator: boolean
-    let isAsync: boolean
-    let isAbstract: boolean
-    let isLambda: boolean
-    let isContextManager: boolean
+    let meta: AnyMeta
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = activeNode.subscribe((_) => {
-        const meta = activeNode.getActive($activeNode)?.meta
-        if (meta) {
-            name = meta.name
-            shortDescription = meta.shortDescription
-            longDescription = meta.longDescription
-            deprecation = meta.deprecation
-            parameters = meta.parameters
-            returns = meta.returns
-            raises = meta.raises
-            source = meta.source
-            signature = meta.signature
-            isGenerator = meta.isGenerator
-            isAsync = meta.isAsync
-            isAbstract = meta.isAbstract
-            isLambda = meta.isLambda
-            isContextManager = meta.isContextManager
-        }
+        meta = activeNode.getActive($activeNode).meta
     })
     onDestroy(unsubscribe)
 </script>
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
     <div class="flex flex-col gap-6 w-full">
-        <DescriptionBlock name={name} short={shortDescription} long={longDescription} isGenerator={isGenerator} isAsync={isAsync} isAbstract={isAbstract} isLambda={isLambda} isContextManager={isContextManager} />
-        {#if deprecation}
-            <DeprecationBlock deprecation={deprecation} />
+        <DescriptionBlock name={meta.name} short={meta.shortDescription} long={meta.longDescription}
+                          isGenerator={meta.isGenerator} isAsync={meta.isAsync} isAbstract={meta.isAbstract}
+                          isLambda={meta.isLambda} isContextManager={meta.isContextManager}
+        />
+        {#if meta.deprecation}
+            <DeprecationBlock deprecation={meta.deprecation} />
         {/if}
-        {#if parameters}
-            <ParametersBlock parameters={parameters} />
+        {#if meta.parameters}
+            <ParametersBlock parameters={meta.parameters} />
         {/if}
-        {#if returns}
-            <ReturnsBlock returns={returns} />
+        {#if meta.returns}
+            <ReturnsBlock returns={meta.returns} />
         {/if}
-        {#if raises}
-            <RaisesBlock exceptions={raises} />
+        {#if meta.raises}
+            <RaisesBlock exceptions={meta.raises} />
         {/if}
     </div>
-    {#if source}
+    {#if meta.source}
         <div class="w-full">
-            <SourceBlock source={source} signature={signature} />
+            <SourceBlock source={meta.source} signature={meta.signature} />
         </div>
     {/if}
 </div>
