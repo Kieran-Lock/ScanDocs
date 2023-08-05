@@ -15,5 +15,5 @@ TODO: Attributes and methods for classes
       Classes for modules
       Modules for packages
       Search grouping
-      Tags: Examples tag
+      Tags: Examples
 """
