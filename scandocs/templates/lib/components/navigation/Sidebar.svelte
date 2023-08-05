@@ -3,12 +3,12 @@
     import {TreeView} from "@skeletonlabs/skeleton";
     import ProjectTree from "$lib/components/navigation/ProjectTree.svelte";
     import {project} from "$lib/stores/project";
-    import {activeNode} from "$lib/stores/node";
+    import {selectNodeBuilder} from "$lib/utils/interactivity";
 </script>
 
 <div class="flex flex-col min-w-[420px] card p-4 h-full gap-8 overflow-y-scroll hide-scrollbar">
     <header class="flex flex-col card justify-center items-center p-4 gap-6 variant-ringed-surface pb-6">
-        <button type="button" on:click={() => activeNode.setActive(project)}>
+        <button type="button" on:click={selectNodeBuilder(project)}>
             <span class="text-2xl font-bold">{project.meta.name}</span>
         </button>
         <Search />
