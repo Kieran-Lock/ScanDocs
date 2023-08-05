@@ -1,25 +1,25 @@
 import type {ComponentType} from "svelte";
 
-interface NameMeta {
+export interface NameMeta {
     name: string
 }
-interface SimpleDescriptionMeta {
+export interface SimpleDescriptionMeta {
     description: string | null
 }
-interface AnnotationMeta {
+export interface AnnotationMeta {
     annotation: string | null
 }
-interface SourceMeta {
+export interface SourceMeta {
     source: string
 }
-interface SignatureMeta extends SourceMeta {
+export interface SignatureMeta extends SourceMeta {
     signature: string
 }
-interface ParametersMeta {
+export interface ParametersMeta {
 
-    parameters: Node[] | JsonNode[]
+    parameters: Node[]
 }
-interface ComplexDescriptionMeta {
+export interface ComplexDescriptionMeta {
     shortDescription: string | null
     longDescription: string | null
 }
@@ -44,8 +44,8 @@ export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & 
     isOptional: boolean
 }
 export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
-    raises: Node[] | JsonNode[]
-    returns: Node[] | JsonNode[]
+    raises: Node[]
+    returns: Node[]
     deprecation: DeprecationTag | null
     isGenerator: boolean
     isAsync: boolean | null  // TODO: Can be null?
@@ -55,20 +55,16 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
 }
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
-export type AllMeta = ClassMeta | DeprecationMeta | ErrorMeta | ModuleMeta | PackageMeta | ParameterMeta | SubroutineMeta | SubroutineReturnMeta
-export type TreeOnlyMeta = ClassMeta | ModuleMeta | PackageMeta | SubroutineMeta
+export type AnyMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
+export type AllTreeOnlyMeta = ClassMeta | ModuleMeta | PackageMeta | SubroutineMeta
+
 export type Node = {
     component: ComponentType,
-    meta: AllMeta,
+    meta: AnyMeta,
     children: Record<string, Node[]>
-}
-export type JsonNode = {
-    component: string,
-    meta: AllMeta,
-    children: Record<string, JsonNode[]>
 }
 export type TreeOnlyNode = {
     component: ComponentType,
-    meta: TreeOnlyMeta,
+    meta: AllTreeOnlyMeta,
     children: Record<string, Node[]>
 }

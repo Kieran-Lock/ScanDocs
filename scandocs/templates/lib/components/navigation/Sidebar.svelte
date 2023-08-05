@@ -1,13 +1,14 @@
 <script lang="ts">
-    import Search from "$lib/components/sidebar/Search.svelte";
+    import Search from "$lib/components/navigation/Search.svelte";
     import {TreeView} from "@skeletonlabs/skeleton";
-    import ProjectTree from "$lib/components/sidebar/ProjectTree.svelte";
-    import {project, activeProject} from "$lib/stores/project";
+    import ProjectTree from "$lib/components/navigation/ProjectTree.svelte";
+    import {project} from "$lib/stores/project";
+    import {activeNode} from "$lib/stores/node";
 </script>
 
 <div class="flex flex-col min-w-[420px] card p-4 h-full gap-8 overflow-y-scroll hide-scrollbar">
     <header class="flex flex-col card justify-center items-center p-4 gap-6 variant-ringed-surface pb-6">
-        <button type="button" on:click={() => activeProject.setActive(project)}>
+        <button type="button" on:click={() => activeNode.setActive(project)}>
             <span class="text-2xl font-bold">{project.meta.name}</span>
         </button>
         <Search />

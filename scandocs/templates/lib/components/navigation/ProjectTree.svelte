@@ -1,13 +1,13 @@
 <script lang="ts">
     import { TreeViewItem } from '@skeletonlabs/skeleton';
     import ProjectTree from './ProjectTree.svelte'
-    import {activeProject} from "$lib/stores/project";
+    import {activeNode} from "$lib/stores/node";
     import type {Node} from "$lib/utils/types";
 
     export let nodes: Node[]
 
     const onClick = (node: Node) => {
-        activeProject.setActive(node)
+        activeNode.setActive(node)
     }
 </script>
 

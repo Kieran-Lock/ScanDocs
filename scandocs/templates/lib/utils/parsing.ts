@@ -2,10 +2,11 @@ import Package from "$lib/components/structures/Package.svelte";
 import Module from "$lib/components/structures/Module.svelte";
 import Class from "$lib/components/structures/Class.svelte";
 import Subroutine from "$lib/components/structures/Subroutine.svelte";
-import type {JsonNode, Node} from "$lib/utils/types";
+import type {Node} from "$lib/utils/types";
 import Parameter from "$lib/components/structures/Parameter.svelte";
 import Exception from "$lib/components/structures/Exception.svelte";
 import SubroutineReturn from "$lib/components/structures/SubroutineReturn.svelte";
+import type {JsonNode} from "$lib/utils/json_types";
 
 export const parseProject = (project: JsonNode): Node => {
     const componentLookup = {

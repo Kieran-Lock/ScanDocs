@@ -9,9 +9,10 @@ const createActiveNodeStore = () => {
     return {
         subscribe: store.subscribe,
         setActive: (node: Node) => {
-            for (const [i, structure] of entriesOf(traverseProject(node))) {
+            for (const [i, structure] of entriesOf(traverseProject(project))) {
                 if (structure === node) {
                     store.set(i as number)
+                    return
                 }
             }
         },
