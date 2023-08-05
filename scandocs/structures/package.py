@@ -35,6 +35,9 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
         """
         Forms an instance of this class from an imported package.
 
+        Initially checks __all__ for any submodules / subpackages that may be missed,
+        before adding all those publicly available via the in-built inspect API to the list of substructures.
+
         :param package: The package to form an object from
         :param declared: A set of structures that have already been declared before this module was loaded
         :return: A corresponding instance of this class
@@ -51,9 +54,10 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
         is_dunder = name.startswith("__")
         docstring = cls.get_docstring(package)
         try:
-            substructures = package.__all__
+            substructures = [substructure for substructure in package.__all__ if ismodule(substructure)]
         except AttributeError:  # __all__ index not defined
-            substructures = [substructure[1] for substructure in getmembers(package, predicate=ismodule)]
+            substructures = []
+        substructures += [substructure[1] for substructure in getmembers(package, predicate=ismodule)]
 
         return cls(
             name,
