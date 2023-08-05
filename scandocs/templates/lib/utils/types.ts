@@ -48,7 +48,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
     returns: Node[]
     deprecation: DeprecationTag | null
     isGenerator: boolean
-    isAsync: boolean | null  // TODO: Can be null?
+    isAsync: boolean
     isAbstract: boolean
     isLambda: boolean
     isContextManager: boolean

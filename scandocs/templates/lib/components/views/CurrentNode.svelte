@@ -20,7 +20,7 @@
     let signature: string
     let name: string
     let isGenerator: boolean
-    let isAsync: boolean | null
+    let isAsync: boolean
     let isAbstract: boolean
     let isLambda: boolean
     let isContextManager: boolean
