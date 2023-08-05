@@ -1,3 +1,9 @@
+"""
+A module containing the documentation API.
+
+This module contains the bulk of the documentation website generation logic.
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
@@ -13,6 +19,12 @@ from ..structures import Package, Structure, Subroutine
 
 @dataclass(frozen=True, slots=True)
 class Documentation:
+    """
+    A dataclass containing all logic regarding the final documentation website.
+
+    This dataclass encompasses all the data used in the final website output, and includes
+    functionality to write to the final output folder with a working and adaptable website.
+    """
     project: Package
     base_directory: Path
     configuration: Configuration

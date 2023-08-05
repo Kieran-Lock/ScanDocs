@@ -18,6 +18,12 @@ class Docstring:
 
     @classmethod
     def from_docstring(cls, docstring: ParserDocstring, return_annotation: str | None = None) -> Docstring:
+        """
+
+        :param docstring:
+        :param return_annotation:
+        :return:
+        """
         return cls(
             docstring.short_description,
             docstring.long_description,

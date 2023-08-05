@@ -1,3 +1,11 @@
+"""
+A module containing internal details of how the tag API is structured.
+
+This module contains an abstract base class, which dictates how each tag
+must be interfaced with, and how they relay their information to the parser
+to be placed in the generated documentation website.
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
@@ -6,6 +14,12 @@ from abc import ABC, abstractmethod
 
 @dataclass(frozen=True, slots=True)
 class Tag(ABC):
+    """
+    An ABC dictating how the tag API must be structured.
+
+    This dataclass provides a template for all public tags in the API,
+    ensuring that they are all interfaced with in the same way.
+    """
     @staticmethod
     def get_all_tags(f: Callable) -> list[Tag]:
         try:
