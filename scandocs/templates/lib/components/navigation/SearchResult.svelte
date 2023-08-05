@@ -9,6 +9,6 @@
 <div class="btn w-[50%]" on:click={selectNodeBuilder(node)} on:keypress={() => {return false}}>
     <DescriptionBlock name={node.meta.name} short={node.meta.shortDescription} long={node.meta.longDescription}
                       isGenerator={node.meta.isGenerator} isAsync={node.meta.isAsync} isAbstract={node.meta.isAbstract}
-                      isLambda={node.meta.isLambda} isContextManager={node.meta.isContextManager}
+                      isLambda={node.meta.isLambda} isContextManager={node.meta.isContextManager} truncate
     />
 </div>

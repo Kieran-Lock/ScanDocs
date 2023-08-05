@@ -9,6 +9,7 @@
     export let isAbstract: boolean
     export let isLambda: boolean
     export let isContextManager: boolean
+    export let truncate = false
 </script>
 
 <div class="flex flex-col card p-4 gap-4 variant-glass-surface w-full">
@@ -22,14 +23,13 @@
             <Badge text="Context Manager" isVisible={isContextManager} />
         </div>
     </header>
-    {#if short || long}
-        <section class="w-full pt-2 flex flex-col gap-2 items-start">
-            {#if short}
-                <p>{short}</p>
-            {/if}
-            {#if long}
-                <p>{long}</p>
-            {/if}
-        </section>
-    {/if}
+    <section class="w-full pt-2 text-left">
+        {#if short}
+            <p class={truncate ? "truncate" : ""}>{short}</p>
+        {/if}
+        {#if long}
+            <br />
+            <p class={truncate ? "truncate" : ""}>{long}</p>
+        {/if}
+    </section>
 </div>
