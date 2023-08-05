@@ -3,9 +3,9 @@ The module containing the dataclass representing Python classes.
 """
 
 from __future__ import annotations
-from abc import ABCMeta
 from dataclasses import dataclass
 from typing import Callable
+from inspect import isabstract
 from .docstring import Docstring
 from .structure import Structure
 from .signature_structure import SignatureStructure
@@ -57,7 +57,7 @@ class Class(SignatureStructure[type], SearchableStructure):
                 for method in class_.__dict__ if callable(getattr(class_, method))
             ],
             Deprecated.get_tag(class_),
-            isinstance(class_, ABCMeta)
+            isabstract(class_)
         )
 
     @property
