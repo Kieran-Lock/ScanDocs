@@ -1,6 +1,6 @@
 import {writable, derived, readable} from 'svelte/store';
 import {iterator, traverseProject} from "$lib/utils/parsing";
-import {project} from "$lib/stores/project";
+import {project} from "$lib/content/project";
 import type {Node, TreeOnlyNode} from "$lib/utils/types";
 
 const nodeIterator = iterator<Node>()

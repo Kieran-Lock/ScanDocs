@@ -1,7 +1,7 @@
 import {writable} from "svelte/store";
 import type {Node} from "$lib/utils/types";
 import {entriesOf, traverseProject} from "$lib/utils/parsing";
-import {project} from "$lib/stores/project";
+import {project} from "$lib/content/project";
 
 const createActiveNodeStore = () => {
     const store = writable(0)
