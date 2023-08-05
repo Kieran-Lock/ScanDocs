@@ -15,5 +15,5 @@ export const searchItems = readable(
 )
 export const filteredItems = derived(
     [searchTerm, searchItems as Writable<string[]>],
-    ([$term, $searchItems]) => $searchItems.filter(item => item.includes($term))
+    ([$term, $searchItems]) => $searchItems.filter(item => item.toLowerCase().includes($term.toLowerCase()))
 )
