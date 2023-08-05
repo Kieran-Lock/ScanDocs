@@ -1,3 +1,7 @@
+"""
+The module containing the dataclass representing Python docstrings.
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from docstring_parser import Docstring as ParserDocstring
@@ -9,6 +13,9 @@ from .deprecation import Deprecation
 
 @dataclass(frozen=True, slots=True)
 class Docstring:
+    """
+    The dataclass representing Python docstrings.
+    """
     short_description: str
     long_description: str
     deprecation: Deprecation | None
@@ -19,10 +26,14 @@ class Docstring:
     @classmethod
     def from_docstring(cls, docstring: ParserDocstring, return_annotation: str | None = None) -> Docstring:
         """
+        Forms an instance of this class from an external Docstring object.
 
-        :param docstring:
-        :param return_annotation:
-        :return:
+        This class method is used to form instances of this class from Docstring objects,
+        as provided by the docstring_parser API: https://pypi.org/project/docstring-parser/.
+
+        :param docstring: The object to form a new object from
+        :param return_annotation: The return annotation of the corresponding subroutine, if applicable
+        :return: A corresponding instance of this class
         """
         return cls(
             docstring.short_description,

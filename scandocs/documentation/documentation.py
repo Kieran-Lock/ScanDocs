@@ -34,6 +34,12 @@ class Documentation:
     )
 
     def output(self) -> None:
+        """
+        Outputs the prepared documentation website files.
+
+        Outputs all the prepared documentation files into the base directory,
+        and automatically installs any dependencies so that the website is ready to run.
+        """
         self.create_skeleton_template()
         self.install_dependencies()
         self.copy_templates()
@@ -41,12 +47,24 @@ class Documentation:
         self.configure_project()
 
     def create_skeleton_template(self) -> None:
+        """
+        Creates a bare-bones project.
+
+        An internal function to run an NPM command that
+        installs a bare-bones SvelteKit template with SkeletonUI.
+        """
         run(
             ["pnpm", "create", "skeleton-app@latest", "-q", "-n", self.project.name, "-p", str(self.base_directory)],
             shell=True
         )
 
     def install_dependencies(self) -> None:
+        """
+        Installs the required project dependencies.
+
+        An internal function which runs several NPM commands, installing all the necessary requirements
+        for the documentation website to function as intended out-of-the-box.
+        """
         dependencies = [
             ["highlight.js"],
             ["-D", "@tailwindcss/forms"]
@@ -59,10 +77,23 @@ class Documentation:
             )
 
     def copy_templates(self) -> None:
+        """
+        Copies all the locally stored project templates into the bare-bones layout.
+        """
         copy_tree(str(Path(f"{__file__}/../../templates/lib")), str(self.base_directory / "src/lib"))
         copy_tree(str(Path(f"{__file__}/../../templates/routes")), str(self.base_directory / "src/routes"))
 
     def replace_content_in_file(self, path: Path, *replacements: Replacement, json: bool = True) -> None:
+        """
+        A utility method to replace the content at a specific marker with given content.
+
+        An internal method to place specified content in place of an internal marker,
+        used to copy dynamic information such as certain configuration settings into the website files.
+
+        :param path: The path at which the target file exists
+        :param replacements: The replacements that should be made to the target file
+        :param json: Whether the given content should be converted into a JSON format or not
+        """
         with path.open("r+") as f:
             content = f.read()
             for replacement in replacements:
@@ -75,6 +106,9 @@ class Documentation:
             f.write(content)
 
     def dump_project(self) -> None:
+        """
+        Places the project JSON tree into the website files.
+        """
         self.replace_content_in_file(
             self.base_directory / "src/lib/content/project.ts",
             Replacement(
@@ -84,6 +118,9 @@ class Documentation:
         )
 
     def configure_project(self) -> None:
+        """
+        Places content into the website files regarding user configuration.
+        """
         self.replace_content_in_file(
             self.base_directory / "src/lib/content/configuration.ts",
             Replacement(

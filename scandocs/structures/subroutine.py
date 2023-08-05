@@ -1,3 +1,7 @@
+"""
+The module containing the dataclass representing Python subroutines, such as functions, methods, and generators.
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from types import FunctionType
@@ -17,6 +21,9 @@ from ..tags import ContextManager, Deprecated
 
 @dataclass(frozen=True, slots=True)
 class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
+    """
+    The dataclass representing Python subroutines, such as functions, methods, and generators.
+    """
     @property
     def search_terms(self) -> str:
         return (
@@ -36,6 +43,14 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
     @classmethod
     def from_subroutine(cls, subroutine: FunctionType | type(object.__init__), is_declared: bool,
                         is_abstract: bool = False) -> Subroutine:
+        """
+        Forms an instance of this class from a Python subroutine, as provided by the in-built inspect API.
+        
+        :param subroutine: The inspected subroutine
+        :param is_declared: Whether the subroutine has been previously declared or not
+        :param is_abstract: Whether this subroutine is an abstract method or not
+        :return: A corresponding instance of this class
+        """
         name = subroutine.__name__
         is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)

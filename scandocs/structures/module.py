@@ -1,3 +1,7 @@
+"""
+The module containing the dataclass representing Python modules (.py files).
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from inspect import getmembers, isclass, isfunction
@@ -14,6 +18,9 @@ from .searchable_structure import SearchableStructure
 
 @dataclass(frozen=True, slots=True)
 class Module(SourceStructure[ModuleType], SearchableStructure):
+    """
+    The dataclass representing Python modules (.py files).
+    """
     classes: list[Class]
     subroutines: list[Subroutine]
 
@@ -26,6 +33,13 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
 
     @classmethod
     def from_module(cls, module: ModuleType, declared: set[type | FunctionType]) -> Module:
+        """
+        Forms an instance of this class from an imported module.
+
+        :param module: The module to form an object from
+        :param declared: A set of structures that have already been declared before this module was loaded
+        :return: A corresponding instance of this class
+        """
         name = module.__name__.split(".")[-1]
         is_dunder = name.startswith("__")
         docstring = cls.get_docstring(module)
@@ -47,6 +61,13 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
 
     @staticmethod
     def is_user_defined(member, module: ModuleType) -> bool:
+        """
+        Determines whether a given member is in-built or not within a given module.
+
+        :param member: The member to inspect
+        :param module: the module the member was declared within
+        :return: Whether the member was defined in the given module, or imported / in-built
+        """
         return member.__module__ == module.__name__
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:

@@ -1,3 +1,7 @@
+"""
+The module containing the dataclass representing Python classes.
+"""
+
 from __future__ import annotations
 from abc import ABCMeta
 from dataclasses import dataclass
@@ -13,6 +17,9 @@ from ..tags import Deprecated
 
 @dataclass(frozen=True, slots=True)
 class Class(SignatureStructure[type], SearchableStructure):
+    """
+    The dataclass representing Python classes.
+    """
     methods: list[Subroutine]
     deprecation: Deprecated | None
     is_abstract: bool

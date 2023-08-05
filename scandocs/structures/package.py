@@ -1,3 +1,7 @@
+"""
+The module containing the dataclass representing Python packages (__init__.py files in a project folder).
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType, FunctionType
@@ -13,6 +17,9 @@ from .searchable_structure import SearchableStructure
 
 @dataclass(frozen=True)
 class Package(SourceStructure[ModuleType], SearchableStructure):
+    """
+    The dataclass representing Python packages (__init__.py files in a project folder).
+    """
     subpackages: list[Package]
     modules: list[Module]
 
@@ -25,6 +32,13 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
 
     @classmethod
     def from_module(cls, package: ModuleType, declared: set[type | FunctionType] | None = None) -> Package:
+        """
+        Forms an instance of this class from an imported package.
+
+        :param package: The package to form an object from
+        :param declared: A set of structures that have already been declared before this module was loaded
+        :return: A corresponding instance of this class
+        """
         if not cls.is_package(package):
             raise TypeError("Can't build documentation for non-package") from None
 
@@ -53,10 +67,22 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
 
     @staticmethod
     def is_package(package: ModuleType) -> bool:
+        """
+        Determines whether a given module is a package or a module (whether it is an __init__.py file or not).
+
+        :param package: The module to inspect
+        :return: Whether the given module is a package (__init__.py file) or not
+        """
         return package.__package__ == package.__name__
 
     @staticmethod
     def get_declared(package: ModuleType) -> set[type | FunctionType]:
+        """
+        Gets the declared members (classes and subroutines) from a given package.
+
+        :param package: The package to inspect
+        :return: A set of the declared classes and subroutines
+        """
         return set(member[1] for member in getmembers(
             package,
             predicate=lambda member: isclass(member) or isfunction(member)
