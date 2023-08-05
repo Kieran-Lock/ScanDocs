@@ -73,7 +73,7 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             (
                 isasyncgenfunction(subroutine) or
                 iscoroutinefunction(subroutine) or
-                ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else False
+                (ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else False)
             ),
             is_abstract,
             name == "<lambda>",
