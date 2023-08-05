@@ -1,4 +1,3 @@
-// @ts-nocheck
 import Package from "$lib/components/structures/Package.svelte";
 import Module from "$lib/components/structures/Module.svelte";
 import Class from "$lib/components/structures/Class.svelte";
@@ -42,5 +41,12 @@ export function* traverseProject(node: Node) {
             stack.push(child)
             explored.add(child)
         }
+    }
+}
+
+export function* entriesOf(iterable: Iterable<unknown>) {
+    let i = 0
+    for (const value of iterable) {
+        yield [i++, value]
     }
 }

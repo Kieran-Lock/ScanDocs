@@ -19,7 +19,7 @@ class Subroutine(SignatureStructure[FunctionType]):
     parameters: list[Parameter]
     raises: list[Error]
     deprecation: Deprecated | None
-    is_generator: bool
+    is_generator: bool | None
     is_async: bool
     is_abstract: bool
     is_lambda: bool
@@ -62,9 +62,9 @@ class Subroutine(SignatureStructure[FunctionType]):
             Deprecated.get_tag(subroutine),
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
             (
-                    isasyncgenfunction(subroutine) or
-                    iscoroutinefunction(subroutine) or
-                    ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else None
+                isasyncgenfunction(subroutine) or
+                iscoroutinefunction(subroutine) or
+                ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else False
             ),
             is_abstract,
             name == "<lambda>",

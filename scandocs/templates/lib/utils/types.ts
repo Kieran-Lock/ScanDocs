@@ -1,11 +1,10 @@
-// @ts-nocheck
 import type {ComponentType} from "svelte";
 
 interface NameMeta {
     name: string
 }
 interface SimpleDescriptionMeta {
-    description: string
+    description: string | null
 }
 interface AnnotationMeta {
     annotation: string | null
@@ -17,12 +16,12 @@ interface SignatureMeta extends SourceMeta {
     signature: string
 }
 interface ParametersMeta {
-    parameters: Node[]
+
+    parameters: Node[] | JsonNode[]
 }
 interface ComplexDescriptionMeta {
     shortDescription: string | null
     longDescription: string | null
-    deprecation: Node | null
 }
 
 export interface DeprecationTag {
@@ -32,10 +31,7 @@ export interface DeprecationTag {
 
 export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
     isAbstract: boolean
-    deprecation: {
-        version: string
-        description: string
-    }
+    deprecation: DeprecationTag | null
 }
 export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
@@ -45,12 +41,12 @@ export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
 export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
-    isOptional: string
+    isOptional: boolean
 }
 export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & {
-    raises: Node[]
-    returns: Node[]
-    deprecation: DeprecationTag
+    raises: Node[] | JsonNode[]
+    returns: Node[] | JsonNode[]
+    deprecation: DeprecationTag | null
     isGenerator: boolean
     isAsync: boolean
     isAbstract: boolean
@@ -59,7 +55,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
 }
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
-export type AllMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
+export type AllMeta = ClassMeta | DeprecationMeta | ErrorMeta | ModuleMeta | PackageMeta | ParameterMeta | SubroutineMeta | SubroutineReturnMeta
 export type Node = {
     component: ComponentType,
     meta: AllMeta,
