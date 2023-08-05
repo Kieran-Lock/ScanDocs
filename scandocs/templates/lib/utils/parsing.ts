@@ -50,3 +50,19 @@ export function* entriesOf(iterable: Iterable<unknown>) {
         yield [i++, value]
     }
 }
+
+export const iterator = <T>() => (
+    {
+        map: (f: (item: T) => unknown, iterable: Iterable<T>) => function* ()
+        {
+            for (const x of iterable)
+                yield f (x)
+        } (),
+        filter: (f: (item: T) => boolean, iterable: Iterable<T>) => function* ()
+        {
+            for (const x of iterable)
+                if (f (x))
+                    yield x
+        } ()
+    }
+)

@@ -48,7 +48,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
     returns: Node[] | JsonNode[]
     deprecation: DeprecationTag | null
     isGenerator: boolean
-    isAsync: boolean
+    isAsync: boolean | null  // TODO: Can be null?
     isAbstract: boolean
     isLambda: boolean
     isContextManager: boolean
@@ -56,6 +56,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
 
 export type AllMeta = ClassMeta | DeprecationMeta | ErrorMeta | ModuleMeta | PackageMeta | ParameterMeta | SubroutineMeta | SubroutineReturnMeta
+export type TreeOnlyMeta = ClassMeta | ModuleMeta | PackageMeta | SubroutineMeta
 export type Node = {
     component: ComponentType,
     meta: AllMeta,
@@ -65,4 +66,9 @@ export type JsonNode = {
     component: string,
     meta: AllMeta,
     children: Record<string, JsonNode[]>
+}
+export type TreeOnlyNode = {
+    component: ComponentType,
+    meta: TreeOnlyMeta,
+    children: Record<string, Node[]>
 }
