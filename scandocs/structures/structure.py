@@ -5,6 +5,7 @@ The module containing the dataclass representing any Python structure recorded b
 from __future__ import annotations
 from dataclasses import dataclass
 from inspect import Signature
+from types import ModuleType
 from typing import Callable
 from abc import ABC, abstractmethod
 from .serialized import Serialized
@@ -44,3 +45,17 @@ class Structure(ABC):
         if object_ in (Signature.empty, "_empty"):
             return
         return object_.__name__ if isinstance(object_, type) else str(object_)
+
+    @staticmethod
+    def defined_within(member, module_name: str) -> bool:
+        """
+        Determines whether a given member is in-built or not within a given module.
+
+        :param member: The member to inspect
+        :param module_name: the name of the module the member was declared within
+        :return: Whether the member was defined in the given module, or imported / in-built
+        """
+        try:
+            return member.__module__ == module_name
+        except AttributeError:  # Module is abnormal (e.g. builtins)
+            return False

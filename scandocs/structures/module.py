@@ -53,25 +53,14 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
             Docstring.from_docstring(docstring) if docstring else None,
             [Class.from_class(class_[1], class_[1] in declared)
              for class_ in getmembers(
-                module, predicate=lambda member: isclass(member) and cls.is_user_defined(member, module)
+                module, predicate=lambda member: isclass(member) and cls.defined_within(member, module.__name__)
             )],
             [Subroutine.from_subroutine(subroutine[1], subroutine[1] in declared)
              for subroutine in getmembers(
-                module, predicate=lambda member: isfunction(member) and cls.is_user_defined(member, module)
+                module, predicate=lambda member: isfunction(member) and cls.defined_within(member, module.__name__)
             )],
-            [variable for variable in Variable.many_from_scope(module)]
+            [variable for variable in Variable.many_from_scope(module, module.__name__)]
         )
-
-    @staticmethod
-    def is_user_defined(member, module: ModuleType) -> bool:
-        """
-        Determines whether a given member is in-built or not within a given module.
-
-        :param member: The member to inspect
-        :param module: the module the member was declared within
-        :return: Whether the member was defined in the given module, or imported / in-built
-        """
-        return member.__module__ == module.__name__
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         return Serialized(

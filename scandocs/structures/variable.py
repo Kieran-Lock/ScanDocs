@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType
 from typing import Iterable, Callable
-from inspect import Signature
+from inspect import Signature, getmembers, ismemberdescriptor, isdatadescriptor, ismethoddescriptor, isgetsetdescriptor
 from .serialized import Serialized
 from .structure import Structure
 
@@ -21,22 +21,29 @@ class Variable(Structure):
     value: str
 
     @classmethod
-    def many_from_scope(cls, scope: object | ModuleType) -> Iterable[Variable]:
+    def many_from_scope(cls, scope: object | ModuleType, module_name: str) -> Iterable[Variable]:
         """
         Forms an instance of this class from a valid scope, such as a class or module.
 
         :param scope: The scope to retrieve variables from
+        :param module_name: The name of the module in which the variable is located
         :return: Each discovered variable from the given scope
         """
-        variable_information = vars(scope)
+        def is_shallow(name: str, variable: object) -> bool:
+            if (
+                    ismemberdescriptor(variable) or isdatadescriptor(variable) or
+                    ismethoddescriptor(variable) or isgetsetdescriptor(variable) or
+                    not cls.defined_within(variable, module_name)
+            ):
+                return False
+            return not (callable(variable) or name.startswith("__"))
+
+        variable_information = getmembers(scope)
         try:
-            annotations_ = variable_information.__annotations__
+            annotations_ = vars(scope).__annotations__
         except AttributeError:
             annotations_ = {}
-        variables = {
-            name: variable_information.get(name) for name in variable_information
-            if not (callable(getattr(scope, name)) or name.startswith("__"))
-        }
+        variables = {name: variable for name, variable in variable_information if is_shallow(name, variable)}
         for variable_name in variables:
             yield cls(
                 variable_name,

@@ -60,7 +60,7 @@ class Class(SignatureStructure[type], SearchableStructure):
             ],
             Deprecated.get_tag(class_),
             isabstract(class_),
-            [variable for variable in Variable.many_from_scope(class_)]
+            [variable for variable in Variable.many_from_scope(class_, class_.__module__)]
         )
 
     @property

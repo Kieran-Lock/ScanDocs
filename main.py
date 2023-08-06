@@ -15,5 +15,5 @@ TODO: Attributes, methods, and class variables for classes
       Classes, and global variables for modules
       Modules for packages
       Search grouping
-      Tags: Examples, Links
+      Tags: Examples, Links, Notes
 """
