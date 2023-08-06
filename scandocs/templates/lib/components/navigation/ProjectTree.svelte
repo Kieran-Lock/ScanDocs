@@ -9,14 +9,14 @@
 
 {#each nodes as node}
     <TreeViewItem on:click={selectNodeBuilder(node)}>
-        <svelte:component this={node.component} meta={node.meta} />
+        <h3>{node.meta.name}</h3>
         <svelte:fragment slot="children">
             {#each Object.values(node.children).flat() as child}
                 {#if Object.values(child.children).flat().length}
                     <ProjectTree nodes={[child]} />
                 {:else}
                     <TreeViewItem on:click={selectNodeBuilder(child)}>
-                        <svelte:component this={child.component} meta={child.meta} />
+                        <h3>{child.meta.name}</h3>
                     </TreeViewItem>
                 {/if}
             {/each}

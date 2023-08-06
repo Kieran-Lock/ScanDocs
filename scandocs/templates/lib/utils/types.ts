@@ -10,7 +10,7 @@ export interface AnnotationMeta {
     annotation: string | null
 }
 export interface SourceMeta {
-    source: string
+    source: string | null
 }
 export interface SignatureMeta extends SourceMeta {
     signature: string
@@ -26,25 +26,24 @@ export interface ComplexDescriptionMeta {
 export interface SearchTermsMeta {
     searchTerms: string
 }
-export interface VariablesMeta {
-    variables: Node[]
-    variablesBlockName: string
-}
 
 export interface DeprecationTag {
     version: string
     description: string | null
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & VariablesMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     isAbstract: boolean
     deprecation: DeprecationTag | null
+    classVariables: Node[]
 }
 export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
 export type ErrorMeta = NameMeta & SimpleDescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & VariablesMeta
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+    globalVariables: Node[]
+}
 export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
@@ -66,7 +65,7 @@ export type VariableMeta = NameMeta & AnnotationMeta & {
 }
 
 export type AnyMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta & VariableMeta
-export type AllTreeOnlyMeta = ClassMeta | ModuleMeta | PackageMeta | SubroutineMeta
+export type AnyTreeOnlyMeta = ClassMeta & ModuleMeta & PackageMeta & SubroutineMeta
 
 export type Node = {
     component: ComponentType,
@@ -75,6 +74,6 @@ export type Node = {
 }
 export type TreeOnlyNode = {
     component: ComponentType,
-    meta: AllTreeOnlyMeta,
+    meta: AnyTreeOnlyMeta,
     children: Record<string, Node[]>
 }

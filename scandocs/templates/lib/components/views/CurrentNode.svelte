@@ -7,13 +7,17 @@
     import {onDestroy} from "svelte";
     import {activeNode} from "$lib/stores/node";
     import SourceBlock from "$lib/components/blocks/SourceBlock.svelte";
-    import type {AnyMeta} from "$lib/utils/types";
+    import type {AnyTreeOnlyMeta, Node} from "$lib/utils/types";
     import VariablesBlock from "$lib/components/blocks/VariablesBlock.svelte";
+    import ChildBlock from "$lib/components/blocks/ChildBlock.svelte";
 
-    let meta: AnyMeta
+    let meta: AnyTreeOnlyMeta
+    let children: Record<string, Node[]>
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unsubscribe = activeNode.subscribe((_) => {
-        meta = activeNode.getActive($activeNode).meta
+        const currentNode = activeNode.getActive($activeNode)
+        meta = currentNode.meta
+        children = currentNode.children
     })
     onDestroy(unsubscribe)
 </script>
@@ -30,18 +34,21 @@
         {#if meta.parameters}
             <ParametersBlock parameters={meta.parameters} />
         {/if}
-        {#if meta.globalVariables}
-            <VariablesBlock variables={meta.globalVariables} blockTitle="Global Variables" />
-        {/if}
-        {#if meta.classVariables}
-            <VariablesBlock variables={meta.classVariables} blockTitle="Class Variables" />
-        {/if}
         {#if meta.returns}
             <ReturnsBlock returns={meta.returns} />
         {/if}
         {#if meta.raises}
             <RaisesBlock exceptions={meta.raises} />
         {/if}
+        {#if meta.globalVariables}
+            <VariablesBlock variables={meta.globalVariables} blockTitle="Global Variables" />
+        {/if}
+        {#if meta.classVariables}
+            <VariablesBlock variables={meta.classVariables} blockTitle="Class Variables" />
+        {/if}
+        {#each Object.entries(children) as [childType, childList]}
+            <ChildBlock childType={childType} childList={childList} />
+        {/each}
     </div>
     {#if meta.source}
         <div class="w-full">

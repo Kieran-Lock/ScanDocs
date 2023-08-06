@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from types import ModuleType
 from typing import Iterable, Callable
-from inspect import Signature, getmembers, ismemberdescriptor, isdatadescriptor, ismethoddescriptor, isgetsetdescriptor
+from inspect import Signature, getmembers
 from .serialized import Serialized
 from .structure import Structure
 

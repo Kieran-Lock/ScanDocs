@@ -24,7 +24,9 @@
     </dt>
     <dd class="pl-8">
         {#if meta.description}
-            {meta.description}
+            <p>{meta.description}</p>
+        {:else}
+            <p class="italic">No Description Provided</p>
         {/if}
     </dd>
 </div>

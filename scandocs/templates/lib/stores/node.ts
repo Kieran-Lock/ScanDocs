@@ -16,13 +16,13 @@ const createActiveNodeStore = () => {
                 }
             }
         },
-        getActive: (current: unknown): TreeOnlyNode | null => {
+        getActive: (current: unknown): TreeOnlyNode => {
             for (const [i, structure] of entriesOf(traverseProject(project))) {
                 if (i === current as number) {
                     return structure as TreeOnlyNode
                 }
             }
-            return null
+            throw new Error(`Cannot get node with index ${current}`)
         }
     }
 }

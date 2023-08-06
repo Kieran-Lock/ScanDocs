@@ -44,7 +44,7 @@ class Docstring:
                 parameter.description,
                 parameter.type_name,
                 parameter.default,
-                parameter.is_optional  # TODO: Gives None wrongly
+                parameter.is_optional
             ) for parameter in docstring.params],
             [Error.from_docstring_raises(error) for error in docstring.raises],
             [SubroutineReturn.from_docstring_returns(

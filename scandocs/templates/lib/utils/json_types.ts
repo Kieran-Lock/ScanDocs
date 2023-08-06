@@ -3,22 +3,21 @@ import type {
     DeprecationMeta,
     DeprecationTag, ErrorMeta,
     NameMeta, PackageMeta, ParameterMeta, SearchTermsMeta,
-    SignatureMeta, SourceMeta, SubroutineReturnMeta
+    SignatureMeta, SourceMeta, SubroutineReturnMeta, VariableMeta
 } from "$lib/utils/types";
 
 export interface JsonParametersMeta {
     parameters: JsonNode[]
 }
-export interface JsonVariablesMeta {
-    variables: JsonNode[]
-    variablesBlockName: string
-}
 
-export type ClassMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & JsonVariablesMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     isAbstract: boolean
     deprecation: DeprecationTag | null
+    classVariables: JsonNode[]
 }
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & JsonVariablesMeta
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+    globalVariables: JsonNode[]
+}
 export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     raises: JsonNode[]
     returns: JsonNode[]
@@ -30,7 +29,7 @@ export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & Com
     isContextManager: boolean
 }
 
-export type AllJsonMeta = ClassMeta | DeprecationMeta | ErrorMeta | ModuleMeta | PackageMeta | ParameterMeta | SubroutineMeta | SubroutineReturnMeta
+export type AllJsonMeta = ClassMeta | DeprecationMeta | ErrorMeta | ModuleMeta | PackageMeta | ParameterMeta | SubroutineMeta | SubroutineReturnMeta | VariableMeta
 
 export type JsonNode = {
     component: string,

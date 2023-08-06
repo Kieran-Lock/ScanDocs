@@ -21,6 +21,6 @@
         </div>
     </dt>
     <dd class="pl-8">
-        {meta.value}
+        <p>{meta.value}</p>
     </dd>
 </div>
