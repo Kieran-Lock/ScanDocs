@@ -11,7 +11,7 @@ from typing import Callable
 from docstring_parser import DocstringDeprecated
 from .serialized import Serialized
 from .structure import Structure
-from ..tags import Deprecated
+from ..tags import Deprecated, Links, Link
 
 
 @Deprecated(
@@ -30,12 +30,18 @@ class Deprecation(Structure):
     version: str
 
     @classmethod
+    @Links(
+        Link(
+            "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
+            "The API that provides the DocstringDeprecated objects this method uses."
+        )
+    ).tag
     def from_docstring_deprecated(cls, deprecation: DocstringDeprecated) -> Deprecation:
         """
         Forms an instance of this class from a DocstringDeprecated object.
 
         This class method is used to form instances of this class from DocstringDeprecated objects,
-        as provided by the docstring_parser API: https://pypi.org/project/docstring-parser/.
+        as provided by the Docstring Parser API.
 
         :param deprecation: The object to form a new object from
         :return: A corresponding instance of this class

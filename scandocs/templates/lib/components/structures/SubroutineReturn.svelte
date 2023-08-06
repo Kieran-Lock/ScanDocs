@@ -9,9 +9,9 @@
         <div class="flex flex-row pr-2 justify-between w-full">
             <div class="flex flex-row gap-2 text-md">
                 {#if meta.annotation}
-                    <p>{meta.annotation}</p>
+                    <p class="font-semibold">{meta.annotation}</p>
                 {:else}
-                    <p>No Annotation Specified</p>
+                    <p class="font-semibold italic">No Annotation Specified</p>
                 {/if}
             </div>
         </div>

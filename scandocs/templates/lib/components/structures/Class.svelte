@@ -8,7 +8,7 @@
     <dt>
         <div class="flex flex-row pr-2 justify-between w-full">
             <div class="flex flex-row gap-2 text-md">
-                <p>{meta.name}</p>
+                <p class="font-semibold">{meta.name}</p>
             </div>
         </div>
     </dt>
