@@ -7,6 +7,6 @@ websites for Python packages of any size and complexity.
 """
 
 
-from .structures import Package
+from .structures import Package, Structure, SourceStructure, SignatureStructure, SearchableStructure
 from .documentation import Documentation, Configuration, Themes
 from .tags import ContextManager, Deprecated

@@ -26,14 +26,17 @@ export interface ComplexDescriptionMeta {
 export interface SearchTermsMeta {
     searchTerms: string
 }
+export interface VariablesMeta {
+    variables: Node[]
+    variablesBlockName: string
+}
 
 export interface DeprecationTag {
     version: string
     description: string | null
 }
 
-
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & VariablesMeta & {
     isAbstract: boolean
     deprecation: DeprecationTag | null
 }
@@ -41,7 +44,7 @@ export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
 export type ErrorMeta = NameMeta & SimpleDescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & VariablesMeta
 export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
@@ -58,8 +61,11 @@ export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & Complex
     isContextManager: boolean
 }
 export type SubroutineReturnMeta = SimpleDescriptionMeta & AnnotationMeta
+export type VariableMeta = NameMeta & AnnotationMeta & {
+    value: string
+}
 
-export type AnyMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta
+export type AnyMeta = ClassMeta & DeprecationMeta & ErrorMeta & ModuleMeta & PackageMeta & ParameterMeta & SubroutineMeta & SubroutineReturnMeta & VariableMeta
 export type AllTreeOnlyMeta = ClassMeta | ModuleMeta | PackageMeta | SubroutineMeta
 
 export type Node = {

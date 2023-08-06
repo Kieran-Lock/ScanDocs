@@ -14,7 +14,7 @@ from typing import Callable
 from .configuration import Configuration
 from .markers import Markers
 from .replacement import Replacement
-from ..structures import Package, Structure, Subroutine
+from ..structures import Package, Structure, Subroutine, SourceStructure
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,8 +29,11 @@ class Documentation:
     base_directory: Path
     configuration: Configuration
     filter: Callable[[Structure], bool] = lambda structure: (
-        not ((structure.is_private or structure.is_dunder)
-             or (isinstance(structure, Subroutine) and structure.is_lambda))
+        not (isinstance(structure, SourceStructure) and (
+                (structure.is_private or structure.is_dunder) or (
+                    isinstance(structure, Subroutine) and structure.is_lambda
+                )
+        ))
     )
 
     def output(self) -> None:

@@ -14,6 +14,7 @@ from .serialized import Serialized
 from .source_structure import SourceStructure
 from .subroutine import Subroutine
 from .searchable_structure import SearchableStructure
+from .variable import Variable
 
 
 @dataclass(frozen=True, slots=True)
@@ -23,6 +24,7 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
     """
     classes: list[Class]
     subroutines: list[Subroutine]
+    global_variables: list[Variable]
 
     @property
     def search_terms(self) -> str:
@@ -56,7 +58,8 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
             [Subroutine.from_subroutine(subroutine[1], subroutine[1] in declared)
              for subroutine in getmembers(
                 module, predicate=lambda member: isfunction(member) and cls.is_user_defined(member, module)
-            )]
+            )],
+            [variable for variable in Variable.many_from_scope(module)]
         )
 
     @staticmethod
@@ -78,7 +81,13 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "searchTerms": self.search_terms
+                "searchTerms": self.search_terms,
+                "variables": [
+                    variable.serialize(
+                        child_filter=child_filter).to_json()
+                    for variable in self.global_variables if child_filter(variable)
+                ],
+                "variablesBlockName": "Global Variables"
             },
             {
                 "classes": [

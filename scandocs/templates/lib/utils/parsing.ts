@@ -7,6 +7,7 @@ import Parameter from "$lib/components/structures/Parameter.svelte";
 import Exception from "$lib/components/structures/Exception.svelte";
 import SubroutineReturn from "$lib/components/structures/SubroutineReturn.svelte";
 import type {JsonNode} from "$lib/utils/json_types";
+import Variable from "$lib/components/structures/Variable.svelte";
 
 export const parseProject = (project: JsonNode): Node => {
     const componentLookup = {
@@ -16,7 +17,8 @@ export const parseProject = (project: JsonNode): Node => {
         "Subroutine": Subroutine,
         "Parameter": Parameter,
         "Exception": Exception,
-        "SubroutineReturn": SubroutineReturn
+        "SubroutineReturn": SubroutineReturn,
+        "Variable": Variable
     }
     return JSON.parse(JSON.stringify(project), (key, value) => {
         if (key === "component" && value in componentLookup) {

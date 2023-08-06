@@ -8,6 +8,7 @@
     import {activeNode} from "$lib/stores/node";
     import SourceBlock from "$lib/components/blocks/SourceBlock.svelte";
     import type {AnyMeta} from "$lib/utils/types";
+    import VariablesBlock from "$lib/components/blocks/VariablesBlock.svelte";
 
     let meta: AnyMeta
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -18,7 +19,7 @@
 </script>
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
-    <div class="flex flex-col gap-6 max-w-[50%]">
+    <div class="flex flex-col gap-6 max-w-[50%] min-w-[40%]">
         <DescriptionBlock name={meta.name} short={meta.shortDescription} long={meta.longDescription}
                           isGenerator={meta.isGenerator} isAsync={meta.isAsync} isAbstract={meta.isAbstract}
                           isLambda={meta.isLambda} isContextManager={meta.isContextManager}
@@ -28,6 +29,9 @@
         {/if}
         {#if meta.parameters}
             <ParametersBlock parameters={meta.parameters} />
+        {/if}
+        {#if meta.variables}
+            <VariablesBlock blockTitle={meta.variablesBlockName} variables={meta.variables} />
         {/if}
         {#if meta.returns}
             <ReturnsBlock returns={meta.returns} />

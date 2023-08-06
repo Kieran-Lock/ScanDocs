@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import type {Node} from "$lib/utils/types";
+import type {TreeOnlyNode} from "$lib/utils/types";
 import {entriesOf, traverseProject} from "$lib/utils/parsing";
 import {project} from "$lib/content/project";
 
@@ -8,7 +8,7 @@ const createActiveNodeStore = () => {
 
     return {
         subscribe: store.subscribe,
-        setActive: (node: Node) => {
+        setActive: (node: TreeOnlyNode) => {
             for (const [i, structure] of entriesOf(traverseProject(project))) {
                 if (structure === node) {
                     store.set(i as number)
@@ -16,10 +16,10 @@ const createActiveNodeStore = () => {
                 }
             }
         },
-        getActive: (current: unknown): Node | null => {
+        getActive: (current: unknown): TreeOnlyNode | null => {
             for (const [i, structure] of entriesOf(traverseProject(project))) {
                 if (i === current as number) {
-                    return structure as Node
+                    return structure as TreeOnlyNode
                 }
             }
             return null

@@ -1,22 +1,30 @@
 import type {
-    ClassMeta,
     ComplexDescriptionMeta,
     DeprecationMeta,
-    DeprecationTag, ErrorMeta, ModuleMeta,
+    DeprecationTag, ErrorMeta,
     NameMeta, PackageMeta, ParameterMeta, SearchTermsMeta,
-    SignatureMeta, SubroutineReturnMeta
+    SignatureMeta, SourceMeta, SubroutineReturnMeta
 } from "$lib/utils/types";
 
 export interface JsonParametersMeta {
     parameters: JsonNode[]
 }
+export interface JsonVariablesMeta {
+    variables: JsonNode[]
+    variablesBlockName: string
+}
 
+export type ClassMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & JsonVariablesMeta & {
+    isAbstract: boolean
+    deprecation: DeprecationTag | null
+}
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & JsonVariablesMeta
 export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     raises: JsonNode[]
     returns: JsonNode[]
     deprecation: DeprecationTag | null
     isGenerator: boolean
-    isAsync: boolean | null  // TODO: Can be null?
+    isAsync: boolean
     isAbstract: boolean
     isLambda: boolean
     isContextManager: boolean

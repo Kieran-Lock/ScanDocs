@@ -13,3 +13,6 @@ from .module import Module
 from .package import Package
 from .subroutine import Subroutine
 from .structure import Structure
+from .source_structure import SourceStructure
+from .signature_structure import SignatureStructure
+from .searchable_structure import SearchableStructure

@@ -12,6 +12,7 @@ from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .subroutine import Subroutine
 from .searchable_structure import SearchableStructure
+from .variable import Variable
 from ..tags import Deprecated
 
 
@@ -23,6 +24,7 @@ class Class(SignatureStructure[type], SearchableStructure):
     methods: list[Subroutine]
     deprecation: Deprecated | None
     is_abstract: bool
+    class_variables: list[Variable]
 
     @property
     def search_terms(self) -> str:
@@ -57,7 +59,8 @@ class Class(SignatureStructure[type], SearchableStructure):
                 for method in class_.__dict__ if callable(getattr(class_, method))
             ],
             Deprecated.get_tag(class_),
-            isabstract(class_)
+            isabstract(class_),
+            [variable for variable in Variable.many_from_scope(class_)]
         )
 
     @property
@@ -73,12 +76,17 @@ class Class(SignatureStructure[type], SearchableStructure):
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),
-                "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters"),
+                "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters", []),
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
                 "isAbstract": self.is_abstract,
-                "searchTerms": self.search_terms
+                "searchTerms": self.search_terms,
+                "variables": [
+                    variable.serialize(child_filter=child_filter).to_json()
+                    for variable in self.class_variables if child_filter(variable)
+                ],
+                "variablesBlockName": "Class Variables"
             },
             {
                 "methods": [
