@@ -67,6 +67,15 @@ class Structure(ABC):
 
     @staticmethod
     def check_is_private(structure: object | FunctionType | ModuleType) -> bool:
+        """
+        Checks to see whether a structure is considered to be private.
+
+        If a structure does not possess the private tag, and starts with
+        at least one underscore, it is considered to be private.
+
+        :param structure:
+        :return:
+        """
         if hasattr(structure, "__name__"):
             return Private.is_tagged(structure) or structure.__name__.startswith("_")
         return Private.is_tagged(structure)

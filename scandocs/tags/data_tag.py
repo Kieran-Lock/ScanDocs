@@ -1,3 +1,7 @@
+"""
+A module containing internal details for how data tags are structured.
+"""
+
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 from .tag import Tag

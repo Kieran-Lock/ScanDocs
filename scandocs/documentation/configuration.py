@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from .themes import Themes
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Configuration:
     """
     A dataclass for customizing details of the generated website.

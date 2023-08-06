@@ -15,7 +15,9 @@ from .serialized import Serialized
 from .parameter import Parameter
 from .subroutine_return import SubroutineReturn
 from .searchable_structure import SearchableStructure
-from ..tags import ContextManager, Deprecated
+from ..tags import ContextManager, Deprecated, Links, Notes, Examples
+
+
 # from ..parsing import ExceptionsParser
 
 
@@ -73,6 +75,10 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             docstring,
             is_declared,
             signature,
+            Deprecated.get_tag(subroutine),
+            Examples.get_tag(subroutine),
+            Links.get_tag(subroutine),
+            Notes.get_tag(subroutine),
             [
                 Parameter.from_parameter(
                     signature.parameters[parameter], docstring.parameters if docstring else []
@@ -82,7 +88,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             # [
             #     Error(error_name, "") for error_name in parser.exceptions
             # ],
-            Deprecated.get_tag(subroutine),
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
             (
                 isasyncgenfunction(subroutine) or
@@ -117,6 +122,9 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
+                "examples": self.examples.json_serialize() if self.examples else None,
+                "links": self.links.json_serialize() if self.links else None,
+                "notes": self.notes.json_serialize() if self.notes else None,
                 "isGenerator": self.is_generator,
                 "isAsync": self.is_async,
                 "isAbstract": self.is_abstract,

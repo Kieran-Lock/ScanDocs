@@ -14,6 +14,10 @@ export interface SourceMeta {
 }
 export interface SignatureMeta extends SourceMeta {
     signature: string
+    deprecation: DeprecationTag | null
+    examples: ExamplesTag | null
+    links: LinksTag | null
+    notes: NotesTag | null
 }
 export interface ParametersMeta {
 
@@ -31,10 +35,25 @@ export interface DeprecationTag {
     version: string
     description: string | null
 }
+export interface ExamplesTag {
+    examples: {
+        title: string
+        content: string
+    }[]
+}
+export interface LinksTag {
+    links: {
+        title: string
+        href: string
+        description: string | null
+    }[]
+}
+export interface NotesTag {
+    notes: string[]
+}
 
 export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
     isAbstract: boolean
-    deprecation: DeprecationTag | null
     classVariables: Node[]
 }
 export type DeprecationMeta = SimpleDescriptionMeta & {

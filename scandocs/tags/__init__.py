@@ -7,5 +7,5 @@ This includes functionality such as deprecation notices.
 """
 
 
-from .tags import ContextManager, Deprecated, Private
+from .tags import ContextManager, Deprecated, Private, Examples, Links, Notes
 from .tag import Tag

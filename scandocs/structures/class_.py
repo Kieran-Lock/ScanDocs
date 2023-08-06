@@ -13,7 +13,7 @@ from .serialized import Serialized
 from .subroutine import Subroutine
 from .searchable_structure import SearchableStructure
 from .variable import Variable
-from ..tags import Deprecated
+from ..tags import Deprecated, Links, Notes, Examples
 
 
 @dataclass(frozen=True, slots=True)
@@ -22,7 +22,6 @@ class Class(SignatureStructure[type], SearchableStructure):
     The dataclass representing Python classes.
     """
     methods: list[Subroutine]
-    deprecation: Deprecated | None
     is_abstract: bool
     class_variables: list[Variable]
 
@@ -49,6 +48,10 @@ class Class(SignatureStructure[type], SearchableStructure):
             Docstring.from_docstring(docstring) if docstring else None,
             is_declared,
             cls.get_signature(class_),
+            Deprecated.get_tag(class_),
+            Examples.get_tag(class_),
+            Links.get_tag(class_),
+            Notes.get_tag(class_),
             [
                 Subroutine.from_subroutine(
                     getattr(class_, method),
@@ -57,15 +60,16 @@ class Class(SignatureStructure[type], SearchableStructure):
                 )
                 for method in class_.__dict__ if callable(getattr(class_, method))
             ],
-            Deprecated.get_tag(class_),
             isabstract(class_),
-            [variable for variable in Variable.many_from_scope(
-                class_, class_.__module__,
-                lambda variable: not (
-                    ismemberdescriptor(variable) or isdatadescriptor(variable) or
-                    ismethoddescriptor(variable) or isgetsetdescriptor(variable) or callable(variable)
+            [
+                variable for variable in Variable.many_from_scope(
+                    class_, class_.__module__,
+                    lambda variable: not (
+                        ismemberdescriptor(variable) or isdatadescriptor(variable) or
+                        ismethoddescriptor(variable) or isgetsetdescriptor(variable) or callable(variable)
+                    )
                 )
-            )]
+            ]
         )
 
     @property
@@ -85,6 +89,9 @@ class Class(SignatureStructure[type], SearchableStructure):
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
+                "examples": self.examples.json_serialize() if self.examples else None,
+                "links": self.links.json_serialize() if self.links else None,
+                "notes": self.notes.json_serialize() if self.notes else None,
                 "isAbstract": self.is_abstract,
                 "searchTerms": self.search_terms,
                 "classVariables": [
