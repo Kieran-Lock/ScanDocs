@@ -11,13 +11,15 @@ class Example(Structure):
     """
     A dataclass detailing how examples should be structured for the Examples tag.
     """
-    title: str
-    content: str
+    header: str
+    python_code: str | None = None
+    footer: str | None = None
 
     def to_json(self) -> dict[str, object]:
         return {
-            "title": self.title,
-            "content": self.content
+            "header": self.header,
+            "code": self.python_code,
+            "footer": self.footer
         }
 
 

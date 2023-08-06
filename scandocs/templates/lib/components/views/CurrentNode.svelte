@@ -11,6 +11,8 @@
     import VariablesBlock from "$lib/components/blocks/VariablesBlock.svelte";
     import ChildBlock from "$lib/components/blocks/ChildBlock.svelte";
     import LinksBlock from "$lib/components/blocks/LinksBlock.svelte";
+    import NotesBlock from "$lib/components/blocks/NotesBlock.svelte";
+    import ExamplesBlock from "$lib/components/blocks/ExamplesBlock.svelte";
 
     let meta: AnyTreeOnlyMeta
     let children: Record<string, Node[]>
@@ -31,6 +33,12 @@
         />
         {#if meta.deprecation}
             <DeprecationBlock deprecation={meta.deprecation} />
+        {/if}
+        {#if meta.notes}
+            <NotesBlock notes={meta.notes} />
+        {/if}
+        {#if meta.examples}
+            <ExamplesBlock examples={meta.examples} />
         {/if}
         {#if meta.parameters}
             <ParametersBlock parameters={meta.parameters} />

@@ -15,8 +15,25 @@ from .configuration import Configuration
 from .markers import Markers
 from .replacement import Replacement
 from ..structures import Package, Structure, Subroutine, SourceStructure
+from ..tags import Examples, Example
 
 
+@Examples(
+    Example(
+        "Creating a website",
+        """from scandocs import Package, Documentation, Configuration, Themes
+from pathlib import Path
+from pprint import pprint
+import scandocs
+
+
+project = Package.from_module(scandocs)
+docs = Documentation(project, Path("./docs"), Configuration("ScanDocs", theme=Themes.SEAFOAM))
+pprint(project.serialize(docs.filter).to_json())
+docs.output()""",
+        "This is the code used to generate this documentation"
+    )
+).tag
 @dataclass(frozen=True, slots=True)
 class Documentation:
     """

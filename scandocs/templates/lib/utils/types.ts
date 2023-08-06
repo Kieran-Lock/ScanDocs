@@ -37,8 +37,9 @@ export interface DeprecationTag {
 }
 export interface ExamplesTag {
     examples: {
-        title: string
-        content: string
+        header: string
+        code: string | null
+        footer: string | null
     }[]
 }
 export interface LinksTag {

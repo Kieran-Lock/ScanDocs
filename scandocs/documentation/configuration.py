@@ -7,8 +7,12 @@ before it is generated, to maximise simplicity.
 
 from dataclasses import dataclass
 from .themes import Themes
+from ..tags import Notes
 
 
+@Notes(
+    "Test note."
+).tag
 @dataclass(frozen=True, slots=True)
 class Configuration:
     """
