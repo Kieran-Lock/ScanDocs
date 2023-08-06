@@ -102,11 +102,11 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
                 "searchTerms": self.search_terms
             },
             {
-                "subpackages": [
+                "Sub-Packages": [
                     subpackage.serialize(
                         child_filter=child_filter) for subpackage in self.subpackages if child_filter(subpackage)
                 ],
-                "modules": [
+                "Modules": [
                     module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)
                 ]
             }

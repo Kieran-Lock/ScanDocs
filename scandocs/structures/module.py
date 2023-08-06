@@ -79,10 +79,10 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
                 ]
             },
             {
-                "classes": [
+                "Classes": [
                     class_.serialize(child_filter=child_filter) for class_ in self.classes
                 ],
-                "subroutines": [
+                "Subroutines": [
                     subroutine.serialize(
                         child_filter=child_filter) for subroutine in self.subroutines if child_filter(subroutine)
                 ]

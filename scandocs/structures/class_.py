@@ -93,7 +93,7 @@ class Class(SignatureStructure[type], SearchableStructure):
                 ]
             },
             {
-                "methods": [
+                "Methods": [
                     method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)
                 ]
             }
