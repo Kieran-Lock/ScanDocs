@@ -51,7 +51,6 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
             declared = declared.intersection(cls.get_declared(package))
 
         name = package.__name__.split(".")[-1]
-        is_dunder = name.startswith("__")
         docstring = cls.get_docstring(package)
         try:
             substructures = [substructure for substructure in package.__all__ if ismodule(substructure)]
@@ -61,8 +60,8 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
 
         return cls(
             name,
-            (not is_dunder) and name.startswith("_"),
-            is_dunder,
+            cls.check_is_private(package),
+            name.startswith("__"),
             cls.get_source(package),
             Docstring.from_docstring(docstring) if docstring else None,
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],

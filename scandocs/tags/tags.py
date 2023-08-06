@@ -9,10 +9,11 @@ documentation generator to provide details regarding the tagged subroutine as ne
 from __future__ import annotations
 from dataclasses import dataclass
 from .tag import Tag
+from .data_tag import DataTag
 
 
 @dataclass(frozen=True, slots=True)
-class ContextManager(Tag):
+class ContextManager(DataTag):
     """
     Mark a structure as a context manager.
 
@@ -28,7 +29,7 @@ class ContextManager(Tag):
 
 
 @dataclass(frozen=True, slots=True)
-class Deprecated(Tag):
+class Deprecated(DataTag):
     """
     Mark a structure as deprecated.
 
@@ -44,3 +45,14 @@ class Deprecated(Tag):
             "version": self.version,
             "description": self.description
         }
+
+
+@dataclass(frozen=True, slots=True)
+class Private(Tag):
+    """
+    Mark a structure as private.
+
+    This indicates that the structure should not be documented when the
+    website is generated. Variable names starting with a single underscore
+    are treated in the same way.
+    """

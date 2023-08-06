@@ -4,11 +4,12 @@ The module containing the dataclass representing any Python structure recorded b
 
 from __future__ import annotations
 from dataclasses import dataclass
-from inspect import Signature
-from types import ModuleType
+from inspect import Signature, getmodule
+from types import ModuleType, FunctionType
 from typing import Callable
 from abc import ABC, abstractmethod
 from .serialized import Serialized
+from ..tags import Private
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,10 +21,11 @@ class Structure(ABC):
     @abstractmethod
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
         """
-        Serializes the structure into a compatible JSON format, so that it can be used in the website.
+        Serializes the structure into a Serialized object, so that it can be used in the website.
 
-        Serializes the structure into a compatible JSON format, with customizable filtering
-        options to omit certain structures from the project tree as desired.
+        A Serialized object is a standardized format for serialization structures, with customizable filtering
+        options to omit certain structures from the project tree as desired,
+        and a convenient method for conversion to JSON.
 
         :param child_filter: The filter method used to omit unwanted structures from the serializes project tree
         :return: The serialized structure, in a compatible JSON format
@@ -55,7 +57,13 @@ class Structure(ABC):
         :param module_name: the name of the module the member was declared within
         :return: Whether the member was defined in the given module, or imported / in-built
         """
-        try:
-            return member.__module__ == module_name
-        except AttributeError:  # Module is abnormal (e.g. builtins)
+        defined_module = getmodule(member)
+        if defined_module is None:
             return False
+        return getmodule(member).__name__ == module_name
+
+    @staticmethod
+    def check_is_private(structure: object | FunctionType | ModuleType) -> bool:
+        if hasattr(structure, "__name__"):
+            return Private.is_tagged(structure) or structure.__name__.startswith("_")
+        return Private.is_tagged(structure)

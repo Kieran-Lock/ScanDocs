@@ -36,7 +36,6 @@ class Class(SignatureStructure[type], SearchableStructure):
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
         name = class_.__name__
-        is_dunder = name.startswith("__")
         docstring = cls.get_docstring(class_)
         try:
             abstract_methods = class_.__abstractmethods__
@@ -44,8 +43,8 @@ class Class(SignatureStructure[type], SearchableStructure):
             abstract_methods = []
         return cls(
             name,
-            (not is_dunder) and name.startswith("_"),
-            is_dunder,
+            cls.check_is_private(class_),
+            name.startswith("__"),
             cls.get_source(class_),
             Docstring.from_docstring(docstring) if docstring else None,
             is_declared,

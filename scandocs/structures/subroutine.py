@@ -52,7 +52,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
         :return: A corresponding instance of this class
         """
         name = subroutine.__name__
-        is_dunder = name.startswith("__")
         signature = cls.get_signature(subroutine)
         docstring = cls.get_docstring(subroutine)
         docstring = Docstring.from_docstring(
@@ -68,8 +67,8 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
 
         return cls(
             name,
-            (not is_dunder) and name.startswith("_"),
-            is_dunder,
+            cls.check_is_private(subroutine),
+            name.startswith("__"),
             cls.get_source(subroutine),
             docstring,
             is_declared,

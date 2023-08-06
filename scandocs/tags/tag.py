@@ -78,16 +78,3 @@ class Tag(ABC):
         :return: Whether the given structure has any tags of the correct type
         """
         return any(isinstance(tag, cls) for tag in cls.get_all_tags(f))
-
-    @abstractmethod
-    def json_serialize(self) -> dict[str, object]:
-        """
-        Serialize the tag, so that it can be used in the website.
-
-        This method must be implemented by children tags, and is used to
-        serialize the information provided by the tag into a JSON compatible
-        dictionary, so that it can be used appropriately in the documentation website.
-
-        :return: The serialized information as a JSON compatible dictionary
-        """
-        ...

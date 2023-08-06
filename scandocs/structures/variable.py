@@ -29,21 +29,21 @@ class Variable(Structure):
         :param module_name: The name of the module in which the variable is located
         :return: Each discovered variable from the given scope
         """
-        def is_shallow(name: str, variable: object) -> bool:
+        def is_shallow(variable: object) -> bool:
             if (
                     ismemberdescriptor(variable) or isdatadescriptor(variable) or
                     ismethoddescriptor(variable) or isgetsetdescriptor(variable) or
-                    not cls.defined_within(variable, module_name)
+                    cls.check_is_private(variable) or not cls.defined_within(variable, module_name)
             ):
                 return False
-            return not (callable(variable) or name.startswith("__"))
+            return not callable(variable)
 
         variable_information = getmembers(scope)
         try:
             annotations_ = vars(scope).__annotations__
         except AttributeError:
             annotations_ = {}
-        variables = {name: variable for name, variable in variable_information if is_shallow(name, variable)}
+        variables = {name: variable for name, variable in variable_information if is_shallow(variable)}
         for variable_name in variables:
             yield cls(
                 variable_name,

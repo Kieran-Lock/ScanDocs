@@ -43,12 +43,11 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
         :return: A corresponding instance of this class
         """
         name = module.__name__.split(".")[-1]
-        is_dunder = name.startswith("__")
         docstring = cls.get_docstring(module)
         return cls(
             name,
-            (not is_dunder) and name.startswith("_"),
-            is_dunder,
+            cls.check_is_private(module),
+            name.startswith("__"),
             cls.get_source(module),
             Docstring.from_docstring(docstring) if docstring else None,
             [Class.from_class(class_[1], class_[1] in declared)
