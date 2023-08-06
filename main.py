@@ -5,11 +5,6 @@ import scandocs
 
 
 project = Package.from_module(scandocs)
-docs = Documentation(project, Path("./docs"), Configuration("ScanDocs", theme=Themes.SEAFOAM))
+docs = Documentation(project, Path("./docs"), Configuration("ScanDocs", theme=Themes.GOLD_NOUVEAU))
 pprint(project.serialize(docs.filter).to_json())
 docs.output()
-
-
-"""
-TODO: Search grouping
-"""

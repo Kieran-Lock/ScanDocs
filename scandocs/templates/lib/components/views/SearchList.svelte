@@ -3,7 +3,7 @@
     import SearchResult from "$lib/components/navigation/SearchResult.svelte";
     import {ListBox, ListBoxItem} from "@skeletonlabs/skeleton";
 
-    let searchFilter = ["package", "module", "class", "subroutine"]
+    let searchFilter = []
 </script>
 
 <div class="flex flex-row w-[80%] p-8 justify-around">
