@@ -30,8 +30,11 @@
         {#if meta.parameters}
             <ParametersBlock parameters={meta.parameters} />
         {/if}
-        {#if meta.variables}
-            <VariablesBlock blockTitle={meta.variablesBlockName} variables={meta.variables} />
+        {#if meta.globalVariables}
+            <VariablesBlock variables={meta.globalVariables} blockTitle="Global Variables" />
+        {/if}
+        {#if meta.classVariables}
+            <VariablesBlock variables={meta.classVariables} blockTitle="Class Variables" />
         {/if}
         {#if meta.returns}
             <ReturnsBlock returns={meta.returns} />

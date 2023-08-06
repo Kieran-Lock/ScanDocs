@@ -21,29 +21,28 @@ class Variable(Structure):
     value: str
 
     @classmethod
-    def many_from_scope(cls, scope: object | ModuleType, module_name: str) -> Iterable[Variable]:
+    def many_from_scope(cls, scope: object | ModuleType, module_name: str,
+                        variable_filter: Callable[[object], bool] = lambda _: True) -> Iterable[Variable]:
         """
         Forms an instance of this class from a valid scope, such as a class or module.
 
         :param scope: The scope to retrieve variables from
         :param module_name: The name of the module in which the variable is located
+        :param variable_filter: A filter function to narrow the selection of yielded variables
         :return: Each discovered variable from the given scope
         """
-        def is_shallow(variable: object) -> bool:
-            if (
-                    ismemberdescriptor(variable) or isdatadescriptor(variable) or
-                    ismethoddescriptor(variable) or isgetsetdescriptor(variable) or
-                    cls.check_is_private(variable) or not cls.defined_within(variable, module_name)
-            ):
-                return False
-            return not callable(variable)
+        def is_valid(variable: object) -> bool:
+            return (
+                cls.defined_within(variable, module_name) and variable_filter(variable)
+                and not cls.check_is_private(variable)
+            )
 
         variable_information = getmembers(scope)
         try:
             annotations_ = vars(scope).__annotations__
         except AttributeError:
             annotations_ = {}
-        variables = {name: variable for name, variable in variable_information if is_shallow(variable)}
+        variables = {name: variable for name, variable in variable_information if is_valid(variable)}
         for variable_name in variables:
             yield cls(
                 variable_name,

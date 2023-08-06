@@ -58,7 +58,9 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
              for subroutine in getmembers(
                 module, predicate=lambda member: isfunction(member) and cls.defined_within(member, module.__name__)
             )],
-            [variable for variable in Variable.many_from_scope(module, module.__name__)]
+            [variable for variable in Variable.many_from_scope(
+                module, module.__name__, lambda variable: not callable(variable)
+            )]
         )
 
     def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:
@@ -70,12 +72,11 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
                 "searchTerms": self.search_terms,
-                "variables": [
+                "globalVariables": [
                     variable.serialize(
                         child_filter=child_filter).to_json()
                     for variable in self.global_variables if child_filter(variable)
-                ],
-                "variablesBlockName": "Global Variables"
+                ]
             },
             {
                 "classes": [

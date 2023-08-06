@@ -5,7 +5,7 @@ The module containing the dataclass representing Python classes.
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
-from inspect import isabstract
+from inspect import isabstract, isdatadescriptor, ismemberdescriptor, ismethoddescriptor, isgetsetdescriptor
 from .docstring import Docstring
 from .structure import Structure
 from .signature_structure import SignatureStructure
@@ -59,7 +59,13 @@ class Class(SignatureStructure[type], SearchableStructure):
             ],
             Deprecated.get_tag(class_),
             isabstract(class_),
-            [variable for variable in Variable.many_from_scope(class_, class_.__module__)]
+            [variable for variable in Variable.many_from_scope(
+                class_, class_.__module__,
+                lambda variable: not (
+                    ismemberdescriptor(variable) or isdatadescriptor(variable) or
+                    ismethoddescriptor(variable) or isgetsetdescriptor(variable) or callable(variable)
+                )
+            )]
         )
 
     @property
@@ -81,11 +87,10 @@ class Class(SignatureStructure[type], SearchableStructure):
                 "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
                 "isAbstract": self.is_abstract,
                 "searchTerms": self.search_terms,
-                "variables": [
+                "classVariables": [
                     variable.serialize(child_filter=child_filter).to_json()
                     for variable in self.class_variables if child_filter(variable)
-                ],
-                "variablesBlockName": "Class Variables"
+                ]
             },
             {
                 "methods": [

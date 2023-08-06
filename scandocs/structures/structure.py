@@ -49,17 +49,20 @@ class Structure(ABC):
         return object_.__name__ if isinstance(object_, type) else str(object_)
 
     @staticmethod
-    def defined_within(member, module_name: str) -> bool:
+    def defined_within(member, module_name: str) -> bool | None:
         """
         Determines whether a given member is in-built or not within a given module.
 
         :param member: The member to inspect
         :param module_name: the name of the module the member was declared within
         :return: Whether the member was defined in the given module, or imported / in-built
+        :rtype: bool
+        :return: If the source module of the given member cannot be determined
+        :rtype: None
         """
         defined_module = getmodule(member)
         if defined_module is None:
-            return False
+            return
         return getmodule(member).__name__ == module_name
 
     @staticmethod
