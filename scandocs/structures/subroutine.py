@@ -33,6 +33,10 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             f"\n{self.docstring.long_description if self.docstring else ''}"
         )
 
+    @property
+    def search_category(self) -> str:
+        return "subroutine"
+
     parameters: list[Parameter]
     raises: list[Error]
     deprecation: Deprecated | None
@@ -103,6 +107,7 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
         return Serialized(
             "Subroutine",
             {
+                "searchCategory": self.search_category,
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),

@@ -30,6 +30,10 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
             f"\n{self.docstring.long_description if self.docstring else ''}"
         )
 
+    @property
+    def search_category(self) -> str:
+        return "package"
+
     @classmethod
     def from_module(cls, package: ModuleType, declared: set[type | FunctionType] | None = None) -> Package:
         """
@@ -95,6 +99,7 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
         return Serialized(
             "Package",
             {
+                "searchCategory": self.search_category,
                 "name": self.name,
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,

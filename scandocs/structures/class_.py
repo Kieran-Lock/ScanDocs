@@ -32,6 +32,10 @@ class Class(SignatureStructure[type], SearchableStructure):
             f"\n{self.docstring.long_description if self.docstring else ''}"
         )
 
+    @property
+    def search_category(self) -> str:
+        return "class"
+
     @classmethod
     def from_class(cls, class_: type, is_declared: bool) -> Class:
         name = class_.__name__
@@ -82,6 +86,7 @@ class Class(SignatureStructure[type], SearchableStructure):
         return Serialized(
             "Class",
             {
+                "searchCategory": self.search_category,
                 "name": self.name,
                 "source": self.source,
                 "signature": str(self.signature),

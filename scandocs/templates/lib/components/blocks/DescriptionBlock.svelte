@@ -1,6 +1,7 @@
 <script lang="ts">
     import Badge from "$lib/components/extra/Badge.svelte";
 
+    export let structureName: string
     export let name: string
     export let short: string | null
     export let long: string | null
@@ -21,6 +22,7 @@
             <Badge text="Abstract" isVisible={isAbstract} />
             <Badge text="Lambda" isVisible={isLambda} />
             <Badge text="Context Manager" isVisible={isContextManager} />
+            <Badge text={structureName} isVisible />
         </div>
     </header>
     <section class="w-full pt-2 text-left">

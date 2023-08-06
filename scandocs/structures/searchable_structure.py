@@ -13,6 +13,7 @@ class SearchableStructure(Structure, ABC):
     """
     A structure that can be searched for on the generated website.
     """
+
     @property
     @abstractmethod
     def search_terms(self) -> str:
@@ -22,5 +23,17 @@ class SearchableStructure(Structure, ABC):
         This property is used by the website files to search for searchable structures in the project.
 
         :return: A string of terms that this structure can be searched for with
+        """
+        ...
+
+    @property
+    @abstractmethod
+    def search_category(self) -> str:
+        """
+        A dynamic property defining what category this searchable structure is listed as.
+
+        This property is used by the website files when filtering searches between categories.
+
+        :return: The name of the search category
         """
         ...

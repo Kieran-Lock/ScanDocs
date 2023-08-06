@@ -12,6 +12,4 @@ docs.output()
 
 """
 TODO: Search grouping
-      Tags: Examples, Links, Notes
-      Badges: Generic
 """

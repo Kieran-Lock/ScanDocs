@@ -27,9 +27,9 @@
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
     <div class="flex flex-col gap-6 max-w-[55%] min-w-[45%]">
-        <DescriptionBlock name={meta.name} short={meta.shortDescription} long={meta.longDescription}
-                          isGenerator={meta.isGenerator} isAsync={meta.isAsync} isAbstract={meta.isAbstract}
-                          isLambda={meta.isLambda} isContextManager={meta.isContextManager}
+        <DescriptionBlock structureName={meta.searchCategory} name={meta.name} short={meta.shortDescription}
+                          long={meta.longDescription} isGenerator={meta.isGenerator} isAsync={meta.isAsync}
+                          isAbstract={meta.isAbstract} isLambda={meta.isLambda} isContextManager={meta.isContextManager}
         />
         {#if meta.deprecation}
             <DeprecationBlock deprecation={meta.deprecation} />

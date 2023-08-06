@@ -4,5 +4,5 @@
 </script>
 
 {#if isVisible}
-    <p class="badge variant-ghost-secondary rounded-2xl">{text}</p>
+    <p class="badge variant-ghost-secondary rounded-2xl capitalize">{text}</p>
 {/if}
