@@ -36,7 +36,7 @@ If you're familiar with SvelteKit, you can then adjust the website layout howeve
 <!-- GETTING STARTED -->
 ## Getting Started
 
-XtermGUI is available on PyPI. To use it in your project, run:
+ScanDocs is available on PyPI. To use it in your project, run:
 
 ```
 pip install ScanDocs
