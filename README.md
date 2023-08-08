@@ -5,7 +5,7 @@
 <!-- PROJECT SUMMARY -->
 <br />
 <div align="center">
-  <img src="https://github.com/Kieran-Lock/ScanDocs" alt="Logo" width="400px">
+  <img src="https://i.imgur.com/2jHaTlY.png" alt="Logo" width="400px">
   <br />
   <p align="center">
     A tool to automatically generate documentation for Python projects
@@ -26,7 +26,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About the Project
 
-ScanDocs creates automatic documentation.
+ScanDocs creates documentation for Python projects automatically, by harnessing the power of SvelteKit, and Python's dynamic nature. By using signature analysis of your modules, classes, and subroutines, and a little help from your docstrings, ScanDocs is able to generate comprehensive and flexible documentation, with customizable themes, easily adaptable content, and comprehensive searching functionality.  
+  
+If you're familiar with SvelteKit, you can then adjust the website layout however you think best fits your project, and edit website content easily from the generated JSON tree. Themes can also be easily changed by using Skeleton UI's [theme generator](https://www.skeleton.dev/docs/generator).
+
 
 
 
