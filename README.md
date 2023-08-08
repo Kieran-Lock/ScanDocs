@@ -76,7 +76,7 @@ project = Package.from_module(<your_project>)
 
 Next, configure the documentation:
 ```py
-docs = Documentation(<your_project>, WEBSITE_PATH, Configuration(PROJECT_NAME))  # Set the path to be wherever you want the website files to be saved
+docs = Documentation(project, WEBSITE_PATH, Configuration(PROJECT_NAME))  # Set the path to be wherever you want the website files to be saved
 ```
 
 You can now build the website files:
@@ -105,7 +105,7 @@ PROJECT_NAME = "YOUR_PROJECT_NAME"  # The name of your project
 
 
 project = Package.from_module(<your_project>)
-docs = Documentation(<your_project>, WEBSITE_PATH, Configuration(PROJECT_NAME, theme=Themes.GOLD_NOUVEAU))  # Or any other available theme you want
+docs = Documentation(project, WEBSITE_PATH, Configuration(PROJECT_NAME, theme=Themes.GOLD_NOUVEAU))  # Or any other available theme you want
 docs.output()
 ```
 You can now generate comprehensive documentation, with any theme you want, for all of your Python projects!
