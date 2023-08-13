@@ -15,7 +15,7 @@
                 <div class="flex flex-col list-d p-2 gap-2">
                     <p class="font-semibold">{example.header}</p>
                     {#if example.code}
-                        <CodeBlock class="w-full my-2" language="Python" code={example.code}></CodeBlock>
+                        <CodeBlock class="w-full my-2 max-h-[30vh] overflow-y-auto" language="Python" code={example.code}></CodeBlock>
                     {/if}
                     {#if example.footer}
                         <p>{example.footer}</p>

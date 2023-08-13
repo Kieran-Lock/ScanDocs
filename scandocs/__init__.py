@@ -24,7 +24,7 @@ PROJECT_NAME = "YOUR_PROJECT_NAME"  # The name of your project
 
 
 project = Package.from_module(<your_project>)
-docs = Documentation(project, WEBSITE_PATH, Configuration(PROJECT_NAME))  # Or any other available theme you want
+docs = Documentation(project, WEBSITE_PATH, Configuration(PROJECT_NAME))  # Set the path to be wherever you want the website files to be saved
 docs.output()""",
     "You can generate high-quality, comprehensive documentation with just these 8 lines of code."
 ).tag(Example.module_from_name(__name__))
