@@ -10,7 +10,7 @@
   <p align="center">
     Automatically generate documentation for Python projects
     <br />
-    <a href="https://github.com/Kieran-Lock/ScanDocs"><strong>Explore the docs »</strong></a>
+    <a href="https://scandocs-documentation.vercel.app/"><strong>Explore the docs »</strong></a>
     <br />
     <br />
     <a href="#about-the-project">Getting Started</a>
