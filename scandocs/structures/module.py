@@ -15,6 +15,7 @@ from .source_structure import SourceStructure
 from .subroutine import Subroutine
 from .searchable_structure import SearchableStructure
 from .variable import Variable
+from ..tags import Deprecated, Example, Link, Note
 
 
 @dataclass(frozen=True, slots=True)
@@ -54,6 +55,10 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
             name.startswith("__"),
             cls.get_source(module),
             Docstring.from_docstring(docstring) if docstring else None,
+            Deprecated.get_tags(module),
+            Example.get_tags(module),
+            Link.get_tags(module),
+            Note.get_tags(module),
             [Class.from_class(class_[1], class_[1] in declared)
              for class_ in getmembers(
                 module, predicate=lambda member: isclass(member) and cls.defined_within(member, module.__name__)
@@ -76,6 +81,10 @@ class Module(SourceStructure[ModuleType], SearchableStructure):
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
+                "deprecations": [deprecation.json_serialize() for deprecation in self.deprecations],
+                "examples": [example.json_serialize() for example in self.examples],
+                "links": [link.json_serialize() for link in self.links],
+                "notes": [note.json_serialize() for note in self.notes],
                 "searchTerms": self.search_terms,
                 "globalVariables": [
                     variable.serialize(

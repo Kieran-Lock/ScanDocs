@@ -64,12 +64,12 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             name.startswith("__"),
             cls.get_source(subroutine),
             docstring,
-            is_declared,
-            signature,
             Deprecated.get_tags(subroutine),
             Example.get_tags(subroutine),
             Link.get_tags(subroutine),
             Note.get_tags(subroutine),
+            is_declared,
+            signature,
             [
                 Parameter.from_parameter(
                     signature.parameters[parameter], docstring.parameters if docstring else []

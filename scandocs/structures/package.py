@@ -13,6 +13,7 @@ from .module import Module
 from .serialized import Serialized
 from .source_structure import SourceStructure
 from .searchable_structure import SearchableStructure
+from ..tags import Deprecated, Example, Link, Note
 
 
 @dataclass(frozen=True)
@@ -68,6 +69,10 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
             name.startswith("__"),
             cls.get_source(package),
             Docstring.from_docstring(docstring) if docstring else None,
+            Deprecated.get_tags(package),
+            Example.get_tags(package),
+            Link.get_tags(package),
+            Note.get_tags(package),
             [cls.from_module(structure, declared) for structure in substructures if cls.is_package(structure)],
             [Module.from_module(structure, declared) for structure in substructures if not cls.is_package(structure)]
         )
@@ -104,6 +109,10 @@ class Package(SourceStructure[ModuleType], SearchableStructure):
                 "source": self.source,
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
+                "deprecations": [deprecation.json_serialize() for deprecation in self.deprecations],
+                "examples": [example.json_serialize() for example in self.examples],
+                "links": [link.json_serialize() for link in self.links],
+                "notes": [note.json_serialize() for note in self.notes],
                 "searchTerms": self.search_terms
             },
             {

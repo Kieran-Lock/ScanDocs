@@ -8,8 +8,10 @@ to be placed in the generated documentation website.
 
 from __future__ import annotations
 from dataclasses import dataclass
+from types import ModuleType
 from typing import Callable, TypeVar
 from abc import ABC
+from sys import modules
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,7 +23,7 @@ class Tag(ABC):
     ensuring that they are all interfaced with in the same way.
     """
     @staticmethod
-    def get_all_tags(f: Callable) -> dict[str, list[Tag]]:
+    def get_all_tags(f: Callable | ModuleType) -> dict[str, list[Tag]]:
         """
         Retrieves all the tags from a given structure, irrespective of type.
 
@@ -35,7 +37,7 @@ class Tag(ABC):
             return {}
 
     @classmethod
-    def get_tags(cls: OwnTagT, f: Callable) -> list[OwnTagT]:
+    def get_tags(cls: OwnTagT, f: Callable | ModuleType) -> list[OwnTagT]:
         """
         Gets the tag of the specified type from a given structure.
 
@@ -47,7 +49,7 @@ class Tag(ABC):
         """
         return cls.get_all_tags(f).get(cls.__name__, [])
 
-    def tag(self, f: Callable) -> Callable:
+    def tag(self, f: Callable | ModuleType) -> Callable | ModuleType:
         """
         Tags a structure with a reference to the specified tag.
 
@@ -56,6 +58,7 @@ class Tag(ABC):
 
         :param f: The structure to tag
         :return: The given structure, with the given tag attached
+
         """
         if hasattr(f, "__scandocs_tags__"):
             if self.__class__.__name__ in f.__scandocs_tags__:
@@ -66,7 +69,7 @@ class Tag(ABC):
             f.__scandocs_tags__ = {self.__class__.__name__: [self]}
         return f
 
-    def __call__(self, f: Callable) -> Callable:
+    def __call__(self, f: Callable | ModuleType) -> Callable | ModuleType:
         """
         Tags a structure with a reference to the specified tag.
 
@@ -78,7 +81,7 @@ class Tag(ABC):
         return self.tag(f)
 
     @classmethod
-    def is_tagged(cls, f: Callable) -> bool:
+    def is_tagged(cls, f: Callable | ModuleType) -> bool:
         """
         A utility method to check if any tags of this type exist on a structure.
 
@@ -86,6 +89,10 @@ class Tag(ABC):
         :return: Whether the given structure has any tags of the correct type
         """
         return any(isinstance(tag, cls) for tag_list in cls.get_all_tags(f).values() for tag in tag_list)
+
+    @staticmethod
+    def module_from_name(module_name: str) -> ModuleType | None:
+        return modules.get(module_name)
 
 
 OwnTagT = TypeVar("OwnTagT", bound=Tag)

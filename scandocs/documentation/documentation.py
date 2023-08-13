@@ -18,20 +18,6 @@ from ..structures import Package, Structure, Subroutine, SourceStructure
 from ..tags import Example
 
 
-@Example(
-    "Creating a website",
-    """from scandocs import Package, Documentation, Configuration, Themes
-from pathlib import Path
-from pprint import pprint
-import scandocs
-
-
-project = Package.from_module(scandocs)
-docs = Documentation(project, Path("./docs"), Configuration("ScanDocs", theme=Themes.SEAFOAM))
-pprint(project.serialize(docs.filter).to_json())
-docs.output()""",
-    "This is the code used to generate this documentation"
-)
 @dataclass(frozen=True, slots=True)
 class Documentation:
     """
@@ -45,9 +31,9 @@ class Documentation:
     configuration: Configuration
     filter: Callable[[Structure], bool] = lambda structure: (
         not (isinstance(structure, SourceStructure) and (
-                (structure.is_private or structure.is_dunder) or (
-                isinstance(structure, Subroutine) and structure.is_lambda
-        )
+                (
+                        structure.is_private or structure.is_dunder) or
+                (isinstance(structure, Subroutine) and structure.is_lambda)
         ))
     )
 

@@ -10,7 +10,7 @@ from docstring_parser import parse, Docstring as ParserDocstring
 from abc import ABC
 from .docstring import Docstring
 from .structure import Structure
-
+from ..tags import Deprecated, Example, Link, Note
 
 StructureT = TypeVar("StructureT")
 
@@ -25,6 +25,10 @@ class SourceStructure(Generic[StructureT], Structure, ABC):
     is_dunder: bool
     source: str
     docstring: Docstring | None
+    deprecations: list[Deprecated]
+    examples: list[Example] | None
+    links: list[Link] | None
+    notes: list[Note] | None
 
     @staticmethod
     def get_source(structure: StructureT) -> str | None:

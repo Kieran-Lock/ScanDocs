@@ -50,12 +50,12 @@ class Class(SignatureStructure[type], SearchableStructure):
             name.startswith("__"),
             cls.get_source(class_),
             Docstring.from_docstring(docstring) if docstring else None,
-            is_declared,
-            cls.get_signature(class_),
             Deprecated.get_tags(class_),
             Example.get_tags(class_),
             Link.get_tags(class_),
             Note.get_tags(class_),
+            is_declared,
+            cls.get_signature(class_),
             [
                 Subroutine.from_subroutine(
                     getattr(class_, method),

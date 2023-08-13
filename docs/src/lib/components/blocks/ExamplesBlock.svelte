@@ -12,10 +12,14 @@
         </header>
         <section>
             {#each examples as example}
-                <div class="list-d flex-auto p-2">
+                <div class="flex flex-col list-d p-2 gap-2">
                     <p class="font-semibold">{example.header}</p>
-                    <CodeBlock class="w-full my-2" language="Python" code={example.code}></CodeBlock>
-                    <p>{example.footer}</p>
+                    {#if example.code}
+                        <CodeBlock class="w-full my-2" language="Python" code={example.code}></CodeBlock>
+                    {/if}
+                    {#if example.footer}
+                        <p>{example.footer}</p>
+                    {/if}
                     <div class="pb-2 pt-4">
                         <hr class="!border-t-2" />
                     </div>
