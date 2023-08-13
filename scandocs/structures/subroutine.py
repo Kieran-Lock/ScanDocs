@@ -15,7 +15,7 @@ from .serialized import Serialized
 from .parameter import Parameter
 from .subroutine_return import SubroutineReturn
 from .searchable_structure import SearchableStructure
-from ..tags import ContextManager, Deprecated, Links, Notes, Examples
+from ..tags import ContextManager, Deprecated, Link, Note, Example
 
 
 # from ..parsing import ExceptionsParser
@@ -39,7 +39,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
 
     parameters: list[Parameter]
     raises: list[Error]
-    deprecation: Deprecated | None
     is_generator: bool | None
     is_async: bool
     is_abstract: bool
@@ -79,10 +78,10 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             docstring,
             is_declared,
             signature,
-            Deprecated.get_tag(subroutine),
-            Examples.get_tag(subroutine),
-            Links.get_tag(subroutine),
-            Notes.get_tag(subroutine),
+            Deprecated.get_tags(subroutine),
+            Example.get_tags(subroutine),
+            Link.get_tags(subroutine),
+            Note.get_tags(subroutine),
             [
                 Parameter.from_parameter(
                     signature.parameters[parameter], docstring.parameters if docstring else []
@@ -96,7 +95,10 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             (
                 isasyncgenfunction(subroutine) or
                 iscoroutinefunction(subroutine) or
-                (ContextManager.get_tag(subroutine).is_async if ContextManager.is_tagged(subroutine) else False)
+                (
+                    any(tag.is_async for tag in ContextManager.get_tags(subroutine))
+                    if ContextManager.is_tagged(subroutine) else False
+                )
             ),
             is_abstract,
             name == "<lambda>",
@@ -126,10 +128,10 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
                 ],
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
-                "examples": self.examples.json_serialize() if self.examples else None,
-                "links": self.links.json_serialize() if self.links else None,
-                "notes": self.notes.json_serialize() if self.notes else None,
+                "deprecations": [deprecation.json_serialize() for deprecation in self.deprecations],
+                "examples": [example.json_serialize() for example in self.examples],
+                "links": [link.json_serialize() for link in self.links],
+                "notes": [note.json_serialize() for note in self.notes],
                 "isGenerator": self.is_generator,
                 "isAsync": self.is_async,
                 "isAbstract": self.is_abstract,

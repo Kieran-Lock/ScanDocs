@@ -1,16 +1,16 @@
 <script lang="ts">
-    import type {LinksTag} from "$lib/types/types";
+    import type {LinksMeta} from "$lib/types/types";
 
-    export let links: LinksTag
+    export let links: LinksMeta[]
 </script>
 
-{#if links.links.length}
+{#if links.length}
     <div class="flex flex-col gap-2 card p-4 variant-glass-surface w-full">
         <header>
             <h2 class="text-2xl font-bold">Links</h2>
         </header>
         <section>
-            {#each links.links as link}
+            {#each links as link}
                 <dl class="list-d flex-auto p-2">
                     <div class="w-full">
                         <a href={link.href} target="_blank" class="btn p-0">

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from inspect import signature, Signature
 from typing import TypeVar
 from .source_structure import SourceStructure
-from ..tags import Examples, Links, Notes, Deprecated
+from ..tags import Example, Link, Note, Deprecated
 
 
 StructureT = TypeVar("StructureT")
@@ -21,10 +21,10 @@ class SignatureStructure(SourceStructure[StructureT], ABC):
     """
     is_declared: bool
     signature: Signature | None
-    deprecation: Deprecated | None
-    examples: Examples | None
-    links: Links | None
-    notes: Notes | None
+    deprecations: list[Deprecated] | None
+    examples: list[Example] | None
+    links: list[Link] | None
+    notes: list[Note] | None
 
     @staticmethod
     def get_signature(structure: StructureT) -> Signature | None:

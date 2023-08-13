@@ -14,47 +14,41 @@ export interface SourceMeta {
 }
 export interface SignatureMeta extends SourceMeta {
     signature: string
-    deprecation: DeprecationTag | null
-    examples: ExamplesTag | null
-    links: LinksTag | null
-    notes: NotesTag | null
+    deprecations: DeprecationsMeta[]
+    examples: ExamplesMeta[]
+    links: LinksMeta[]
+    notes: NotesMeta[]
 }
 export interface ParametersMeta {
-
     parameters: Node[]
 }
 export interface ComplexDescriptionMeta {
     shortDescription: string | null
     longDescription: string | null
 }
-export interface SearchMeta {
+export interface SearchableMeta {
     searchCategory: string
     searchTerms: string
 }
-
-export interface DeprecationTag {
+export interface DeprecationsMeta {
     version: string
     description: string | null
 }
-export interface ExamplesTag {
-    examples: {
-        header: string
-        code: string | null
-        footer: string | null
-    }[]
+export interface ExamplesMeta {
+    header: string
+    code: string | null
+    footer: string | null
 }
-export interface LinksTag {
-    links: {
-        title: string
-        href: string
-        description: string | null
-    }[]
+export interface LinksMeta {
+    title: string
+    href: string
+    description: string | null
 }
-export interface NotesTag {
-    notes: string[]
+export interface NotesMeta {
+    note: string
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchableMeta & {
     isAbstract: boolean
     classVariables: Node[]
 }
@@ -62,18 +56,17 @@ export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
 export type ErrorMeta = NameMeta & SimpleDescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchMeta & {
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchableMeta & {
     globalVariables: Node[]
 }
-export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchMeta
+export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchableMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
     isOptional: boolean
 }
-export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchMeta & {
+export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchableMeta & {
     raises: Node[]
     returns: Node[]
-    deprecation: DeprecationTag | null
     isGenerator: boolean
     isAsync: boolean
     isAbstract: boolean

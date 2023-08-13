@@ -8,7 +8,6 @@ documentation generator to provide details regarding the tagged subroutine as ne
 
 from __future__ import annotations
 from dataclasses import dataclass
-from .structures import Example, Link
 from .tag import Tag
 from .data_tag import DataTag
 
@@ -59,52 +58,49 @@ class Private(Tag):
     """
 
 
-@dataclass(frozen=True, slots=True, init=False)
-class Examples(DataTag):
+@dataclass(frozen=True, slots=True)
+class Example(DataTag):
     """
     Add documented examples to a structure.
     """
-
-    examples: tuple[Example]
-
-    def __init__(self, *examples: Example):
-        object.__setattr__(self, "examples", examples)
+    header: str
+    python_code: str | None = None
+    footer: str | None = None
 
     def json_serialize(self) -> dict[str, object]:
         return {
-            "examples": [example.to_json() for example in self.examples]
+            "header": self.header,
+            "code": self.python_code,
+            "footer": self.footer
         }
 
 
-@dataclass(frozen=True, slots=True, init=False)
-class Links(DataTag):
+@dataclass(frozen=True, slots=True)
+class Link(DataTag):
     """
     Add relevant links to a structure's documentation.
     """
-
-    links: tuple[Link]
-
-    def __init__(self, *links: Link):
-        object.__setattr__(self, "links", links)
+    title: str
+    href: str
+    description: str | None = None
 
     def json_serialize(self) -> dict[str, object]:
         return {
-            "links": [link.to_json() for link in self.links]
+            "title": self.title,
+            "href": self.href,
+            "description": self.description
         }
 
 
-@dataclass(frozen=True, slots=True, init=False)
-class Notes(DataTag):
+@dataclass(frozen=True, slots=True)
+class Note(DataTag):
     """
     Add relevant notes to a structure's documentation.
     """
 
-    notes: tuple[str]
-
-    def __init__(self, *notes: str):
-        object.__setattr__(self, "notes", notes)
+    note: str
 
     def json_serialize(self) -> dict[str, object]:
         return {
-            "notes": [note for note in self.notes]
+            "note": self.note
         }

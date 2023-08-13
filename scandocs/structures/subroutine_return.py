@@ -9,7 +9,7 @@ from typing import Callable
 from docstring_parser import DocstringReturns
 from .serialized import Serialized
 from .structure import Structure
-from ..tags import Links, Link
+from ..tags import Link
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,12 +21,10 @@ class SubroutineReturn(Structure):
     annotation: str | None
 
     @classmethod
-    @Links(
-        Link(
-            "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
-            "The API that provides the DocstringReturns objects this method uses."
-        )
-    ).tag
+    @Link(
+        "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
+        "The API that provides the DocstringReturns objects this method uses."
+    )
     def from_docstring_returns(cls, returns: DocstringReturns) -> SubroutineReturn:
         """
         Forms an instance of this class from a DocstringReturns object.

@@ -31,8 +31,10 @@
                           long={meta.longDescription} isGenerator={meta.isGenerator} isAsync={meta.isAsync}
                           isAbstract={meta.isAbstract} isLambda={meta.isLambda} isContextManager={meta.isContextManager}
         />
-        {#if meta.deprecation}
-            <DeprecationBlock deprecation={meta.deprecation} />
+        {#if meta.deprecations}
+            {#each meta.deprecations as deprecation}
+                <DeprecationBlock deprecation={deprecation} />
+            {/each}
         {/if}
         {#if meta.notes}
             <NotesBlock notes={meta.notes} />

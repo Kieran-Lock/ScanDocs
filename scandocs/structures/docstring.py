@@ -9,7 +9,7 @@ from .parameter import Parameter
 from .error import Error
 from .subroutine_return import SubroutineReturn
 from .deprecation import Deprecation
-from ..tags import Links, Link
+from ..tags import Link
 
 
 @dataclass(frozen=True, slots=True)
@@ -25,12 +25,10 @@ class Docstring:
     returns: list[SubroutineReturn]
 
     @classmethod
-    @Links(
-        Link(
-            "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
-            "The API that provides the Docstring objects this method uses."
-        )
-    ).tag
+    @Link(
+        "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
+        "The API that provides the Docstring objects this method uses."
+    )
     def from_docstring(cls, docstring: ParserDocstring, return_annotation: str | None = None) -> Docstring:
         """
         Forms an instance of this class from an external Docstring object.

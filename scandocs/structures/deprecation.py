@@ -11,13 +11,13 @@ from typing import Callable
 from docstring_parser import DocstringDeprecated
 from .serialized import Serialized
 from .structure import Structure
-from ..tags import Deprecated, Links, Link
+from ..tags import Deprecated, Link
 
 
 @Deprecated(
     "v0.1.1",
     "Deprecated in favour of using tags to indicate deprecation, as it is considered to be more robust"
-).tag
+)
 @dataclass(frozen=True, slots=True)
 class Deprecation(Structure):
     """
@@ -30,12 +30,10 @@ class Deprecation(Structure):
     version: str
 
     @classmethod
-    @Links(
-        Link(
-            "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
-            "The API that provides the DocstringDeprecated objects this method uses."
-        )
-    ).tag
+    @Link(
+        "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
+        "The API that provides the DocstringDeprecated objects this method uses."
+    )
     def from_docstring_deprecated(cls, deprecation: DocstringDeprecated) -> Deprecation:
         """
         Forms an instance of this class from a DocstringDeprecated object.

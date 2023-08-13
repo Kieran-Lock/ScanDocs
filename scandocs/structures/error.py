@@ -8,7 +8,7 @@ from typing import Callable
 from docstring_parser import DocstringRaises
 from .serialized import Serialized
 from .structure import Structure
-from ..tags import Links, Link
+from ..tags import Link
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,12 +20,10 @@ class Error(Structure):
     description: str
 
     @classmethod
-    @Links(
-        Link(
-            "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
-            "The API that provides the DocstringRaises objects this method uses."
-        )
-    ).tag
+    @Link(
+        "Docstring Parser API", "https://pypi.org/project/docstring-parser/",
+        "The API that provides the DocstringRaises objects this method uses."
+    )
     def from_docstring_raises(cls, raises: DocstringRaises) -> Error:
         """
         Forms an instance of this class from a DocstringRaises object.

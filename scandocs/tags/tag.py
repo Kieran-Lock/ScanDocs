@@ -8,8 +8,8 @@ to be placed in the generated documentation website.
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Callable
-from abc import ABC, abstractmethod
+from typing import Callable, TypeVar
+from abc import ABC
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,21 +21,21 @@ class Tag(ABC):
     ensuring that they are all interfaced with in the same way.
     """
     @staticmethod
-    def get_all_tags(f: Callable) -> list[Tag]:
+    def get_all_tags(f: Callable) -> dict[str, list[Tag]]:
         """
         Retrieves all the tags from a given structure, irrespective of type.
 
         :param f: The given structure to retrieve from
-        :return: A list of the tags attached to the given structure
+        :return: A mapping of tag names to a list of corresponding tags
         """
         try:
             # noinspection PyUnresolvedReferences
             return f.__scandocs_tags__
         except AttributeError:
-            return []
+            return {}
 
     @classmethod
-    def get_tag(cls, f: Callable) -> Tag | None:
+    def get_tags(cls: OwnTagT, f: Callable) -> list[OwnTagT]:
         """
         Gets the tag of the specified type from a given structure.
 
@@ -44,14 +44,8 @@ class Tag(ABC):
 
         :param f: The given structure to retrieve from
         :return: If a tag exists of the correct type, return it
-        :rtype: Tag
-        :return: If no tag exists of the specified type
-        :rtype: None
         """
-        try:
-            return next(tag for tag in cls.get_all_tags(f) if isinstance(tag, cls))
-        except StopIteration:
-            return
+        return cls.get_all_tags(f).get(cls.__name__, [])
 
     def tag(self, f: Callable) -> Callable:
         """
@@ -61,13 +55,27 @@ class Tag(ABC):
         with a concise and readable syntax.
 
         :param f: The structure to tag
-        :return: The given structure, with an attached tag
+        :return: The given structure, with the given tag attached
         """
         if hasattr(f, "__scandocs_tags__"):
-            f.__scandocs_tags__.append(self)
+            if self.__class__.__name__ in f.__scandocs_tags__:
+                f.__scandocs_tags__[self.__class__.__name__].append(self)
+            else:
+                f.__scandocs_tags__[self.__class__.__name__] = [self]
         else:
-            f.__scandocs_tags__ = [self]
+            f.__scandocs_tags__ = {self.__class__.__name__: [self]}
         return f
+
+    def __call__(self, f: Callable) -> Callable:
+        """
+        Tags a structure with a reference to the specified tag.
+
+        This has the same functionality as calling the tag method, and serves only to simplify the API.
+
+        :param f: The structure to tag
+        :return: The given structure, with an attached tag
+        """
+        return self.tag(f)
 
     @classmethod
     def is_tagged(cls, f: Callable) -> bool:
@@ -77,4 +85,7 @@ class Tag(ABC):
         :param f: The structure which may have tags attached to it
         :return: Whether the given structure has any tags of the correct type
         """
-        return any(isinstance(tag, cls) for tag in cls.get_all_tags(f))
+        return any(isinstance(tag, cls) for tag_list in cls.get_all_tags(f).values() for tag in tag_list)
+
+
+OwnTagT = TypeVar("OwnTagT", bound=Tag)

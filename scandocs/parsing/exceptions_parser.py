@@ -10,7 +10,7 @@ from deep_ast import DeepVisitor
 from ..tags import Deprecated
 
 
-@Deprecated("v0.1.1", "Docstrings are used instead to provide accurate detail about exceptions").tag
+@Deprecated("v0.1.1", "Docstrings are used instead to provide accurate detail about exceptions")
 class ExceptionsParser(DeepVisitor):
     """
     A class which parses the source code to find the possible exceptions a subroutine might raise.

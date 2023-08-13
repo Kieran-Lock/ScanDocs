@@ -13,7 +13,7 @@ from .serialized import Serialized
 from .subroutine import Subroutine
 from .searchable_structure import SearchableStructure
 from .variable import Variable
-from ..tags import Deprecated, Links, Notes, Examples
+from ..tags import Deprecated, Link, Note, Example
 
 
 @dataclass(frozen=True, slots=True)
@@ -52,10 +52,10 @@ class Class(SignatureStructure[type], SearchableStructure):
             Docstring.from_docstring(docstring) if docstring else None,
             is_declared,
             cls.get_signature(class_),
-            Deprecated.get_tag(class_),
-            Examples.get_tag(class_),
-            Links.get_tag(class_),
-            Notes.get_tag(class_),
+            Deprecated.get_tags(class_),
+            Example.get_tags(class_),
+            Link.get_tags(class_),
+            Note.get_tags(class_),
             [
                 Subroutine.from_subroutine(
                     getattr(class_, method),
@@ -93,10 +93,10 @@ class Class(SignatureStructure[type], SearchableStructure):
                 "parameters": self.initializer.serialize(child_filter=child_filter).meta.get("parameters", []),
                 "shortDescription": self.docstring.short_description if self.docstring else None,
                 "longDescription": self.docstring.long_description if self.docstring else None,
-                "deprecation": self.deprecation.json_serialize() if self.deprecation else None,
-                "examples": self.examples.json_serialize() if self.examples else None,
-                "links": self.links.json_serialize() if self.links else None,
-                "notes": self.notes.json_serialize() if self.notes else None,
+                "deprecations": [deprecation.json_serialize() for deprecation in self.deprecations],
+                "examples": [example.json_serialize() for example in self.examples],
+                "links": [link.json_serialize() for link in self.links],
+                "notes": [note.json_serialize() for note in self.notes],
                 "isAbstract": self.is_abstract,
                 "searchTerms": self.search_terms,
                 "classVariables": [

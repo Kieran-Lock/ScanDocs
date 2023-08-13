@@ -1,8 +1,7 @@
 import type {
     ComplexDescriptionMeta,
-    DeprecationMeta,
-    DeprecationTag, ErrorMeta,
-    NameMeta, PackageMeta, ParameterMeta, SearchMeta,
+    DeprecationMeta, ErrorMeta,
+    NameMeta, PackageMeta, ParameterMeta, SearchableMeta,
     SignatureMeta, SourceMeta, SubroutineReturnMeta, VariableMeta
 } from "$lib/types/types";
 
@@ -10,18 +9,16 @@ export interface JsonParametersMeta {
     parameters: JsonNode[]
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchableMeta & {
     isAbstract: boolean
-    deprecation: DeprecationTag | null
     classVariables: JsonNode[]
 }
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchMeta & {
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchableMeta & {
     globalVariables: JsonNode[]
 }
-export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchMeta & {
+export type SubroutineMeta = NameMeta & SignatureMeta & JsonParametersMeta & ComplexDescriptionMeta & SearchableMeta & {
     raises: JsonNode[]
     returns: JsonNode[]
-    deprecation: DeprecationTag | null
     isGenerator: boolean
     isAsync: boolean
     isAbstract: boolean
