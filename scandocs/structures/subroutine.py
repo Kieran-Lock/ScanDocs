@@ -9,16 +9,12 @@ from typing import Callable
 from inspect import isgeneratorfunction, isasyncgenfunction, iscoroutinefunction
 from .docstring import Docstring
 from .structure import Structure
-from .error import Error
 from .signature_structure import SignatureStructure
 from .serialized import Serialized
 from .parameter import Parameter
 from .subroutine_return import SubroutineReturn
 from .searchable_structure import SearchableStructure
 from ..tags import ContextManager, Deprecated, Link, Note, Example
-
-
-# from ..parsing import ExceptionsParser
 
 
 @dataclass(frozen=True, slots=True)
@@ -38,7 +34,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
         return "subroutine"
 
     parameters: list[Parameter]
-    raises: list[Error]
     is_generator: bool | None
     is_async: bool
     is_abstract: bool
@@ -63,13 +58,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
             docstring, cls.object_as_written(signature.return_annotation)
         ) if docstring else None
 
-        # parser = ExceptionsParser()
-        # # noinspection PyBroadException
-        # try:
-        #     parser.deep_visit(subroutine)
-        # except Exception:
-        #     parser.exceptions = set()
-
         return cls(
             name,
             cls.check_is_private(subroutine),
@@ -87,10 +75,6 @@ class Subroutine(SignatureStructure[FunctionType], SearchableStructure):
                     signature.parameters[parameter], docstring.parameters if docstring else []
                 ) for parameter in signature.parameters if parameter is not None
             ],
-            [],
-            # [
-            #     Error(error_name, "") for error_name in parser.exceptions
-            # ],
             isgeneratorfunction(subroutine) or isasyncgenfunction(subroutine),
             (
                 isasyncgenfunction(subroutine) or
