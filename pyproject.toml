@@ -22,5 +22,5 @@ build-backend = "setuptools.build_meta"
 
 [project.urls]
 GitHub = "https://github.com/Kieran-Lock/ScanDocs"
-Documentation = "https://github.com/Kieran-Lock/ScanDocs"
+Documentation = "https://scandocs-documentation.vercel.app/"
 License = "https://github.com/Kieran-Lock/ScanDocs/blob/main/LICENSE"
