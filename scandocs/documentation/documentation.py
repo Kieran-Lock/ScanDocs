@@ -48,8 +48,8 @@ class Documentation:
     filter: Callable[[Structure], bool] = lambda structure: (
         not (isinstance(structure, SourceStructure) and (
                 (structure.is_private or structure.is_dunder) or (
-                    isinstance(structure, Subroutine) and structure.is_lambda
-                )
+                isinstance(structure, Subroutine) and structure.is_lambda
+        )
         ))
     )
 
@@ -150,18 +150,24 @@ class Documentation:
             )
         )
         self.replace_content_in_file(
-            self.base_directory / "src/app.html",
-            Replacement(
-                "data-theme=\"skeleton\"",
-                f"data-theme=\"{self.configuration.theme.value}\""
-            ),
-            json=False
-        )
-        self.replace_content_in_file(
             self.base_directory / "src/routes/+layout.svelte",
             Replacement(
                 Markers.THEME.value,
                 self.configuration.theme.value
+            ),
+            json=False
+        )
+        self.replace_content_in_file(
+            self.base_directory / "src/app.html",
+            Replacement(
+                "%sveltekit.head%",
+                f"<title>{self.configuration.project_name} Documentation</title>\n\t\t"
+                f"<meta name=\"title\" content={self.configuration.project_name}>\n\t\t"
+                f"<meta name=\"description\" content=\"Documentation for {self.configuration.project_name}\">\n\t\t"
+                "<meta name=\"robots\" content=\"index, follow\">\n\t\t"
+                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n\t\t"
+                "<meta name=\"language\" content=\"English\">\n\t\t"
+                "%sveltekit.head%"
             ),
             json=False
         )
