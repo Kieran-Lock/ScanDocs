@@ -27,7 +27,8 @@ export interface ComplexDescriptionMeta {
     shortDescription: string | null
     longDescription: string | null
 }
-export interface SearchTermsMeta {
+export interface SearchMeta {
+    searchCategory: string
     searchTerms: string
 }
 
@@ -53,7 +54,7 @@ export interface NotesTag {
     notes: string[]
 }
 
-export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+export type ClassMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchMeta & {
     isAbstract: boolean
     classVariables: Node[]
 }
@@ -61,15 +62,15 @@ export type DeprecationMeta = SimpleDescriptionMeta & {
     version: string
 }
 export type ErrorMeta = NameMeta & SimpleDescriptionMeta
-export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+export type ModuleMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchMeta & {
     globalVariables: Node[]
 }
-export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchTermsMeta
+export type PackageMeta = NameMeta & SourceMeta & ComplexDescriptionMeta & SearchMeta
 export type ParameterMeta = NameMeta & SimpleDescriptionMeta & AnnotationMeta & {
     default: string | null
     isOptional: boolean
 }
-export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchTermsMeta & {
+export type SubroutineMeta = NameMeta & SignatureMeta & ParametersMeta & ComplexDescriptionMeta & SearchMeta & {
     raises: Node[]
     returns: Node[]
     deprecation: DeprecationTag | null

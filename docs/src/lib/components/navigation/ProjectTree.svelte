@@ -1,10 +1,15 @@
 <script lang="ts">
-    import { TreeViewItem } from '@skeletonlabs/skeleton';
+    import {drawerStore, TreeViewItem} from '@skeletonlabs/skeleton';
     import ProjectTree from './ProjectTree.svelte'
-    import type {Node} from "$lib/utils/types";
-    import {selectNodeBuilder} from "$lib/utils/interactivity";
+    import type {TreeOnlyNode, Node} from "$lib/types/types";
+    import {selectNode, selectNodeBuilder} from "$lib/utils/interactivity";
 
     export let nodes: Node[]
+
+    const leafNodeSelectedBuilder = (node: TreeOnlyNode) => (): void => {
+        selectNode(node)
+        drawerStore.close()
+    }
 </script>
 
 {#each nodes as node}
@@ -15,7 +20,7 @@
                 {#if Object.values(child.children).flat().length}
                     <ProjectTree nodes={[child]} />
                 {:else}
-                    <TreeViewItem on:click={selectNodeBuilder(child)}>
+                    <TreeViewItem on:click={leafNodeSelectedBuilder(child)}>
                         <h3>{child.meta.name}</h3>
                     </TreeViewItem>
                 {/if}

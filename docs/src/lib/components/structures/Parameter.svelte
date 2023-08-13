@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {ParameterMeta} from "$lib/utils/types";
+    import type {ParameterMeta} from "$lib/types/types";
     import Badge from "$lib/components/extra/Badge.svelte";
 
     export let meta: ParameterMeta
@@ -7,7 +7,7 @@
 
 <div class="w-full">
     <dt>
-        <div class="flex flex-row pr-2 justify-between w-full">
+        <div class="flex flex-row justify-between w-full gap-4">
             <div class="flex flex-row gap-2 text-md">
                 {#if meta.name}
                     <p class="font-semibold">{meta.name}</p>

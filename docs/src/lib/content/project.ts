@@ -143,7 +143,7 @@ export const project = parseProject({
                                             "searchCategory": "class",
                                             "name": "Documentation",
                                             "source": "@Examples(\n    Example(\n        \"Creating a website\",\n        \"\"\"from scandocs import Package, Documentation, Configuration, Themes\nfrom pathlib import Path\nfrom pprint import pprint\nimport scandocs\n\n\nproject = Package.from_module(scandocs)\ndocs = Documentation(project, Path(\"./docs\"), Configuration(\"ScanDocs\", theme=Themes.SEAFOAM))\npprint(project.serialize(docs.filter).to_json())\ndocs.output()\"\"\",\n        \"This is the code used to generate this documentation\"\n    )\n).tag\n@dataclass(frozen=True, slots=True)\nclass Documentation:\n    \"\"\"\n    A dataclass containing all logic regarding the final documentation website.\n\n    This dataclass encompasses all the data used in the final website output, and includes\n    functionality to write to the final output folder with a working and adaptable website.\n    \"\"\"\n    project: Package\n    base_directory: Path\n    configuration: Configuration\n    filter: Callable[[Structure], bool] = lambda structure: (\n        not (isinstance(structure, SourceStructure) and (\n                (structure.is_private or structure.is_dunder) or (\n                    isinstance(structure, Subroutine) and structure.is_lambda\n                )\n        ))\n    )\n\n    def output(self) -> None:\n        \"\"\"\n        Outputs the prepared documentation website files.\n\n        Outputs all the prepared documentation files into the base directory,\n        and automatically installs any dependencies so that the website is ready to run.\n        \"\"\"\n        self.create_skeleton_template()\n        self.install_dependencies()\n        self.copy_templates()\n        self.dump_project()\n        self.configure_project()\n\n    def create_skeleton_template(self) -> None:\n        \"\"\"\n        Creates a bare-bones project.\n\n        An internal function to run an NPM command that\n        installs a bare-bones SvelteKit template with SkeletonUI.\n        \"\"\"\n        run(\n            [\"pnpm\", \"create\", \"skeleton-app@latest\", \"-q\", \"-n\", self.project.name, \"-p\", str(self.base_directory)],\n            shell=True\n        )\n\n    def install_dependencies(self) -> None:\n        \"\"\"\n        Installs the required project dependencies.\n\n        An internal function which runs several NPM commands, installing all the necessary requirements\n        for the documentation website to function as intended out-of-the-box.\n        \"\"\"\n        dependencies = [\n            [\"highlight.js\"],\n            [\"-D\", \"@tailwindcss/forms\"]\n        ]\n        for dependency in dependencies:\n            run(\n                [\"pnpm\", \"install\", *dependency],\n                shell=True,\n                cwd=str(self.base_directory)\n            )\n\n    def copy_templates(self) -> None:\n        \"\"\"\n        Copies all the locally stored project templates into the bare-bones layout.\n        \"\"\"\n        copy_tree(str(Path(f\"{__file__}/../../templates/lib\")), str(self.base_directory / \"src/lib\"))\n        copy_tree(str(Path(f\"{__file__}/../../templates/routes\")), str(self.base_directory / \"src/routes\"))\n\n    def replace_content_in_file(self, path: Path, *replacements: Replacement, json: bool = True) -> None:\n        \"\"\"\n        A utility method to replace the content at a specific marker with given content.\n\n        An internal method to place specified content in place of an internal marker,\n        used to copy dynamic information such as certain configuration settings into the website files.\n\n        :param path: The path at which the target file exists\n        :param replacements: The replacements that should be made to the target file\n        :param json: Whether the given content should be converted into a JSON format or not\n        \"\"\"\n        with path.open(\"r+\") as f:\n            content = f.read()\n            for replacement in replacements:\n                content = content.replace(\n                    replacement.marker,\n                    dumps(replacement.content, indent=self.configuration.json_indent) if json else replacement.content\n                )\n            f.seek(0)\n            f.truncate(0)\n            f.write(content)\n\n    def dump_project(self) -> None:\n        \"\"\"\n        Places the project JSON tree into the website files.\n        \"\"\"\n        self.replace_content_in_file(\n            self.base_directory / \"src/lib/content/project.ts\",\n            Replacement(\n                Markers.PROJECT.value,\n                self.project.serialize(child_filter=self.filter).to_json()\n            )\n        )\n\n    def configure_project(self) -> None:\n        \"\"\"\n        Places content into the website files regarding user configuration.\n        \"\"\"\n        self.replace_content_in_file(\n            self.base_directory / \"src/lib/content/configuration.ts\",\n            Replacement(\n                Markers.PROJECT_NAME.value,\n                self.configuration.project_name\n            )\n        )\n        self.replace_content_in_file(\n            self.base_directory / \"src/app.html\",\n            Replacement(\n                \"data-theme=\\\"skeleton\\\"\",\n                f\"data-theme=\\\"{self.configuration.theme.value}\\\"\"\n            ),\n            json=False\n        )\n        self.replace_content_in_file(\n            self.base_directory / \"src/routes/+layout.svelte\",\n            Replacement(\n                Markers.THEME.value,\n                self.configuration.theme.value\n            ),\n            json=False\n        )\n",
-                                            "signature": "(project: 'Package', base_directory: 'Path', configuration: 'Configuration', filter: 'Callable[[Structure], bool]' = <function Documentation.<lambda> at 0x0000021650B896C0>) -> None",
+                                            "signature": "(project: 'Package', base_directory: 'Path', configuration: 'Configuration', filter: 'Callable[[Structure], bool]' = <function Documentation.<lambda> at 0x000001E2CACC16C0>) -> None",
                                             "parameters": [
                                                 {
                                                     "component": "Parameter",
@@ -195,7 +195,7 @@ export const project = parseProject({
                                                         "name": "filter",
                                                         "description": null,
                                                         "annotation": "Callable[[Structure], bool]",
-                                                        "default": "<function Documentation.<lambda> at 0x0000021650B896C0>",
+                                                        "default": "<function Documentation.<lambda> at 0x000001E2CACC16C0>",
                                                         "isOptional": true
                                                     },
                                                     "children": {}
@@ -1179,7 +1179,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Class\",\n            {\n                \"searchCategory\": self.search_category,\n                \"name\": self.name,\n                \"source\": self.source,\n                \"signature\": str(self.signature),\n                \"parameters\": self.initializer.serialize(child_filter=child_filter).meta.get(\"parameters\", []),\n                \"shortDescription\": self.docstring.short_description if self.docstring else None,\n                \"longDescription\": self.docstring.long_description if self.docstring else None,\n                \"deprecation\": self.deprecation.json_serialize() if self.deprecation else None,\n                \"examples\": self.examples.json_serialize() if self.examples else None,\n                \"links\": self.links.json_serialize() if self.links else None,\n                \"notes\": self.notes.json_serialize() if self.notes else None,\n                \"isAbstract\": self.is_abstract,\n                \"searchTerms\": self.search_terms,\n                \"classVariables\": [\n                    variable.serialize(child_filter=child_filter).to_json()\n                    for variable in self.class_variables if child_filter(variable)\n                ]\n            },\n            {\n                \"Methods\": [\n                    method.serialize(child_filter=child_filter) for method in self.methods if child_filter(method)\n                ]\n            }\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Class.<lambda> at 0x0000021650B2CEA0>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Class.<lambda> at 0x000001E2CAC6CEA0>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -1198,7 +1198,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Class.<lambda> at 0x0000021650B2CEA0>",
+                                                                    "default": "<function Class.<lambda> at 0x000001E2CAC6CEA0>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -1367,7 +1367,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Deprecation\",\n            {\n                \"description\": self.description,\n                \"version\": self.version\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Deprecation.<lambda> at 0x0000021650B099E0>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Deprecation.<lambda> at 0x000001E2CAC499E0>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -1386,7 +1386,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Deprecation.<lambda> at 0x0000021650B099E0>",
+                                                                    "default": "<function Deprecation.<lambda> at 0x000001E2CAC499E0>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -1735,7 +1735,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Exception\",\n            {\n                \"name\": self.name,\n                \"description\": self.description\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Error.<lambda> at 0x0000021650B08900>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Error.<lambda> at 0x000001E2CAC48900>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -1754,7 +1754,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Error.<lambda> at 0x0000021650B08900>",
+                                                                    "default": "<function Error.<lambda> at 0x000001E2CAC48900>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -1989,7 +1989,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Module\",\n            {\n                \"searchCategory\": self.search_category,\n                \"name\": self.name,\n                \"source\": self.source,\n                \"shortDescription\": self.docstring.short_description if self.docstring else None,\n                \"longDescription\": self.docstring.long_description if self.docstring else None,\n                \"searchTerms\": self.search_terms,\n                \"globalVariables\": [\n                    variable.serialize(\n                        child_filter=child_filter).to_json()\n                    for variable in self.global_variables if child_filter(variable)\n                ]\n            },\n            {\n                \"Classes\": [\n                    class_.serialize(child_filter=child_filter) for class_ in self.classes\n                ],\n                \"Subroutines\": [\n                    subroutine.serialize(\n                        child_filter=child_filter) for subroutine in self.subroutines if child_filter(subroutine)\n                ]\n            }\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Module.<lambda> at 0x0000021650B2DC60>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Module.<lambda> at 0x000001E2CAC6DC60>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -2008,7 +2008,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Module.<lambda> at 0x0000021650B2DC60>",
+                                                                    "default": "<function Module.<lambda> at 0x000001E2CAC6DC60>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -2324,7 +2324,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Package\",\n            {\n                \"searchCategory\": self.search_category,\n                \"name\": self.name,\n                \"source\": self.source,\n                \"shortDescription\": self.docstring.short_description if self.docstring else None,\n                \"longDescription\": self.docstring.long_description if self.docstring else None,\n                \"searchTerms\": self.search_terms\n            },\n            {\n                \"Sub-Packages\": [\n                    subpackage.serialize(\n                        child_filter=child_filter) for subpackage in self.subpackages if child_filter(subpackage)\n                ],\n                \"Modules\": [\n                    module.serialize(child_filter=child_filter) for module in self.modules if child_filter(module)\n                ]\n            }\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Package.<lambda> at 0x0000021650B2E660>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Package.<lambda> at 0x000001E2CAC6E660>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -2343,7 +2343,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Package.<lambda> at 0x0000021650B2E660>",
+                                                                    "default": "<function Package.<lambda> at 0x000001E2CAC6E660>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -2545,7 +2545,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Parameter\",\n            {\n                \"name\": self.name,\n                \"description\": self.description,\n                \"annotation\": self.annotation,\n                \"default\": self.default,\n                \"isOptional\": self.is_optional\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Parameter.<lambda> at 0x0000021650B08040>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Parameter.<lambda> at 0x000001E2CAC48040>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -2564,7 +2564,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Parameter.<lambda> at 0x0000021650B08040>",
+                                                                    "default": "<function Parameter.<lambda> at 0x000001E2CAC48040>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -3290,7 +3290,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    @abstractmethod\n    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        \"\"\"\n        Serializes the structure into a Serialized object, so that it can be used in the website.\n\n        A Serialized object is a standardized format for serialization structures, with customizable filtering\n        options to omit certain structures from the project tree as desired,\n        and a convenient method for conversion to JSON.\n\n        :param child_filter: The filter method used to omit unwanted structures from the serializes project tree\n        :return: The serialized structure, in a compatible JSON format\n        \"\"\"\n        ...\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Structure.<lambda> at 0x0000021650AB3CE0>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Structure.<lambda> at 0x000001E2CABF3CE0>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -3309,7 +3309,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Structure.<lambda> at 0x0000021650AB3CE0>",
+                                                                    "default": "<function Structure.<lambda> at 0x000001E2CABF3CE0>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -3822,7 +3822,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Subroutine\",\n            {\n                \"searchCategory\": self.search_category,\n                \"name\": self.name,\n                \"source\": self.source,\n                \"signature\": str(self.signature),\n                \"parameters\": [\n                    parameter.serialize(child_filter=child_filter).to_json() for parameter in self.parameters\n                ],\n                \"raises\": [\n                    error.serialize(child_filter=child_filter).to_json() for error in self.docstring.raises\n                ] if self.docstring else [],\n                \"returns\": [\n                    return_.serialize(child_filter=child_filter).to_json() for return_ in self.docstring.returns\n                ] if self.docstring else [\n                    SubroutineReturn(\n                        \"No description...\", self.object_as_written(self.signature.return_annotation)\n                    ).serialize(child_filter=child_filter).to_json()\n                ],\n                \"shortDescription\": self.docstring.short_description if self.docstring else None,\n                \"longDescription\": self.docstring.long_description if self.docstring else None,\n                \"deprecation\": self.deprecation.json_serialize() if self.deprecation else None,\n                \"examples\": self.examples.json_serialize() if self.examples else None,\n                \"links\": self.links.json_serialize() if self.links else None,\n                \"notes\": self.notes.json_serialize() if self.notes else None,\n                \"isGenerator\": self.is_generator,\n                \"isAsync\": self.is_async,\n                \"isAbstract\": self.is_abstract,\n                \"isLambda\": self.is_lambda,\n                \"isContextManager\": self.is_context_manager,\n                \"searchTerms\": self.search_terms\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Subroutine.<lambda> at 0x0000021650B0BD80>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Subroutine.<lambda> at 0x000001E2CAC4BD80>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -3841,7 +3841,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Subroutine.<lambda> at 0x0000021650B0BD80>",
+                                                                    "default": "<function Subroutine.<lambda> at 0x000001E2CAC4BD80>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -4064,7 +4064,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"SubroutineReturn\",\n            {\n                \"description\": self.description,\n                \"annotation\": self.annotation\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function SubroutineReturn.<lambda> at 0x0000021650B091C0>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function SubroutineReturn.<lambda> at 0x000001E2CAC491C0>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -4083,7 +4083,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function SubroutineReturn.<lambda> at 0x0000021650B091C0>",
+                                                                    "default": "<function SubroutineReturn.<lambda> at 0x000001E2CAC491C0>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -4260,7 +4260,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "many_from_scope",
                                                         "source": "    @classmethod\n    def many_from_scope(cls, scope: object | ModuleType, module_name: str,\n                        variable_filter: Callable[[object], bool] = lambda _: True) -> Iterable[Variable]:\n        \"\"\"\n        Forms an instance of this class from a valid scope, such as a class or module.\n\n        :param scope: The scope to retrieve variables from\n        :param module_name: The name of the module in which the variable is located\n        :param variable_filter: A filter function to narrow the selection of yielded variables\n        :return: Each discovered variable from the given scope\n        \"\"\"\n        def is_valid(variable: object) -> bool:\n            return (\n                cls.defined_within(variable, module_name) and variable_filter(variable)\n                and not cls.check_is_private(variable)\n            )\n\n        variable_information = getmembers(scope)\n        try:\n            annotations_ = vars(scope).__annotations__\n        except AttributeError:\n            annotations_ = {}\n        variables = {name: variable for name, variable in variable_information if is_valid(variable)}\n        for variable_name in variables:\n            yield cls(\n                variable_name,\n                cls.object_as_written(annotations_.get(variable_name, Signature.empty)),\n                cls.object_as_written(variables.get(variable_name, Signature.empty))\n            )\n",
-                                                        "signature": "(scope: 'object | ModuleType', module_name: 'str', variable_filter: 'Callable[[object], bool]' = <function Variable.<lambda> at 0x0000021650B2C680>) -> 'Iterable[Variable]'",
+                                                        "signature": "(scope: 'object | ModuleType', module_name: 'str', variable_filter: 'Callable[[object], bool]' = <function Variable.<lambda> at 0x000001E2CAC6C680>) -> 'Iterable[Variable]'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -4290,7 +4290,7 @@ export const project = parseProject({
                                                                     "name": "variable_filter",
                                                                     "description": "A filter function to narrow the selection of yielded variables",
                                                                     "annotation": "Callable[[object], bool]",
-                                                                    "default": "<function Variable.<lambda> at 0x0000021650B2C680>",
+                                                                    "default": "<function Variable.<lambda> at 0x000001E2CAC6C680>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}
@@ -4328,7 +4328,7 @@ export const project = parseProject({
                                                         "searchCategory": "subroutine",
                                                         "name": "serialize",
                                                         "source": "    def serialize(self, child_filter: Callable[[Structure], bool] = lambda _: True) -> Serialized:\n        return Serialized(\n            \"Variable\",\n            {\n                \"name\": self.name,\n                \"annotation\": self.annotation,\n                \"value\": self.value\n            },\n            {}\n        )\n",
-                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Variable.<lambda> at 0x0000021650B2C7C0>) -> 'Serialized'",
+                                                        "signature": "(self, child_filter: 'Callable[[Structure], bool]' = <function Variable.<lambda> at 0x000001E2CAC6C7C0>) -> 'Serialized'",
                                                         "parameters": [
                                                             {
                                                                 "component": "Parameter",
@@ -4347,7 +4347,7 @@ export const project = parseProject({
                                                                     "name": "child_filter",
                                                                     "description": "The filter method used to omit unwanted structures from the serializes project tree",
                                                                     "annotation": "Callable[[Structure], bool]",
-                                                                    "default": "<function Variable.<lambda> at 0x0000021650B2C7C0>",
+                                                                    "default": "<function Variable.<lambda> at 0x000001E2CAC6C7C0>",
                                                                     "isOptional": true
                                                                 },
                                                                 "children": {}

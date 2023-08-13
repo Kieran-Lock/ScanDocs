@@ -7,7 +7,7 @@
     import {onDestroy} from "svelte";
     import {activeNode} from "$lib/stores/node";
     import SourceBlock from "$lib/components/blocks/SourceBlock.svelte";
-    import type {AnyTreeOnlyMeta, Node} from "$lib/utils/types";
+    import type {AnyTreeOnlyMeta, Node} from "$lib/types/types";
     import VariablesBlock from "$lib/components/blocks/VariablesBlock.svelte";
     import ChildBlock from "$lib/components/blocks/ChildBlock.svelte";
     import LinksBlock from "$lib/components/blocks/LinksBlock.svelte";
@@ -26,7 +26,7 @@
 </script>
 
 <div class="flex flex-row justify-evenly w-full p-8 gap-8">
-    <div class="flex flex-col gap-6 max-w-[55%] min-w-[45%]">
+    <div class="flex flex-col gap-6 2xl:max-w-[55%] min-w-[45%]">
         <DescriptionBlock structureName={meta.searchCategory} name={meta.name} short={meta.shortDescription}
                           long={meta.longDescription} isGenerator={meta.isGenerator} isAsync={meta.isAsync}
                           isAbstract={meta.isAbstract} isLambda={meta.isLambda} isContextManager={meta.isContextManager}
@@ -60,7 +60,7 @@
         {/each}
     </div>
     {#if meta.source}
-        <div class="flex flex-col gap-6 w-full">
+        <div class="hidden 2xl:flex flex-col gap-6 w-full">
             <SourceBlock source={meta.source} signature={meta.signature} />
             {#if meta.links}
                 <LinksBlock links={meta.links} />

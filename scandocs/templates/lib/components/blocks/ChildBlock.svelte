@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import type {Node} from "$lib/utils/types";
+    import type {Node} from "$lib/types/types";
 
     export let childType: string
     export let childList: Node[]

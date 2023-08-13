@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {ModuleMeta} from "$lib/utils/types";
+    import type {ModuleMeta} from "$lib/types/types";
 
     export let meta: ModuleMeta
 </script>

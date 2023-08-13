@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {ErrorMeta} from "$lib/utils/types";
+    import type {ErrorMeta} from "$lib/types/types";
 
     export let meta: ErrorMeta
 </script>

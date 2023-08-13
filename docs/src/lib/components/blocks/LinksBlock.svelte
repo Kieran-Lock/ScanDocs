@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {LinksTag} from "$lib/utils/types";
+    import type {LinksTag} from "$lib/types/types";
 
     export let links: LinksTag
 </script>

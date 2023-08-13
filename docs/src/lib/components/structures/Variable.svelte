@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {VariableMeta} from "$lib/utils/types";
+    import type {VariableMeta} from "$lib/types/types";
 
     export let meta: VariableMeta
 </script>

@@ -1,4 +1,4 @@
-import type {TreeOnlyNode} from "$lib/utils/types";
+import type {TreeOnlyNode} from "$lib/types/types";
 import {activeNode} from "$lib/stores/node";
 import {searchTerm} from "$lib/stores/searching";
 

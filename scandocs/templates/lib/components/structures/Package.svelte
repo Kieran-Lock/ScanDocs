@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {PackageMeta} from "$lib/utils/types";
+    import type {PackageMeta} from "$lib/types/types";
 
     export let meta: PackageMeta
 </script>

@@ -1,5 +1,5 @@
 import {writable} from "svelte/store";
-import type {TreeOnlyNode} from "$lib/utils/types";
+import type {TreeOnlyNode} from "$lib/types/types";
 import {entriesOf, traverseProject} from "$lib/utils/parsing";
 import {project} from "$lib/content/project";
 

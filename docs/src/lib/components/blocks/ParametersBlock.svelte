@@ -1,11 +1,11 @@
 <script lang="ts">
-    import type {Node} from "$lib/utils/types";
+    import type {Node} from "$lib/types/types";
 
     export let parameters: Node[]
 </script>
 
 {#if parameters.length}
-    <div class="flex flex-col gap-2 card p-4 variant-glass-surface w-full">
+    <div class="flex flex-col gap-2 card p-4 variant-glass-surface w-full overflow-x-auto">
         <header>
             <h2 class="text-2xl font-bold">Parameters</h2>
         </header>

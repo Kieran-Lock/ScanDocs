@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {SubroutineReturnMeta} from "$lib/utils/types";
+    import type {SubroutineReturnMeta} from "$lib/types/types";
 
     export let meta: SubroutineReturnMeta
 </script>

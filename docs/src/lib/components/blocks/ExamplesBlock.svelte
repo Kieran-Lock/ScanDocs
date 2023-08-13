@@ -1,6 +1,6 @@
 <script lang="ts">
     import {CodeBlock} from "@skeletonlabs/skeleton";
-    import type {ExamplesTag} from "$lib/utils/types";
+    import type {ExamplesTag} from "$lib/types/types";
 
     export let examples: ExamplesTag
 </script>

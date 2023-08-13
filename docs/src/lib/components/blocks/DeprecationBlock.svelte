@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {DeprecationTag} from "$lib/utils/types";
+    import type {DeprecationTag} from "$lib/types/types";
 
     export let deprecation: DeprecationTag
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {NotesTag} from "$lib/utils/types";
+    import type {NotesTag} from "$lib/types/types";
 
     export let notes: NotesTag
 </script>

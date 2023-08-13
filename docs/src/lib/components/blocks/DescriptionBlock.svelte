@@ -13,10 +13,10 @@
     export let truncate = false
 </script>
 
-<div class="flex flex-col card p-4 gap-4 variant-glass-surface w-full">
-    <header class="flex flex-row justify-between w-full pr-2">
+<div class="flex flex-col card p-4 gap-4 variant-glass-surface w-full overflow-x-auto">
+    <header class="flex flex-row justify-between w-full gap-4">
         <h2 class="text-2xl font-bold">{name}</h2>
-        <div>
+        <div class="flex flex-row gap-2 pr-4">
             <Badge text="Generator" isVisible={isGenerator} />
             <Badge text="Asynchronous" isVisible={isAsync} />
             <Badge text="Abstract" isVisible={isAbstract} />
