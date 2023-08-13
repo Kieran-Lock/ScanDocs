@@ -1,0 +1,23 @@
+<script lang="ts">
+    import type {NotesTag} from "$lib/utils/types";
+
+    export let notes: NotesTag
+</script>
+
+{#if notes.notes.length}
+    <div class="flex flex-col gap-2 card p-4 variant-glass-surface w-full">
+        <header>
+            <h2 class="text-2xl font-bold">Notes</h2>
+        </header>
+        <section>
+            {#each notes.notes as note}
+                <div class="list-d flex-auto p-2">
+                    <p class="font-semibold">{note}</p>
+                    <div class="pb-2 pt-4">
+                        <hr class="!border-t-2" />
+                    </div>
+                </div>
+            {/each}
+        </section>
+    </div>
+{/if}

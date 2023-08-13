@@ -1,0 +1,7 @@
+<script lang="ts">
+    import {searchTerm} from "$lib/stores/searching";
+</script>
+
+<div class="px-8 w-full">
+    <input class="input variant-form-material w-full p-1.5" type="search" placeholder="Search Documentation..." bind:value={$searchTerm} />
+</div>
