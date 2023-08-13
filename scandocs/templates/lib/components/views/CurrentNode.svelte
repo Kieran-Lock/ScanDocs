@@ -61,12 +61,12 @@
             <ChildBlock childType={childType} childList={childList} />
         {/each}
     </div>
-    {#if meta.source}
-        <div class="hidden 2xl:flex flex-col gap-6 w-full">
+    <div class="hidden 2xl:flex flex-col gap-6 w-full">
+        {#if meta.links}
+            <LinksBlock links={meta.links} />
+        {/if}
+        {#if meta.source}
             <SourceBlock source={meta.source} signature={meta.signature} />
-            {#if meta.links}
-                <LinksBlock links={meta.links} />
-            {/if}
-        </div>
-    {/if}
+        {/if}
+    </div>
 </div>
