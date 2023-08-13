@@ -19,5 +19,5 @@
             </span>
         </button>
     </svelte:fragment>
-    <strong class="text-3xl uppercase text-center inline-block">{projectName}</strong>
+    <strong class="text-3xl text-center inline-block">{projectName}</strong>
 </AppBar>

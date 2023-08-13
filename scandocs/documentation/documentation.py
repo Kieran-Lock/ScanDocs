@@ -102,6 +102,7 @@ class Documentation:
         """
         copy_tree(str(Path(f"{__file__}/../../templates/lib")), str(self.base_directory / "src/lib"))
         copy_tree(str(Path(f"{__file__}/../../templates/routes")), str(self.base_directory / "src/routes"))
+        copy_tree(str(Path(f"{__file__}/../../templates/static")), str(self.base_directory / "static"))
 
     def replace_content_in_file(self, path: Path, *replacements: Replacement, json: bool = True) -> None:
         """

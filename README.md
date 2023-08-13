@@ -5,7 +5,7 @@
 <!-- PROJECT SUMMARY -->
 <br />
 <div align="center">
-  <img src="https://i.imgur.com/2jHaTlY.png" alt="Logo" width="400px">
+  <img src="https://i.imgur.com/g08ozNS.png" alt="Logo" width="400px">
   <br />
   <p align="center">
     Automatically generate documentation for Python projects
