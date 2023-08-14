@@ -1,6 +1,6 @@
-from scandocs import Package, Documentation, Configuration, Themes
+from src.scandocs import Package, Documentation, Configuration, Themes
 from pathlib import Path
-import scandocs
+from src import scandocs
 
 
 project = Package.from_module(scandocs)
