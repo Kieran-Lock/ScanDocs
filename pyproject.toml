@@ -15,6 +15,9 @@ classifiers = [
 ]
 requires-python = ">=3.8"
 license = {file = "LICENSE"}
+dependencies = [
+    "docstring-parser==0.15"
+]
 
 [build-system]
 requires = ["setuptools", "wheel"]
@@ -24,3 +27,9 @@ build-backend = "setuptools.build_meta"
 GitHub = "https://github.com/Kieran-Lock/ScanDocs"
 Documentation = "https://scandocs-documentation.vercel.app/"
 License = "https://github.com/Kieran-Lock/ScanDocs/blob/main/LICENSE"
+
+[tool.setuptools.packages.find]
+where = ["scandocs"]
+
+[tool.setuptools.package-data]
+"*" = ["**/*"]
